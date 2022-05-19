@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'CaveStoryRegular';
+    src: url('/fonts/Cave-Story.woff2') format('woff2'),
+        url('/fonts/Cave-Story.woff') format('woff'),
+        url('/fonts/Cave-Story.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

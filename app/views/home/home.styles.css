@@ -11,6 +11,14 @@ html, body {
   animation: grassScroll infinite 2s linear;
 }
 
+.home__title {
+  font-size: 6rem;
+  line-height: 1;
+  letter-spacing: 0.065em;
+  text-align: center;
+  color: var(--text-color);
+  padding-top: 4rem;
+}
 
 @media (prefers-reduced-motion) {
   .homeContainer {
