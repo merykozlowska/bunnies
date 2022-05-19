@@ -12,6 +12,11 @@ html, body {
 
   padding: 0 var(--spacing-s);
 }
+
+.home__container > * + * {
+  margin-top: var(--spacing-xl);
+}
+
 @media (prefers-reduced-motion) {
   .home__container {
     animation: none;
@@ -32,6 +37,11 @@ html, body {
   .home__container__title {
     font-size: 6rem;
   }
+}
+
+.home__bunnies {
+  display: flex;
+  justify-content: space-around;
 }
 
 @keyframes grassScroll {

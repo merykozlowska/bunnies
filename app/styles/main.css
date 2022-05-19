@@ -6,10 +6,14 @@ html {
     --size-2: 0.5rem;
     --size-4: 1rem;
     --size-8: 2rem;
+    --size-12: 3rem;
+    --size-16: 4rem;
 
     --spacing-xs: var(--size-2);
     --spacing-s: var(--size-4);
     --spacing-m: var(--size-8);
+    --spacing-l: var(--size-12);
+    --spacing-xl: var(--size-16);
 
     --text-color: #fff;
 

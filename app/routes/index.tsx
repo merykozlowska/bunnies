@@ -1,8 +1,5 @@
-import Home from "~/views/home/home";
-import styles from "~/views/home/home.styles.css";
+import Home, { links } from "~/views/home/home";
 
-export function links() {
-  return [{ rel: "stylesheet", href: styles }];
-}
+export { links };
 
 export default Home;
