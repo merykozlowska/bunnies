@@ -1,0 +1,29 @@
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+.homeContainer {
+  width: 100%;
+  height: 100%;
+  background-image: url("/resources/grass.png");
+
+  animation: grassScroll infinite 2s linear;
+}
+
+
+@media (prefers-reduced-motion) {
+  .homeContainer {
+    animation: none;
+  }
+}
+
+@keyframes grassScroll {
+  0% {
+    background-position-y: 0;
+  }
+
+  100% {
+    background-position-y: 64px;
+  }
+}
