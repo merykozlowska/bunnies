@@ -3,26 +3,34 @@ html, body {
   height: 100%;
 }
 
-.homeContainer {
+.home__container {
   width: 100%;
   height: 100%;
   background-image: url("/resources/grass.png");
 
   animation: grassScroll infinite 2s linear;
+
+  padding: 0 var(--spacing-s);
+}
+@media (prefers-reduced-motion) {
+  .home__container {
+    animation: none;
+  }
 }
 
-.home__title {
-  font-size: 6rem;
+.home__container__title {
+  font-size: 4rem;
   line-height: 1;
-  letter-spacing: 0.065em;
+  letter-spacing: 0.06em;
+
   text-align: center;
+
   color: var(--text-color);
   padding-top: 4rem;
 }
-
-@media (prefers-reduced-motion) {
-  .homeContainer {
-    animation: none;
+@media only screen and (min-width: 768px) {
+  .home__container__title {
+    font-size: 6rem;
   }
 }
 
