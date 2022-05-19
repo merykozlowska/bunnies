@@ -9,7 +9,8 @@
     "dev:remix": "remix watch",
     "dev:wrangler": "cross-env NODE_ENV=development wrangler pages dev ./public",
     "dev": "remix build && run-p dev:*",
-    "start": "cross-env NODE_ENV=production npm run dev:wrangler"
+    "start": "cross-env NODE_ENV=production npm run dev:wrangler",
+    "lint:fix": "eslint --fix app"
   },
   "dependencies": {
     "@remix-run/cloudflare": "^1.5.1",
@@ -20,6 +21,7 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
+    "@cazoo/eslint-plugin-eslint": "^2.0.0",
     "@cloudflare/workers-types": "^3.10.0",
     "@remix-run/dev": "^1.5.1",
     "@remix-run/eslint-config": "^1.5.1",
