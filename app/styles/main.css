@@ -2,6 +2,12 @@ html {
     font-family: CaveStoryRegular, Arial, Helvetica, sans-serif;
 }
 
+html, body {
+    min-height: auto;
+    height: 100%;
+    background-color: #1F3809;
+}
+
 :root {
     --size-2: 0.5rem;
     --size-4: 1rem;
