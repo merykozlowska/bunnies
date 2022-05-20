@@ -33,12 +33,18 @@
   gap: var(--spacing-xs);
 }
 
-.home__bunnies__bunny > button {
-  align-self: flex-end;
-}
-
 .home__bunnies__bunny .scoreProgress {
   flex-grow: 1;
+  opacity: 0;
+
+  animation: homeAppear 150ms 650ms forwards ease-out;
+}
+
+.home__bunnies__bunny > button {
+  align-self: flex-end;
+  opacity: 0;
+
+  animation: homeAppear 150ms 650ms forwards ease-out;
 }
 
 .home__bunnies__name, .home__bunnies__vs {
@@ -50,7 +56,9 @@
 
 .home__bunnies__vs {
   font-size: 4rem;
-  transform: rotate(-20deg);
+  opacity: 0;
+
+  animation: homeAppearVs 150ms 250ms forwards ease-in;
 }
 
 @media only screen and (min-width: 768px) {
@@ -71,5 +79,27 @@
 
   100% {
     background-position-y: 64px;
+  }
+}
+
+@keyframes homeAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes homeAppearVs {
+  0% {
+    opacity: 0;
+    transform: scale(4) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-20deg);
   }
 }
