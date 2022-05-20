@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import type { BunnyId, BunnyState } from "~/model/bunnies";
 
@@ -20,7 +20,7 @@ export const links = () => [
 ];
 
 export default function Home() {
-  const gameState: Record<BunnyId, BunnyState> = {
+  const [gameState, setGameState] = useState<Record<BunnyId, BunnyState>>({
     snowball: {
       id: "snowball",
       scoreValue: 100,
@@ -31,7 +31,24 @@ export default function Home() {
       scoreValue: 80,
       playersCount: 2,
     },
-  };
+  });
+
+  useEffect(() => {
+    setInterval(() => {
+      setGameState((gameState) => ({
+        snowball: {
+          ...gameState.snowball,
+          scoreValue: gameState.snowball.scoreValue + 5,
+          playersCount: Math.floor(Math.random() * 10),
+        },
+        fluffy: {
+          ...gameState.fluffy,
+          scoreValue: gameState.fluffy.scoreValue + 5,
+          playersCount: Math.floor(Math.random() * 10),
+        },
+      }));
+    }, 2000);
+  }, []);
 
   const maxScoreValue = Math.max(
     gameState.snowball.scoreValue,

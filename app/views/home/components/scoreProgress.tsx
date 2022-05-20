@@ -1,11 +1,15 @@
 import React from "react";
 
-import type { BunnyColour } from "~/views/home/components/bunnySprite";
-import { BunnySprite } from "~/views/home/components/bunnySprite";
-
+import type { BunnyColour } from "./bunnySprite";
+import { BunnySprite, links as bunnySpriteLinks } from "./bunnySprite";
+import { DynamicNumber, links as dynamicNumberLinks } from "./dynamicNumber";
 import styles from "./scoreProgress.styles.css";
 
-export const links = () => [{ rel: "stylesheet", href: styles }];
+export const links = () => [
+  ...bunnySpriteLinks(),
+  ...dynamicNumberLinks(),
+  { rel: "stylesheet", href: styles },
+];
 
 interface Props {
   bunnyColour: BunnyColour;
@@ -27,12 +31,14 @@ export const ScoreProgress: React.FC<Props> = ({
         style={{ width: `${(scoreValue / maxScoreValue) * 100}%` }}
       >
         <div className="scoreProgress__value">
-          {scoreValue.toLocaleString()}m
+          <DynamicNumber value={scoreValue} />m
         </div>
       </div>
       <div className="scoreProgress__players">
         <BunnySprite bunnyColour={bunnyColour} />
-        <span>{playersCount} players</span>
+        <span>
+          <DynamicNumber value={playersCount} /> players
+        </span>
       </div>
     </div>
   );

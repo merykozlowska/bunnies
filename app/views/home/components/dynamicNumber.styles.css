@@ -1,0 +1,28 @@
+.dynamicNumber {
+    position: relative;
+}
+
+.dynamicNumber__lastChange {
+    color: var(--positive-change-text);
+    white-space: nowrap;
+
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    animation: dynamicNumberChange 1s forwards ease-out;
+}
+
+.dynamicNumber__lastChange[data-negative="true"] {
+    color: var(--negative-change-text);
+}
+
+@keyframes dynamicNumberChange {
+    0% {
+        opacity: 1;
+        transform: translateY(-0.6em);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-1.5em);
+    }
+}

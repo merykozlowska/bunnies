@@ -30,6 +30,9 @@ html, body {
     --progress-bar-text: #000;
     --progress-bar-background: #fff;
 
+    --positive-change-text: #91cd3e;
+    --negative-change-text: #cd3e3e;
+
     /* medium-screen: 768px; */
     /* large-screen: 1024; */
 }
