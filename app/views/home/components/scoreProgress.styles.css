@@ -3,6 +3,28 @@
 }
 
 .scoreProgress__bar {
-    height: 1rem;
+    position: relative;
+
+    text-align: right;
     background-color: var(--progress-bar-background);
+
+    padding-right: var(--spacing-xxs);
+}
+
+.scoreProgress__bar::before {
+    content: '';
+    background-color: var(--progress-bar-background);
+    width: 6px;
+
+    position: absolute;
+    z-index: 0;
+    top: 20%;
+    bottom: 20%;
+    left: 100%;
+}
+
+.scoreProgress__value {
+    position: relative;
+    color: var(--progress-bar-text);
+    font-size: 2rem;
 }

@@ -19,6 +19,8 @@ export const ScoreProgress: React.FC<Props> = ({
     <div
       className="scoreProgress__bar"
       style={{ width: `${(scoreValue / maxScoreValue) * 100}%` }}
-    />
+    >
+      <div className="scoreProgress__value">{scoreValue.toLocaleString()}m</div>
+    </div>
   </div>
 );

@@ -1,20 +1,25 @@
-html {
+body {
     font-family: CaveStoryRegular, Arial, Helvetica, sans-serif;
+    color: var(--text-color);
+    line-height: 0.8;
 }
 
 html, body {
     min-height: auto;
     height: 100%;
+
     background-color: #1F3809;
 }
 
 :root {
+    --size-1: 0.25rem;
     --size-2: 0.5rem;
     --size-4: 1rem;
     --size-8: 2rem;
     --size-12: 3rem;
     --size-16: 4rem;
 
+    --spacing-xxs: var(--size-1);
     --spacing-xs: var(--size-2);
     --spacing-s: var(--size-4);
     --spacing-m: var(--size-8);
@@ -22,6 +27,7 @@ html, body {
     --spacing-xl: var(--size-16);
 
     --text-color: #fff;
+    --progress-bar-text: #000;
     --progress-bar-background: #fff;
 
     /* medium-screen: 768px; */

@@ -47,12 +47,9 @@
 
 .home__bunnies__name, .home__bunnies__vs {
   font-size: 4rem;
-  line-height: 0.8;
   letter-spacing: 0.06em;
 
   text-align: center;
-
-  color: var(--text-color);
 }
 
 .home__bunnies__vs {
