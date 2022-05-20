@@ -6,6 +6,9 @@
   animation: grassScroll infinite 2s linear;
 
   padding: 0 var(--spacing-s);
+
+  display: flex;
+  align-items: center;
 }
 
 .home__container > * + * {
@@ -18,18 +21,41 @@
   }
 }
 
-.home__container__title {
-  font-size: 4rem;
+.home__bunnies {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.home__bunnies__bunny {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-s);
+}
+
+.home__bunnies__bunny + * + .home__bunnies__bunny {
+  flex-direction: column-reverse;
+}
+
+.home__bunnies__name, .home__bunnies__vs {
+  font-size: 6rem;
   line-height: 1;
   letter-spacing: 0.06em;
 
   text-align: center;
 
   color: var(--text-color);
-  padding-top: 4rem;
 }
+
+.home__bunnies__vs {
+  font-size: 4rem;
+}
+
 @media only screen and (min-width: 768px) {
-  .home__container__title {
+  .home__bunnies__name {
     font-size: 6rem;
   }
 }

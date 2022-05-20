@@ -12,11 +12,16 @@ export const links = () => [
 export default function Home() {
   return (
     <main className="home__container">
-      <h1 className="home__container__title">Snowball and Fluffy</h1>
-
       <div className="home__bunnies">
-        <BunnySprite />
-        <BunnySprite bunnyColour={"brown"} />
+        <div className="home__bunnies__bunny">
+          <BunnySprite />
+          <h2 className="home__bunnies__name">Snowball</h2>
+        </div>
+        <h2 className="home__bunnies__vs">vs</h2>
+        <div className="home__bunnies__bunny">
+          <BunnySprite bunnyColour={"brown"} />
+          <h2 className="home__bunnies__name">Fluffy</h2>
+        </div>
       </div>
     </main>
   );
