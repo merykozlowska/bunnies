@@ -23,7 +23,7 @@
   flex-grow: 1;
   justify-content: space-around;
   align-items: stretch;
-  gap: var(--spacing-m);
+  gap: 1.5rem;
 }
 
 .home__bunnies__bunny {
@@ -37,23 +37,20 @@
   align-self: flex-end;
 }
 
-.home__bunnies__title {
-  align-self: stretch;
-}
-
 .home__bunnies__bunny .scoreProgress {
   flex-grow: 1;
 }
 
 .home__bunnies__name, .home__bunnies__vs {
-  font-size: 4rem;
+  font-size: 3rem;
   letter-spacing: 0.06em;
 
   text-align: center;
 }
 
 .home__bunnies__vs {
-  font-size: 6rem;
+  font-size: 4rem;
+  transform: rotate(-20deg);
 }
 
 @media only screen and (min-width: 768px) {
