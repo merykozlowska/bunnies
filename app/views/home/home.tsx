@@ -7,6 +7,7 @@ import {
   BunnySprite,
   links as bunnySpriteLinks,
 } from "./components/bunnySprite";
+import { Button, links as buttonLinks } from "./components/button";
 import {
   links as progressBarLinks,
   ScoreProgress,
@@ -16,6 +17,7 @@ import styles from "./home.styles.css";
 export const links = () => [
   ...bunnySpriteLinks(),
   ...progressBarLinks(),
+  ...buttonLinks(),
   { rel: "stylesheet", href: styles },
 ];
 
@@ -93,5 +95,6 @@ const HomeBunny: React.FC<{
         playersCount={bunnyState.playersCount}
       />
     </div>
+    <Button buttonColor={bunnyColour}>Help {bunnyName}</Button>
   </div>
 );

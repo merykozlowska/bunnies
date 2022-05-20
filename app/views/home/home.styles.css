@@ -37,6 +37,10 @@
   gap: var(--spacing-xs);
 }
 
+.home__bunnies__bunny > button {
+  align-self: flex-end;
+}
+
 .home__bunnies__title {
   align-self: stretch;
 }

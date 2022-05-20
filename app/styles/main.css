@@ -33,6 +33,14 @@ html, body {
     --positive-change-text: #91cd3e;
     --negative-change-text: #cd3e3e;
 
+    --button-white-background: #D2E6FF;
+    --button-white-border: #656985;
+    --button-white-text: #000;
+
+    --button-brown-background: #D69756;
+    --button-brown-border: #432220;
+    --button-brown-text: #000;
+
     /* medium-screen: 768px; */
     /* large-screen: 1024; */
 }

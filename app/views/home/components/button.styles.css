@@ -1,0 +1,14 @@
+.customButton {
+    font-size: 2rem;
+    padding: var(--spacing-xs) var(--spacing-s);
+
+    background-color: var(--button-white-background);
+    color: var(--button-white-text);
+    border: 4px solid var(--button-white-border);
+}
+
+.customButton[data-colour="brown"] {
+    background-color: var(--button-brown-background);
+    color: var(--button-brown-text);
+    border: 4px solid var(--button-brown-border);
+}
