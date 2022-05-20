@@ -11,10 +11,6 @@
   align-items: center;
 }
 
-.home__container > * + * {
-  margin-top: var(--spacing-xl);
-}
-
 @media (prefers-reduced-motion) {
   .home__container {
     animation: none;
@@ -57,7 +53,7 @@
 }
 
 .home__bunnies__vs {
-  font-size: 8rem;
+  font-size: 6rem;
 }
 
 @media only screen and (min-width: 768px) {
