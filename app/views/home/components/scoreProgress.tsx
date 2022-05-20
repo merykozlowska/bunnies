@@ -14,4 +14,11 @@ export const ScoreProgress: React.FC<Props> = ({
   scoreValue,
   maxScoreValue,
   playersCount,
-}) => <progress value={scoreValue} max={maxScoreValue} />;
+}) => (
+  <div className="scoreProgress">
+    <div
+      className="scoreProgress__bar"
+      style={{ width: `${(scoreValue / maxScoreValue) * 100}%` }}
+    />
+  </div>
+);

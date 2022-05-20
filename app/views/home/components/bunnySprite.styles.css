@@ -5,6 +5,11 @@
     height: 136px;
 }
 
+.bunnySprite--small {
+    width: 62px;
+    height: 102px;
+}
+
 .bunnySprite img {
     position: absolute;
     left: 0;

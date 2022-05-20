@@ -26,23 +26,28 @@
   flex-direction: column;
   flex-grow: 1;
   justify-content: space-around;
-  align-items: center;
+  align-items: stretch;
+  gap: var(--spacing-m);
 }
 
 .home__bunnies__bunny {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-s);
+  gap: var(--spacing-xs);
 }
 
-.home__bunnies__bunny + * + .home__bunnies__bunny {
-  flex-direction: column-reverse;
+.home__bunnies__title {
+  align-self: stretch;
+}
+
+.home__bunnies__bunny .scoreProgress {
+  flex-grow: 1;
 }
 
 .home__bunnies__name, .home__bunnies__vs {
-  font-size: 6rem;
-  line-height: 1;
+  font-size: 4rem;
+  line-height: 0.8;
   letter-spacing: 0.06em;
 
   text-align: center;
@@ -51,7 +56,7 @@
 }
 
 .home__bunnies__vs {
-  font-size: 4rem;
+  font-size: 8rem;
 }
 
 @media only screen and (min-width: 768px) {

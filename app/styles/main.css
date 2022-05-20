@@ -22,6 +22,7 @@ html, body {
     --spacing-xl: var(--size-16);
 
     --text-color: #fff;
+    --progress-bar-background: #fff;
 
     /* medium-screen: 768px; */
     /* large-screen: 1024; */

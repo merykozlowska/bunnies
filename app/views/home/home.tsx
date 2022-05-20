@@ -1,5 +1,8 @@
+import React from "react";
+
 import type { BunnyId, BunnyState } from "~/model/bunnies";
 
+import type { BunnyColour } from "./components/bunnySprite";
 import {
   BunnySprite,
   links as bunnySpriteLinks,
@@ -38,26 +41,39 @@ export default function Home() {
   return (
     <main className="home__container">
       <div className="home__bunnies">
-        <div className="home__bunnies__bunny">
-          <BunnySprite />
-          <h2 className="home__bunnies__name">Snowball</h2>
-          <ScoreProgress
-            scoreValue={gameState.snowball.scoreValue}
-            maxScoreValue={maxScoreValue}
-            playersCount={gameState.snowball.playersCount}
-          />
-        </div>
+        <HomeBunny
+          bunnyName="snowball"
+          bunnyColour="white"
+          bunnyState={gameState.snowball}
+          maxScoreValue={maxScoreValue}
+        />
         <h2 className="home__bunnies__vs">vs</h2>
-        <div className="home__bunnies__bunny">
-          <BunnySprite bunnyColour={"brown"} />
-          <h2 className="home__bunnies__name">Fluffy</h2>
-          <ScoreProgress
-            scoreValue={gameState.fluffy.scoreValue}
-            maxScoreValue={maxScoreValue}
-            playersCount={gameState.fluffy.playersCount}
-          />
-        </div>
+        <HomeBunny
+          bunnyName="fluffy"
+          bunnyColour="brown"
+          bunnyState={gameState.fluffy}
+          maxScoreValue={maxScoreValue}
+        />
       </div>
     </main>
   );
 }
+
+const HomeBunny: React.FC<{
+  bunnyName: string;
+  bunnyColour: BunnyColour;
+  bunnyState: BunnyState;
+  maxScoreValue: number;
+}> = ({ bunnyName, bunnyColour, bunnyState, maxScoreValue }) => (
+  <div className="home__bunnies__bunny">
+    <BunnySprite bunnyColour={bunnyColour} />
+    <div className="home__bunnies__title">
+      <h2 className="home__bunnies__name">{bunnyName}</h2>
+      <ScoreProgress
+        scoreValue={bunnyState.scoreValue}
+        maxScoreValue={maxScoreValue}
+        playersCount={bunnyState.playersCount}
+      />
+    </div>
+  </div>
+);

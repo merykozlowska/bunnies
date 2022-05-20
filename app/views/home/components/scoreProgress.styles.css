@@ -1,0 +1,8 @@
+.scoreProgress {
+    width: 100%;
+}
+
+.scoreProgress__bar {
+    height: 1rem;
+    background-color: var(--progress-bar-background);
+}
