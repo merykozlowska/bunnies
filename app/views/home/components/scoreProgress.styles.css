@@ -2,6 +2,10 @@
     width: 100%;
 }
 
+.scoreProgress > * + * {
+    margin-top: var(--spacing-xs);
+}
+
 .scoreProgress__bar {
     position: relative;
 
@@ -27,4 +31,14 @@
     position: relative;
     color: var(--progress-bar-text);
     font-size: 2rem;
+}
+
+.scoreProgress__players {
+    display: flex;
+    align-items: flex-end;
+    font-size: 2rem;
+}
+
+.scoreProgress__players > * + * {
+    margin-left: var(--spacing-xs);
 }

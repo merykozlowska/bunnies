@@ -1,11 +1,11 @@
 .bunnySprite {
     display: block;
     position: relative;
-    width: 82px;
-    height: 136px;
+    width: 21px;
+    height: 34px;
 }
 
-.bunnySprite--small {
+.bunnySprite--lg {
     width: 62px;
     height: 102px;
 }

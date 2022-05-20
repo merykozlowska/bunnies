@@ -66,10 +66,11 @@ const HomeBunny: React.FC<{
   maxScoreValue: number;
 }> = ({ bunnyName, bunnyColour, bunnyState, maxScoreValue }) => (
   <div className="home__bunnies__bunny">
-    <BunnySprite bunnyColour={bunnyColour} />
+    <BunnySprite bunnyColour={bunnyColour} bunnySize="lg" />
     <div className="home__bunnies__title">
       <h2 className="home__bunnies__name">{bunnyName}</h2>
       <ScoreProgress
+        bunnyColour={bunnyColour}
         scoreValue={bunnyState.scoreValue}
         maxScoreValue={maxScoreValue}
         playersCount={bunnyState.playersCount}
