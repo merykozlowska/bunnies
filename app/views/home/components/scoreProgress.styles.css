@@ -13,6 +13,8 @@
     background-color: var(--progress-bar-background);
 
     padding-right: var(--spacing-xxs);
+
+    transition: width 150ms ease-out;
 }
 
 .scoreProgress__bar::before {
