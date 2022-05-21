@@ -87,12 +87,14 @@ const HomeBunny: React.FC<{
   <div className="home__bunnies__bunny">
     <BunnySprite bunnyColour={bunnyColour} bunnySize="lg" />
     <h2 className="home__bunnies__name">{bunnyName}</h2>
-    <ScoreProgress
-      bunnyColour={bunnyColour}
-      scoreValue={bunnyState.scoreValue}
-      maxScoreValue={maxScoreValue}
-      playersCount={bunnyState.playersCount}
-    />
-    <Button buttonColor={bunnyColour}>Help {bunnyName}</Button>
+    <div className="home__bunnies__progress_and_button">
+      <ScoreProgress
+        bunnyColour={bunnyColour}
+        scoreValue={bunnyState.scoreValue}
+        maxScoreValue={maxScoreValue}
+        playersCount={bunnyState.playersCount}
+      />
+      <Button buttonColor={bunnyColour}>Help {bunnyName}</Button>
+    </div>
   </div>
 );
