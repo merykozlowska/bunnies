@@ -17,12 +17,18 @@ export function links() {
     { rel: "stylesheet", href: reset },
     { rel: "stylesheet", href: fonts },
     { rel: "stylesheet", href: main },
+    { rel: "preload", href: "/resources/grass.png", as: "image" },
+    { rel: "preload", href: "/resources/bunny_1_1.png", as: "image" },
+    { rel: "preload", href: "/resources/bunny_1_2.png", as: "image" },
+    { rel: "preload", href: "/resources/bunny_2_1.png", as: "image" },
+    { rel: "preload", href: "/resources/bunny_2_2.png", as: "image" },
+    { rel: "icon", href: "/favicon.png", type: "image/png" },
   ];
 }
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "Snowball vs Fluffy",
   viewport: "width=device-width,initial-scale=1",
 });
 
