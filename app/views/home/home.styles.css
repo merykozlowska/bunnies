@@ -1,110 +1,141 @@
 .home__container {
-  width: 100%;
-  height: 100%;
-  background-image: url("/resources/grass.png");
+    width: 100%;
+    height: 100%;
+    background-image: url("/resources/grass.png");
 
-  animation: grassScroll infinite 2s linear;
+    animation: grassScroll infinite 2s linear;
 
-  padding: 0 var(--spacing-s);
+    padding: 0 var(--spacing-s);
 
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 @media (prefers-reduced-motion) {
-  .home__container {
-    animation: none;
-  }
+    .home__container {
+        animation: none;
+    }
 }
 
 .home__bunnies {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: space-around;
-  align-items: stretch;
-  gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-around;
+    align-items: stretch;
+    gap: 1.5rem;
 }
 
 .home__bunnies__bunny {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-xs);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
 }
 
+.home__bunnies__hero {
+    position: relative;
+}
+
+.home__bunnies__hero .medal {
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    z-index: 0;
+
+    opacity: 0;
+    animation: homeAppearMedal 150ms 650ms forwards ease-in;
+}
+
+
 .home__bunnies__bunny .scoreProgress {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .home__bunnies__progress_and_button > button {
-  align-self: flex-end;
+    align-self: flex-end;
 }
 
 .home__bunnies__progress_and_button {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
 
-  align-self: stretch;
+    align-self: stretch;
 
-  opacity: 0;
-  animation: homeAppear 150ms 650ms forwards ease-out;
+    opacity: 0;
+    animation: homeAppear 150ms 650ms forwards ease-in;
 }
 
 .home__bunnies__name, .home__bunnies__vs {
-  font-size: 3rem;
-  letter-spacing: 0.06em;
+    position: relative;
 
-  text-align: center;
+    font-size: 3rem;
+    letter-spacing: 0.06em;
+
+    text-align: center;
 }
 
 .home__bunnies__vs {
-  font-size: 4rem;
-  opacity: 0;
+    font-size: 4rem;
+    opacity: 0;
 
-  animation: homeAppearVs 150ms 250ms forwards ease-in;
+    animation: homeAppearVs 150ms 250ms forwards ease-in;
 }
 
 @media only screen and (min-width: 768px) {
-  .home__bunnies__name {
-    font-size: 6rem;
-  }
+    .home__bunnies__name {
+        font-size: 6rem;
+    }
 }
 
 .home__bunnies {
-  display: flex;
-  justify-content: space-around;
+    display: flex;
+    justify-content: space-around;
 }
 
 @keyframes grassScroll {
-  0% {
-    background-position-y: 0;
-  }
+    0% {
+        background-position-y: 0;
+    }
 
-  100% {
-    background-position-y: 64px;
-  }
+    100% {
+        background-position-y: 64px;
+    }
 }
 
 @keyframes homeAppear {
-  0% {
-    opacity: 0;
-    transform: translateY(-2rem);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(-1rem);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes homeAppearVs {
-  0% {
-    opacity: 0;
-    transform: scale(4) rotate(0deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(-20deg);
-  }
+    0% {
+        opacity: 0;
+        transform: scale(4) rotate(0deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(-20deg);
+    }
+}
+
+
+@keyframes homeAppearMedal {
+    0% {
+        opacity: 0;
+        transform: scale(2) translateY(-1.5rem);
+        transform-origin: top center;
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        transform-origin: top center;
+    }
 }

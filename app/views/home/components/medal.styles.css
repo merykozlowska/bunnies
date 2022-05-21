@@ -1,0 +1,29 @@
+.medal {
+    position: relative;
+    width: 26px;
+    height: 48px;
+}
+
+.medal__circle {
+    image-rendering: pixelated;
+}
+
+.medal__rank {
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    font-size: 24px;
+    color: #544202;
+}
+
+.medal[data-rank="2"] .medal__circle__border {
+    stroke: #606060;
+}
+
+.medal[data-rank="2"] .medal__circle__body {
+    stroke: #c5c5c5;
+}
+
+.medal[data-rank="2"] .medal__rank {
+    color: #313131;
+}

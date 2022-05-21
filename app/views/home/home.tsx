@@ -8,6 +8,7 @@ import {
   links as bunnySpriteLinks,
 } from "./components/bunnySprite";
 import { Button, links as buttonLinks } from "./components/button";
+import { links as medalLinks, Medal } from "./components/medal";
 import {
   links as progressBarLinks,
   ScoreProgress,
@@ -18,6 +19,7 @@ export const links = () => [
   ...bunnySpriteLinks(),
   ...progressBarLinks(),
   ...buttonLinks(),
+  ...medalLinks(),
   { rel: "stylesheet", href: styles },
 ];
 
@@ -30,25 +32,46 @@ export default function Home() {
     },
     fluffy: {
       id: "fluffy",
-      scoreValue: 80,
-      playersCount: 2,
+      scoreValue: 100,
+      playersCount: 10,
     },
   });
 
   useEffect(() => {
     setInterval(() => {
-      setGameState((gameState) => ({
-        snowball: {
-          ...gameState.snowball,
-          scoreValue: gameState.snowball.scoreValue + 5,
-          playersCount: Math.floor(Math.random() * 10),
-        },
-        fluffy: {
-          ...gameState.fluffy,
-          scoreValue: gameState.fluffy.scoreValue + 5,
-          playersCount: Math.floor(Math.random() * 10),
-        },
-      }));
+      setGameState((gameState) => {
+        const snowballPlayers =
+          Math.random() > 0.6
+            ? Math.max(
+                gameState.snowball.playersCount +
+                  Math.floor(Math.random() * 6) -
+                  3,
+                0
+              )
+            : gameState.snowball.playersCount;
+        const fluffyPlayers =
+          Math.random() > 0.6
+            ? Math.max(
+                gameState.fluffy.playersCount +
+                  Math.floor(Math.random() * 6) -
+                  3,
+                0
+              )
+            : gameState.fluffy.playersCount;
+
+        return {
+          snowball: {
+            ...gameState.snowball,
+            scoreValue: gameState.snowball.scoreValue + snowballPlayers * 2,
+            playersCount: snowballPlayers,
+          },
+          fluffy: {
+            ...gameState.fluffy,
+            scoreValue: gameState.fluffy.scoreValue + fluffyPlayers * 2,
+            playersCount: fluffyPlayers,
+          },
+        };
+      });
     }, 2000);
   }, []);
 
@@ -65,6 +88,7 @@ export default function Home() {
           bunnyColour="white"
           bunnyState={gameState.snowball}
           maxScoreValue={maxScoreValue}
+          rank={gameState.snowball.scoreValue === maxScoreValue ? 1 : 2}
         />
         <h2 className="home__bunnies__vs">vs</h2>
         <HomeBunny
@@ -72,6 +96,7 @@ export default function Home() {
           bunnyColour="brown"
           bunnyState={gameState.fluffy}
           maxScoreValue={maxScoreValue}
+          rank={gameState.fluffy.scoreValue === maxScoreValue ? 1 : 2}
         />
       </div>
     </main>
@@ -82,10 +107,14 @@ const HomeBunny: React.FC<{
   bunnyName: string;
   bunnyColour: BunnyColour;
   bunnyState: BunnyState;
+  rank: 1 | 2;
   maxScoreValue: number;
-}> = ({ bunnyName, bunnyColour, bunnyState, maxScoreValue }) => (
+}> = ({ bunnyName, bunnyColour, bunnyState, maxScoreValue, rank }) => (
   <div className="home__bunnies__bunny">
-    <BunnySprite bunnyColour={bunnyColour} bunnySize="lg" />
+    <div className="home__bunnies__hero">
+      <BunnySprite bunnyColour={bunnyColour} bunnySize="lg" />
+      <Medal rank={rank} />
+    </div>
     <h2 className="home__bunnies__name">{bunnyName}</h2>
     <div className="home__bunnies__progress_and_button">
       <ScoreProgress
