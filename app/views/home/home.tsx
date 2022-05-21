@@ -137,7 +137,7 @@ const HomeBunny: React.FC<{
         playersCount={playersCount}
         maxScore={maxScore}
       />
-      <Button buttonColor={bunnyColour}>Help {bunnyName}</Button>
+      <Button buttonColor={bunnyColour}>help {bunnyName}</Button>
     </div>
   </div>
 );
