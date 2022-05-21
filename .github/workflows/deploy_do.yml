@@ -1,0 +1,21 @@
+name: Deploy DO
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'durable_objects/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy DO
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish DO
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          command: publish -c durable_objects/wrangler.toml

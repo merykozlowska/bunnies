@@ -1,0 +1,11 @@
+name = "bunnies-game-do"
+main = "./src/game.ts"
+usage_model = "bundled"
+compatibility_date = "2022-05-21"
+
+[durable_objects]
+bindings = [{name = "GAME", class_name = "Game"}]
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["Game"]
