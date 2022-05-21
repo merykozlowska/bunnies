@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import type { BunnyId, BunnyState } from "~/model/bunnies";
+import type { DynamicNumberData } from "~/views/home/components/dynamicNumber";
+import { useDynamicNumber } from "~/views/home/components/dynamicNumber";
 
 import type { BunnyColour } from "./components/bunnySprite";
 import {
@@ -75,9 +77,11 @@ export default function Home() {
     }, 2000);
   }, []);
 
-  const maxScoreValue = Math.max(
-    gameState.snowball.scoreValue,
-    gameState.fluffy.scoreValue
+  const dynamicScoreSnowball = useDynamicNumber(gameState.snowball.scoreValue);
+  const dynamicScoreFluffy = useDynamicNumber(gameState.fluffy.scoreValue);
+  const maxScore = Math.max(
+    dynamicScoreSnowball.value,
+    dynamicScoreFluffy.value
   );
 
   return (
@@ -86,17 +90,19 @@ export default function Home() {
         <HomeBunny
           bunnyName="snowball"
           bunnyColour="white"
-          bunnyState={gameState.snowball}
-          maxScoreValue={maxScoreValue}
-          rank={gameState.snowball.scoreValue === maxScoreValue ? 1 : 2}
+          dynamicScore={dynamicScoreSnowball}
+          playersCount={gameState.snowball.playersCount}
+          maxScore={maxScore}
+          rank={dynamicScoreSnowball.value === maxScore ? 1 : 2}
         />
         <h2 className="home__bunnies__vs">vs</h2>
         <HomeBunny
           bunnyName="fluffy"
           bunnyColour="brown"
-          bunnyState={gameState.fluffy}
-          maxScoreValue={maxScoreValue}
-          rank={gameState.fluffy.scoreValue === maxScoreValue ? 1 : 2}
+          dynamicScore={dynamicScoreFluffy}
+          playersCount={gameState.fluffy.playersCount}
+          maxScore={maxScore}
+          rank={dynamicScoreFluffy.value === maxScore ? 1 : 2}
         />
       </div>
     </main>
@@ -106,10 +112,18 @@ export default function Home() {
 const HomeBunny: React.FC<{
   bunnyName: string;
   bunnyColour: BunnyColour;
-  bunnyState: BunnyState;
+  dynamicScore: DynamicNumberData;
+  playersCount: number;
   rank: 1 | 2;
-  maxScoreValue: number;
-}> = ({ bunnyName, bunnyColour, bunnyState, maxScoreValue, rank }) => (
+  maxScore: number;
+}> = ({
+  bunnyName,
+  bunnyColour,
+  dynamicScore,
+  playersCount,
+  maxScore,
+  rank,
+}) => (
   <div className="home__bunnies__bunny">
     <div className="home__bunnies__hero">
       <BunnySprite bunnyColour={bunnyColour} bunnySize="lg" />
@@ -119,9 +133,9 @@ const HomeBunny: React.FC<{
     <div className="home__bunnies__progress_and_button">
       <ScoreProgress
         bunnyColour={bunnyColour}
-        scoreValue={bunnyState.scoreValue}
-        maxScoreValue={maxScoreValue}
-        playersCount={bunnyState.playersCount}
+        dynamicScore={dynamicScore}
+        playersCount={playersCount}
+        maxScore={maxScore}
       />
       <Button buttonColor={bunnyColour}>Help {bunnyName}</Button>
     </div>

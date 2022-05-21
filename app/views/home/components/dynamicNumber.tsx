@@ -5,36 +5,48 @@ import styles from "./dynamicNumber.styles.css";
 export const links = () => [{ rel: "stylesheet", href: styles }];
 
 interface Props {
-  value: number;
+  dynamicNumberData: DynamicNumberData;
 }
 
-export const DynamicNumber: React.FC<Props> = ({ value }) => {
-  const [lastValue, setLastValue] = useState(value);
-  const [lastChange, setLastChange] = useState(5);
+export const DynamicNumber: React.FC<Props> = ({
+  dynamicNumberData: { value, lastChange },
+}) => (
+  <span className="dynamicNumber">
+    {lastChange !== 0 && (
+      <span
+        className="dynamicNumber__lastChange"
+        data-negative={lastChange < 0}
+      >
+        {lastChange > 0 ? "+ " : "- "}
+        {Math.abs(lastChange)}
+      </span>
+    )}
+    {value.toLocaleString()}
+  </span>
+);
+
+export interface DynamicNumberData {
+  value: number;
+  lastChange: number;
+}
+
+const animationDurationMs = 650;
+
+export const useDynamicNumber = (value: number): DynamicNumberData => {
+  const [currentUpdatedValue, setCurrentUpdatedValue] = useState(value);
+  const [lastChange, setLastChange] = useState(0);
 
   useEffect(() => {
-    if (lastValue === value) {
+    if (currentUpdatedValue === value) {
       return;
     }
 
     setLastChange(0);
-    setLastValue(value);
+    setTimeout(() => setLastChange(value - currentUpdatedValue));
+    setTimeout(() => {
+      setCurrentUpdatedValue(value);
+    }, animationDurationMs);
+  }, [currentUpdatedValue, value]);
 
-    setTimeout(() => setLastChange(value - lastValue));
-  }, [lastValue, value]);
-
-  return (
-    <span className="dynamicNumber">
-      {lastChange !== 0 && (
-        <span
-          className="dynamicNumber__lastChange"
-          data-negative={lastChange < 0}
-        >
-          {lastChange > 0 ? "+ " : "- "}
-          {Math.abs(lastChange)}
-        </span>
-      )}
-      {lastValue.toLocaleString()}
-    </span>
-  );
+  return { lastChange, value: currentUpdatedValue };
 };

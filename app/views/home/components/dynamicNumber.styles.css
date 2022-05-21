@@ -9,7 +9,10 @@
     position: absolute;
     z-index: 10;
     right: 0;
-    animation: dynamicNumberChange 1s forwards ease-out;
+
+    opacity: 0;
+    transform: translateY(-1.5em);
+    animation: dynamicNumberChange 750ms forwards ease-out;
 }
 
 .dynamicNumber__lastChange[data-negative="true"] {
@@ -18,11 +21,15 @@
 
 @keyframes dynamicNumberChange {
     0% {
+        opacity: 0;
+        transform: translateY(-1.5em);
+    }
+    70% {
         opacity: 1;
         transform: translateY(-0.6em);
     }
     100% {
         opacity: 0;
-        transform: translateY(-1.5em);
+        transform: translateY(0);
     }
 }
