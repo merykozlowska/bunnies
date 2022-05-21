@@ -44,7 +44,7 @@ export default function Home() {
           Math.random() > 0.6
             ? Math.max(
                 gameState.snowball.playersCount +
-                  Math.floor(Math.random() * 6) -
+                  Math.ceil(Math.random() * 6) -
                   3,
                 0
               )
@@ -53,7 +53,7 @@ export default function Home() {
           Math.random() > 0.6
             ? Math.max(
                 gameState.fluffy.playersCount +
-                  Math.floor(Math.random() * 6) -
+                  Math.ceil(Math.random() * 6) -
                   3,
                 0
               )
