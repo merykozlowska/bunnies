@@ -22,6 +22,12 @@ export function links() {
     { rel: "preload", href: "/resources/bunny_1_2.png", as: "image" },
     { rel: "preload", href: "/resources/bunny_2_1.png", as: "image" },
     { rel: "preload", href: "/resources/bunny_2_2.png", as: "image" },
+    {
+      rel: "preload",
+      href: "/resources/Cave-Story.woff2",
+      as: "font",
+      type: "font/woff2",
+    },
     { rel: "icon", href: "/favicon.png", type: "image/png" },
   ];
 }
