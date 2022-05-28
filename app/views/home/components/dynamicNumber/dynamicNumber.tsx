@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { ScrollingNumber } from "../scrollingNumber/scrollingNumber";
 import styles from "./dynamicNumber.styles.css";
-import { ScrollingNumber } from "./scrollingNumber";
 
 export const links = () => [{ rel: "stylesheet", href: styles }];
 

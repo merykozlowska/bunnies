@@ -36,6 +36,7 @@ export const ScrollingNumber: React.FC<Props> = ({ value }) => {
     updateAnimationFrame = requestAnimation();
 
     return () => window.cancelAnimationFrame(updateAnimationFrame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   return <>{displayedValue.toLocaleString()}</>;

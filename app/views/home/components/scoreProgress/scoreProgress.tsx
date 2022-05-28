@@ -1,15 +1,18 @@
 import React from "react";
 
+import {
+  BunnySprite,
+  links as bunnySpriteLinks,
+} from "~/components/bunnySprite/bunnySprite";
 import type { BunnyColour } from "~/model/bunnies";
 import { classNames } from "~/utils/classNames";
 
-import { BunnySprite, links as bunnySpriteLinks } from "./bunnySprite";
-import type { DynamicNumberData } from "./dynamicNumber";
+import type { DynamicNumberData } from "../dynamicNumber/dynamicNumber";
 import {
   DynamicNumber,
   links as dynamicNumberLinks,
   useDynamicNumber,
-} from "./dynamicNumber";
+} from "../dynamicNumber/dynamicNumber";
 import styles from "./scoreProgress.styles.css";
 
 export const links = () => [

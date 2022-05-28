@@ -8,14 +8,14 @@ import { Grass, links as grassLinks } from "~/components/grass/grass";
 import type { BunnyId, BunnyState } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
 
-import { Button, links as buttonLinks } from "./components/button";
-import type { DynamicNumberData } from "./components/dynamicNumber";
-import { useDynamicNumber } from "./components/dynamicNumber";
-import { links as medalLinks, Medal } from "./components/medal";
+import { Button, links as buttonLinks } from "./components/button/button";
+import type { DynamicNumberData } from "./components/dynamicNumber/dynamicNumber";
+import { useDynamicNumber } from "./components/dynamicNumber/dynamicNumber";
+import { links as medalLinks, Medal } from "./components/medal/medal";
 import {
   links as progressBarLinks,
   ScoreProgress,
-} from "./components/scoreProgress";
+} from "./components/scoreProgress/scoreProgress";
 import styles from "./home.styles.css";
 
 export const links = () => [
