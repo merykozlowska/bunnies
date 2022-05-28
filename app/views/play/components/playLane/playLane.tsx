@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import {
@@ -34,6 +34,7 @@ interface Item {
 
 export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
   const [lane, setLane] = useState(0);
+  const touchStartedRef = useRef(false);
 
   const switchLane = () => setLane((prevLane) => (prevLane + 1) % 2);
 
@@ -65,7 +66,11 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
       role="button"
       tabIndex={side === "left" ? 1 : 2}
       className={classNames("playLane", className)}
-      onMouseDown={switchLane}
+      onTouchStart={() => {
+        touchStartedRef.current = true;
+        switchLane();
+      }}
+      onClick={() => !touchStartedRef.current && switchLane()}
       onKeyDown={(e) => e.key === "Enter" && switchLane()}
     >
       {items.map((item) => (

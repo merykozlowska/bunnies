@@ -3,6 +3,8 @@ body {
     color: var(--text-color);
     line-height: 0.8;
     font-size: 1.6em;
+
+    user-select: none;
 }
 
 html, body {

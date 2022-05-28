@@ -1,5 +1,7 @@
 .playLane {
     position: relative;
+
+    touch-action: manipulation;
 }
 
 .playLane_separator {
