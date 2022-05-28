@@ -15,33 +15,31 @@ interface Props {
   className?: string;
 }
 
-export const BunnySprite: React.FC<Props> = ({
-  bunnyColour,
-  bunnySize,
-  className,
-  ...props
-}) => {
-  const imageNumber = bunnyColour === "brown" ? 1 : 2;
+export const BunnySprite = React.forwardRef<HTMLDivElement, Props>(
+  function BunnySprite({ bunnyColour, bunnySize, className, ...props }, ref) {
+    const imageNumber = bunnyColour === "brown" ? 1 : 2;
 
-  return (
-    <div
-      {...props}
-      className={classNames(
-        "bunnySprite",
-        `bunnySprite--${bunnySize}`,
-        className
-      )}
-    >
-      <img
-        className="bunnySprite__image1"
-        src={`/resources/bunny_${imageNumber}_1.png`}
-        alt=""
-      />
-      <img
-        className="bunnySprite__image2"
-        src={`/resources/bunny_${imageNumber}_2.png`}
-        alt=""
-      />
-    </div>
-  );
-};
+    return (
+      <div
+        {...props}
+        ref={ref}
+        className={classNames(
+          "bunnySprite",
+          `bunnySprite--${bunnySize}`,
+          className
+        )}
+      >
+        <img
+          className="bunnySprite__image1"
+          src={`/resources/bunny_${imageNumber}_1.png`}
+          alt=""
+        />
+        <img
+          className="bunnySprite__image2"
+          src={`/resources/bunny_${imageNumber}_2.png`}
+          alt=""
+        />
+      </div>
+    );
+  }
+);

@@ -41,6 +41,8 @@ interface Item {
 export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
   const [lane, setLane] = useState(0);
   const touchStartedRef = useRef(false);
+  const bunnyRef = useRef<HTMLDivElement>(null);
+  const laneRef = useRef<HTMLDivElement>(null);
 
   const switchLane = () => setLane((prevLane) => (prevLane + 1) % 2);
 
@@ -83,12 +85,24 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
           gameWorldBaseUnitPx *
           gameWorldBaseSpeedInUnitPerSeconds;
 
-        setItems((items) =>
-          items.map((item) => ({
+        setItems((items) => {
+          let newItems = items.map((item) => ({
             ...item,
             top: item.top + step,
-          }))
-        );
+          }));
+
+          const bunnyBoundingRect = bunnyRef.current?.getBoundingClientRect();
+          const laneBoundingRect = laneRef.current?.getBoundingClientRect();
+          if (!bunnyBoundingRect || !laneBoundingRect) {
+            return newItems;
+          }
+
+          newItems = newItems.filter(
+            (item) => item.top < laneBoundingRect.height
+          );
+
+          return newItems;
+        });
 
         previousTimeInMs = currentTimeInMs;
         updateAnimationFrame = requestAnimation();
@@ -110,6 +124,7 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
       }}
       onClick={() => !touchStartedRef.current && switchLane()}
       onKeyDown={(e) => e.key === "Enter" && switchLane()}
+      ref={laneRef}
     >
       {items.map((item) => (
         <CarrotSprite
@@ -124,6 +139,7 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
         bunnySize="lg"
         className="playLane__bunny"
         data-lane={lane}
+        ref={bunnyRef}
       />
       <div className="playLane_separator" />
     </div>
