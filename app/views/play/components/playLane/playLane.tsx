@@ -28,6 +28,7 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
   const switchLane = () => setLane((prevLane) => (prevLane + 1) % 2);
 
   useHotkeys(side, switchLane);
+  useHotkeys(side === "left" ? "a" : "d", switchLane);
 
   return (
     <div className={classNames("playLane", className)} onClick={switchLane}>
