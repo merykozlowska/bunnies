@@ -6,6 +6,7 @@
 
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .home__bunnies {
@@ -15,6 +16,8 @@
     justify-content: space-around;
     align-items: stretch;
     gap: 1.5rem;
+
+    max-width: 40rem;
 }
 
 .home__bunny {
@@ -69,8 +72,10 @@
 
 .home__bunnies__vs {
     font-size: var(--heading-xl);
-    opacity: 0;
 
+    align-self: center;
+
+    opacity: 0;
     animation: homeAppearVs 150ms 250ms forwards ease-in;
 }
 
