@@ -24,9 +24,10 @@ export function links() {
     { rel: "preload", href: "/resources/bunny_2_2.png", as: "image" },
     {
       rel: "preload",
-      href: "/resources/Cave-Story.woff2",
+      href: "/fonts/Cave-Story.woff2",
       as: "font",
       type: "font/woff2",
+      crossOrigin: "anonymous",
     },
     { rel: "icon", href: "/favicon.png", type: "image/png" },
   ];
