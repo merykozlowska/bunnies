@@ -31,7 +31,7 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
   useHotkeys(side === "left" ? "a" : "d", switchLane);
 
   return (
-    <div className={classNames("playLane", className)} onClick={switchLane}>
+    <div className={classNames("playLane", className)} onMouseDown={switchLane}>
       <BunnySprite
         bunnyColour={bunnyColourForId(bunnyId)}
         bunnySize="lg"
