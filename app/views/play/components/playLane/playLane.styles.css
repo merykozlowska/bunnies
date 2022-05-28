@@ -7,12 +7,12 @@
 .playLane_separator {
     position: absolute;
     left: calc(50% - 2px);
-    top: -64px;
+    top: calc(var(--game-world-base-unit) * -1);
     bottom: 0;
 
     border-left: 1px dashed var(--playLane-separator);
 
-    animation: separatorScroll infinite 2s linear;;
+    animation: separatorScroll infinite calc(1s / var(--game-world-base-unit-per-seconds)) linear;;
 }
 
 .playLane__bunny {
@@ -28,12 +28,24 @@
     left: 75%;
 }
 
+.playLane__item {
+    position: absolute;
+    left: 25%;
+    top: 0;
+
+    transform: translateX(-50%) translateY(-100%);
+}
+
+.playLane__item[data-lane="1"] {
+    left: 75%;
+}
+
 @keyframes separatorScroll {
     0% {
         transform: translateY(0);
     }
 
     100% {
-        transform: translateY(64px);
+        transform: translateY(var(--game-world-base-unit));
     }
 }

@@ -1,7 +1,7 @@
 .grassContainer {
     background-image: url("/resources/grass.png");
 
-    animation: grassScroll infinite 2s linear;
+    animation: grassScroll infinite calc(1s / var(--game-world-base-unit-per-seconds)) linear;
 }
 
 @media (prefers-reduced-motion) {
@@ -16,6 +16,6 @@
     }
 
     100% {
-        background-position-y: 64px;
+        background-position-y: var(--game-world-base-unit);
     }
 }

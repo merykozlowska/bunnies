@@ -11,6 +11,10 @@ import {
 } from "~/components/carrotSprite/carrotSprite";
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
+import {
+  gameWorldBaseSpeedInUnitPerSeconds,
+  gameWorldBaseUnitPx,
+} from "~/model/world";
 import { classNames } from "~/utils/classNames";
 
 import styles from "./playLane.styles.css";
@@ -30,6 +34,8 @@ export const links = () => [
 interface Item {
   id: string;
   type: "carrot";
+  lane: 0 | 1;
+  top: number;
 }
 
 export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
@@ -49,16 +55,48 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
       timeoutRef = setTimeout(() => {
         setItems((items) => [
           ...items,
-          { id: new Date().getTime().toString(), type: "carrot" },
+          {
+            id: new Date().getTime().toString(),
+            type: "carrot",
+            lane: Math.random() >= 0.5 ? 1 : 0,
+            top: 0,
+          },
         ]);
 
         generateItem();
-      }, 5000 * (Math.random() + 1));
+      }, 10000 * Math.random() + 1000);
     };
 
     generateItem();
 
     return () => clearTimeout(timeoutRef);
+  }, []);
+
+  useEffect(() => {
+    let updateAnimationFrame: number;
+    let previousTimeInMs = 0;
+    const requestAnimation = () =>
+      window.requestAnimationFrame((currentTimeInMs) => {
+        const timePassed = currentTimeInMs - previousTimeInMs;
+        const step =
+          (timePassed / 1000) *
+          gameWorldBaseUnitPx *
+          gameWorldBaseSpeedInUnitPerSeconds;
+
+        setItems((items) =>
+          items.map((item) => ({
+            ...item,
+            top: item.top + step,
+          }))
+        );
+
+        previousTimeInMs = currentTimeInMs;
+        updateAnimationFrame = requestAnimation();
+      });
+
+    updateAnimationFrame = requestAnimation();
+
+    return () => window.cancelAnimationFrame(updateAnimationFrame);
   }, []);
 
   return (
@@ -74,7 +112,12 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
       onKeyDown={(e) => e.key === "Enter" && switchLane()}
     >
       {items.map((item) => (
-        <CarrotSprite key={item.id} />
+        <CarrotSprite
+          key={item.id}
+          className="playLane__item"
+          style={{ top: `${item.top}px` }}
+          data-lane={item.lane}
+        />
       ))}
       <BunnySprite
         bunnyColour={bunnyColourForId(bunnyId)}
