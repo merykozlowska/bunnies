@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { Grass, links as grassLinks } from "~/components/grass/grass";
 import type { BunnyId, BunnyState } from "~/model/bunnies";
-import type { DynamicNumberData } from "~/views/home/components/dynamicNumber";
-import { useDynamicNumber } from "~/views/home/components/dynamicNumber";
 
 import type { BunnyColour } from "./components/bunnySprite";
 import {
@@ -10,6 +9,8 @@ import {
   links as bunnySpriteLinks,
 } from "./components/bunnySprite";
 import { Button, links as buttonLinks } from "./components/button";
+import type { DynamicNumberData } from "./components/dynamicNumber";
+import { useDynamicNumber } from "./components/dynamicNumber";
 import { links as medalLinks, Medal } from "./components/medal";
 import {
   links as progressBarLinks,
@@ -22,6 +23,7 @@ export const links = () => [
   ...progressBarLinks(),
   ...buttonLinks(),
   ...medalLinks(),
+  ...grassLinks(),
   { rel: "stylesheet", href: styles },
 ];
 
@@ -85,7 +87,7 @@ export default function Home() {
   );
 
   return (
-    <main className="home__container">
+    <Grass className="home__container" speed={100}>
       <div className="home__bunnies">
         <HomeBunny
           bunnyId="snowball"
@@ -107,7 +109,7 @@ export default function Home() {
           rank={dynamicScoreFluffy.value === maxScore ? 1 : 2}
         />
       </div>
-    </main>
+    </Grass>
   );
 }
 

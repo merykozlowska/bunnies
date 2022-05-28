@@ -1,0 +1,21 @@
+.grassContainer {
+    background-image: url("/resources/grass.png");
+
+    animation: grassScroll infinite 2s linear;
+}
+
+@media (prefers-reduced-motion) {
+    .grassContainer {
+        animation: none;
+    }
+}
+
+@keyframes grassScroll {
+    0% {
+        background-position-y: 0;
+    }
+
+    100% {
+        background-position-y: 64px;
+    }
+}

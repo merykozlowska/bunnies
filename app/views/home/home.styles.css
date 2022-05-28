@@ -1,20 +1,11 @@
 .home__container {
     width: 100%;
     height: 100%;
-    background-image: url("/resources/grass.png");
-
-    animation: grassScroll infinite 2s linear;
 
     padding: 0 var(--spacing-s);
 
     display: flex;
     align-items: center;
-}
-
-@media (prefers-reduced-motion) {
-    .home__container {
-        animation: none;
-    }
 }
 
 .home__bunnies {
@@ -86,16 +77,6 @@
 .home__bunnies {
     display: flex;
     justify-content: space-around;
-}
-
-@keyframes grassScroll {
-    0% {
-        background-position-y: 0;
-    }
-
-    100% {
-        background-position-y: 64px;
-    }
 }
 
 @keyframes homeAppear {
