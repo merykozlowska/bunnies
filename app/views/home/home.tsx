@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 
+import {
+  BunnySprite,
+  links as bunnySpriteLinks,
+} from "~/components/bunnySprite/bunnySprite";
 import { Grass, links as grassLinks } from "~/components/grass/grass";
 import type { BunnyId, BunnyState } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
 
-import {
-  BunnySprite,
-  links as bunnySpriteLinks,
-} from "./components/bunnySprite";
 import { Button, links as buttonLinks } from "./components/button";
 import type { DynamicNumberData } from "./components/dynamicNumber";
 import { useDynamicNumber } from "./components/dynamicNumber";

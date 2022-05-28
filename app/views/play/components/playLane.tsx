@@ -1,12 +1,12 @@
 import React from "react";
 
-import type { BunnyId } from "~/model/bunnies";
-import { bunnyColourForId } from "~/model/bunnies";
-import { classNames } from "~/utils/classNames";
 import {
   BunnySprite,
   links as bunnySpriteLinks,
-} from "~/views/home/components/bunnySprite";
+} from "~/components/bunnySprite/bunnySprite";
+import type { BunnyId } from "~/model/bunnies";
+import { bunnyColourForId } from "~/model/bunnies";
+import { classNames } from "~/utils/classNames";
 
 import styles from "./playLane.styles.css";
 
