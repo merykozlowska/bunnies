@@ -2,17 +2,13 @@ import { useParams } from "react-router";
 
 import { Grass, links as grassLinks } from "~/components/grass/grass";
 import type { BunnyId } from "~/model/bunnies";
-import { bunnyColourForId } from "~/model/bunnies";
-import {
-  BunnySprite,
-  links as bunnySpriteLinks,
-} from "~/views/home/components/bunnySprite";
 
+import { links as playLaneLinks, PlayLane } from "./components/playLane";
 import styles from "./play.styles.css";
 
 export const links = () => [
   ...grassLinks(),
-  ...bunnySpriteLinks(),
+  ...playLaneLinks(),
   { rel: "stylesheet", href: styles },
 ];
 
@@ -21,13 +17,8 @@ export default function Play() {
 
   return (
     <Grass className="play__container" speed={100}>
-      <div>
-        <BunnySprite
-          bunnyColour={bunnyColourForId(bunnyId as BunnyId)}
-          bunnySize="lg"
-        />
-      </div>
-      <div></div>
+      <PlayLane bunnyId={bunnyId as BunnyId} className="play__playLane" />
+      <PlayLane bunnyId={bunnyId as BunnyId} className="play__playLane" />
     </Grass>
   );
 }
