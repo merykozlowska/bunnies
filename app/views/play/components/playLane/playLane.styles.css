@@ -1,3 +1,25 @@
 .playLane {
+    position: relative;
+}
 
+.playLane_separator {
+    position: absolute;
+    left: calc(50% - 2px);
+    top: 0;
+    bottom: 0;
+
+    border: 2px dashed var(--playLane-separator);
+}
+
+.playLane__bunny {
+    position: absolute;
+    left: 25%;
+    bottom: 100px;
+
+    transform: translateX(-50%);
+    transition: left 150ms ease-in-out;
+}
+
+.playLane__bunny[data-lane="1"] {
+    left: 75%;
 }

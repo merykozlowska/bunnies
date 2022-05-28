@@ -8,3 +8,7 @@
 .play__playLane {
     flex-grow: 1;
 }
+
+.play__playLane + .play__playLane {
+    border-left: 2px solid var(--playLane-separator);
+}

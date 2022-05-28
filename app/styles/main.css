@@ -47,6 +47,8 @@ html, body {
     --button-brown-border: #8C3F21;
     --button-brown-text: #000;
 
+    --playLane-separator: #FFF;
+
     /* medium-screen: 768px; */
     /* large-screen: 1024; */
 }

@@ -20,8 +20,16 @@ export default function Play() {
 
   return (
     <Grass className="play__container" speed={100}>
-      <PlayLane bunnyId={bunnyId as BunnyId} className="play__playLane" />
-      <PlayLane bunnyId={bunnyId as BunnyId} className="play__playLane" />
+      <PlayLane
+        side="left"
+        bunnyId={bunnyId as BunnyId}
+        className="play__playLane"
+      />
+      <PlayLane
+        side="right"
+        bunnyId={bunnyId as BunnyId}
+        className="play__playLane"
+      />
     </Grass>
   );
 }
