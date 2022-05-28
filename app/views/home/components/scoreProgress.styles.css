@@ -32,13 +32,13 @@
 .scoreProgress__value {
     position: relative;
     color: var(--progress-bar-text);
-    font-size: 2rem;
+    font-size: var(--text-m);
 }
 
 .scoreProgress__players {
     display: flex;
     align-items: flex-end;
-    font-size: 1.75rem;
+    font-size: var(--text-m);
 }
 
 .scoreProgress__players > * + * {

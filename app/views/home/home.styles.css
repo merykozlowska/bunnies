@@ -70,23 +70,17 @@
 .home__bunnies__name, .home__bunnies__vs {
     position: relative;
 
-    font-size: 3rem;
+    font-size: var(--heading-l);
     letter-spacing: 0.06em;
 
     text-align: center;
 }
 
 .home__bunnies__vs {
-    font-size: 4rem;
+    font-size: var(--heading-xl);
     opacity: 0;
 
     animation: homeAppearVs 150ms 250ms forwards ease-in;
-}
-
-@media only screen and (min-width: 768px) {
-    .home__bunnies__name {
-        font-size: 6rem;
-    }
 }
 
 .home__bunnies {

@@ -2,6 +2,7 @@ body {
     font-family: CaveStoryRegular, Arial, Helvetica, sans-serif;
     color: var(--text-color);
     line-height: 0.8;
+    font-size: 1.6em;
 }
 
 html, body {
@@ -26,6 +27,11 @@ html, body {
     --spacing-l: var(--size-12);
     --spacing-xl: var(--size-16);
 
+    --text-m: 2rem;
+
+    --heading-l: 3rem;
+    --heading-xl: 4rem;
+
     --text-color: #fff;
     --progress-bar-text: #000;
     --progress-bar-background: #fff;
@@ -43,4 +49,11 @@ html, body {
 
     /* medium-screen: 768px; */
     /* large-screen: 1024; */
+}
+
+@media only screen and (min-width: 768px) {
+    :root {
+        --heading-l: 4rem;
+        --heading-xl: 6rem;
+    }
 }
