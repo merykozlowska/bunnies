@@ -6,11 +6,12 @@ import {
   links as bunnySpriteLinks,
 } from "~/components/bunnySprite/bunnySprite";
 import {
-  CarrotSprite,
+  ItemSprite,
   links as carrotSpriteLinks,
-} from "~/components/carrotSprite/carrotSprite";
+} from "~/components/itemSprite/itemSprite";
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
+import type { ItemType } from "~/model/items";
 import {
   gameWorldBaseSpeedInUnitPerSeconds,
   gameWorldBaseUnitPx,
@@ -33,7 +34,7 @@ export const links = () => [
 
 interface Item {
   id: string;
-  type: "carrot";
+  type: ItemType;
   lane: 0 | 1;
   top: number;
 }
@@ -59,7 +60,7 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
           ...items,
           {
             id: new Date().getTime().toString(),
-            type: "carrot",
+            type: Math.random() >= 0.5 ? "carrot" : "bomb",
             lane: Math.random() >= 0.5 ? 1 : 0,
             top: 0,
           },
@@ -127,8 +128,9 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
       ref={laneRef}
     >
       {items.map((item) => (
-        <CarrotSprite
+        <ItemSprite
           key={item.id}
+          itemType={item.type}
           className="playLane__item"
           style={{ top: `${item.top}px` }}
           data-lane={item.lane}
