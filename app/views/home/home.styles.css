@@ -52,7 +52,7 @@
     flex-grow: 1;
 }
 
-.home__bunnies__progress_and_button > button {
+.home__bunnies__progress_and_button > .customButton {
     align-self: flex-end;
 }
 
