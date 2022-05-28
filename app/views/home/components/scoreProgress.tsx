@@ -1,6 +1,7 @@
 import React from "react";
 
-import type { BunnyColour } from "./bunnySprite";
+import type { BunnyColour } from "~/model/bunnies";
+
 import { BunnySprite, links as bunnySpriteLinks } from "./bunnySprite";
 import type { DynamicNumberData } from "./dynamicNumber";
 import {
@@ -44,7 +45,7 @@ export const ScoreProgress: React.FC<Props> = ({
         </div>
       </div>
       <div className="scoreProgress__players">
-        <BunnySprite bunnyColour={bunnyColour} />
+        <BunnySprite bunnyColour={bunnyColour} bunnySize="sm" />
         <span>
           <DynamicNumber dynamicNumberData={dynamicPlayersCount} /> players
         </span>

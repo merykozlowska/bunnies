@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import { Grass, links as grassLinks } from "~/components/grass/grass";
 import type { BunnyId, BunnyState } from "~/model/bunnies";
+import { bunnyColourForId } from "~/model/bunnies";
 
-import type { BunnyColour } from "./components/bunnySprite";
 import {
   BunnySprite,
   links as bunnySpriteLinks,
@@ -92,7 +92,6 @@ export default function Home() {
         <HomeBunny
           bunnyId="snowball"
           bunnyName="snowball"
-          bunnyColour="white"
           dynamicScore={dynamicScoreSnowball}
           playersCount={gameState.snowball.playersCount}
           maxScore={maxScore}
@@ -102,7 +101,6 @@ export default function Home() {
         <HomeBunny
           bunnyId="fluffy"
           bunnyName="fluffy"
-          bunnyColour="brown"
           dynamicScore={dynamicScoreFluffy}
           playersCount={gameState.fluffy.playersCount}
           maxScore={maxScore}
@@ -116,36 +114,31 @@ export default function Home() {
 const HomeBunny: React.FC<{
   bunnyId: BunnyId;
   bunnyName: string;
-  bunnyColour: BunnyColour;
   dynamicScore: DynamicNumberData;
   playersCount: number;
   rank: 1 | 2;
   maxScore: number;
-}> = ({
-  bunnyId,
-  bunnyName,
-  bunnyColour,
-  dynamicScore,
-  playersCount,
-  maxScore,
-  rank,
-}) => (
-  <div className="home__bunnies__bunny">
-    <div className="home__bunnies__hero">
-      <BunnySprite bunnyColour={bunnyColour} bunnySize="lg" />
-      <Medal rank={rank} />
+}> = ({ bunnyId, bunnyName, dynamicScore, playersCount, maxScore, rank }) => {
+  const bunnyColour = bunnyColourForId(bunnyId);
+
+  return (
+    <div className="home__bunnies__bunny">
+      <div className="home__bunnies__hero">
+        <BunnySprite bunnyColour={bunnyColour} bunnySize="lg" />
+        <Medal rank={rank} />
+      </div>
+      <h2 className="home__bunnies__name">{bunnyName}</h2>
+      <div className="home__bunnies__progress_and_button">
+        <ScoreProgress
+          bunnyColour={bunnyColour}
+          dynamicScore={dynamicScore}
+          playersCount={playersCount}
+          maxScore={maxScore}
+        />
+        <Button buttonColor={bunnyColour} to={`/play/${bunnyId}`}>
+          help {bunnyName}
+        </Button>
+      </div>
     </div>
-    <h2 className="home__bunnies__name">{bunnyName}</h2>
-    <div className="home__bunnies__progress_and_button">
-      <ScoreProgress
-        bunnyColour={bunnyColour}
-        dynamicScore={dynamicScore}
-        playersCount={playersCount}
-        maxScore={maxScore}
-      />
-      <Button buttonColor={bunnyColour} to={`/play/${bunnyId}`}>
-        help {bunnyName}
-      </Button>
-    </div>
-  </div>
-);
+  );
+};

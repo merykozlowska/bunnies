@@ -1,21 +1,19 @@
 import React from "react";
 
+import type { BunnyColour } from "~/model/bunnies";
+
 import styles from "./bunnySprite.styles.css";
 
 export const links = () => [{ rel: "stylesheet", href: styles }];
 
-export type BunnyColour = "white" | "brown";
 type BunnySize = "sm" | "lg";
 
 interface Props {
-  bunnyColour?: BunnyColour;
-  bunnySize?: BunnySize;
+  bunnyColour: BunnyColour;
+  bunnySize: BunnySize;
 }
 
-export const BunnySprite: React.FC<Props> = ({
-  bunnyColour = "white",
-  bunnySize = "sm",
-}) => {
+export const BunnySprite: React.FC<Props> = ({ bunnyColour, bunnySize }) => {
   const imageNumber = bunnyColour === "brown" ? 1 : 2;
 
   return (
