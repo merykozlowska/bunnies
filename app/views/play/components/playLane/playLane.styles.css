@@ -8,7 +8,7 @@
     top: 0;
     bottom: 0;
 
-    border: 2px dashed var(--playLane-separator);
+    border-left: 1px dashed var(--playLane-separator);
 }
 
 .playLane__bunny {

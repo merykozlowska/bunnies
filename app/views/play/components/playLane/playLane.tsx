@@ -24,10 +24,13 @@ export const links = () => [
 
 export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
   const [lane, setLane] = useState(0);
-  useHotkeys(side, () => setLane((prevLane) => (prevLane + 1) % 2));
+
+  const switchLane = () => setLane((prevLane) => (prevLane + 1) % 2);
+
+  useHotkeys(side, switchLane);
 
   return (
-    <div className={classNames("playLane", className)}>
+    <div className={classNames("playLane", className)} onClick={switchLane}>
       <BunnySprite
         bunnyColour={bunnyColourForId(bunnyId)}
         bunnySize="lg"
