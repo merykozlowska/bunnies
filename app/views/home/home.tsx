@@ -88,6 +88,7 @@ export default function Home() {
     <main className="home__container">
       <div className="home__bunnies">
         <HomeBunny
+          bunnyId="snowball"
           bunnyName="snowball"
           bunnyColour="white"
           dynamicScore={dynamicScoreSnowball}
@@ -97,6 +98,7 @@ export default function Home() {
         />
         <h2 className="home__bunnies__vs">vs</h2>
         <HomeBunny
+          bunnyId="fluffy"
           bunnyName="fluffy"
           bunnyColour="brown"
           dynamicScore={dynamicScoreFluffy}
@@ -110,6 +112,7 @@ export default function Home() {
 }
 
 const HomeBunny: React.FC<{
+  bunnyId: BunnyId;
   bunnyName: string;
   bunnyColour: BunnyColour;
   dynamicScore: DynamicNumberData;
@@ -117,6 +120,7 @@ const HomeBunny: React.FC<{
   rank: 1 | 2;
   maxScore: number;
 }> = ({
+  bunnyId,
   bunnyName,
   bunnyColour,
   dynamicScore,
@@ -137,7 +141,7 @@ const HomeBunny: React.FC<{
         playersCount={playersCount}
         maxScore={maxScore}
       />
-      <Button buttonColor={bunnyColour} to={`/play/${bunnyName}`}>
+      <Button buttonColor={bunnyColour} to={`/play/${bunnyId}`}>
         help {bunnyName}
       </Button>
     </div>
