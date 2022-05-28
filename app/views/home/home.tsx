@@ -122,20 +122,25 @@ const HomeBunny: React.FC<{
   const bunnyColour = bunnyColourForId(bunnyId);
 
   return (
-    <div className="home__bunnies__bunny">
-      <div className="home__bunnies__hero">
+    <div className="home__bunny">
+      <div className="home__bunny__hero">
         <BunnySprite bunnyColour={bunnyColour} bunnySize="lg" />
-        <Medal rank={rank} />
+        <Medal rank={rank} className="home__bunny__hero__medal" />
       </div>
-      <h2 className="home__bunnies__name">{bunnyName}</h2>
-      <div className="home__bunnies__progress_and_button">
+      <h2 className="home__bunny__name">{bunnyName}</h2>
+      <div className="home__bunny__progress">
         <ScoreProgress
           bunnyColour={bunnyColour}
           dynamicScore={dynamicScore}
           playersCount={playersCount}
           maxScore={maxScore}
+          className="home__bunny__progress__score"
         />
-        <Button buttonColor={bunnyColour} to={`/play/${bunnyId}`}>
+        <Button
+          buttonColor={bunnyColour}
+          to={`/play/${bunnyId}`}
+          className="home__bunny__progress__button"
+        >
           help {bunnyName}
         </Button>
       </div>

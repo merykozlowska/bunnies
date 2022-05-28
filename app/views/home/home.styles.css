@@ -17,18 +17,18 @@
     gap: 1.5rem;
 }
 
-.home__bunnies__bunny {
+.home__bunny {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--spacing-xs);
 }
 
-.home__bunnies__hero {
+.home__bunny__hero {
     position: relative;
 }
 
-.home__bunnies__hero .medal {
+.home__bunny__hero__medal {
     position: absolute;
     right: -10px;
     bottom: -20px;
@@ -39,15 +39,11 @@
 }
 
 
-.home__bunnies__bunny .scoreProgress {
+.home__bunny__progress__score {
     flex-grow: 1;
 }
 
-.home__bunnies__progress_and_button > .customButton {
-    align-self: flex-end;
-}
-
-.home__bunnies__progress_and_button {
+.home__bunny__progress {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
@@ -58,7 +54,11 @@
     animation: homeAppear 150ms 650ms forwards ease-in;
 }
 
-.home__bunnies__name, .home__bunnies__vs {
+.home__bunny__progress__button {
+    align-self: flex-end;
+}
+
+.home__bunny__name, .home__bunnies__vs {
     position: relative;
 
     font-size: var(--heading-l);

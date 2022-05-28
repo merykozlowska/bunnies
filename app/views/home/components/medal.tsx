@@ -1,15 +1,18 @@
 import React from "react";
 
+import { classNames } from "~/utils/classNames";
+
 import styles from "./medal.styles.css";
 
 export const links = () => [{ rel: "stylesheet", href: styles }];
 
 interface Props {
   rank: number;
+  className?: string;
 }
 
-export const Medal: React.FC<Props> = ({ rank }) => (
-  <div className="medal" data-rank={rank}>
+export const Medal: React.FC<Props> = ({ rank, className }) => (
+  <div className={classNames("medal", className)} data-rank={rank}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 -0.5 13 24"

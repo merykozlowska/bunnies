@@ -1,6 +1,7 @@
 import React from "react";
 
 import type { BunnyColour } from "~/model/bunnies";
+import { classNames } from "~/utils/classNames";
 
 import { BunnySprite, links as bunnySpriteLinks } from "./bunnySprite";
 import type { DynamicNumberData } from "./dynamicNumber";
@@ -22,6 +23,7 @@ interface Props {
   dynamicScore: DynamicNumberData;
   maxScore: number;
   playersCount: number;
+  className?: string;
 }
 
 export const ScoreProgress: React.FC<Props> = ({
@@ -29,11 +31,12 @@ export const ScoreProgress: React.FC<Props> = ({
   dynamicScore,
   maxScore,
   playersCount,
+  className,
 }) => {
   const dynamicPlayersCount = useDynamicNumber(playersCount);
 
   return (
-    <div className="scoreProgress">
+    <div className={classNames("scoreProgress", className)}>
       <div
         className="scoreProgress__bar"
         style={{
