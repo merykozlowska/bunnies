@@ -61,7 +61,13 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
   }, []);
 
   return (
-    <div className={classNames("playLane", className)} onMouseDown={switchLane}>
+    <div
+      role="button"
+      tabIndex={side === "left" ? 1 : 2}
+      className={classNames("playLane", className)}
+      onMouseDown={switchLane}
+      onKeyDown={(e) => e.key === "Enter" && switchLane()}
+    >
       {items.map((item) => (
         <CarrotSprite key={item.id} />
       ))}
