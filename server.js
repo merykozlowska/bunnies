@@ -7,6 +7,19 @@ const handleRequest = createPagesFunctionHandler({
   getLoadContext: (context) => context.env,
 });
 
-export function onRequest(context) {
-  return handleRequest(context);
-}
+export default {
+  async fetch(request, env, ctx) {
+    return handleRequest({
+      request: new Request(request),
+      env,
+      waitUntil: ctx.waitUntil,
+      params: {},
+      data: undefined,
+      next: () => {
+        throw new Error("next() called in Worker");
+      },
+    });
+  },
+};
+
+export { Game } from "./durable_objects/src/game";

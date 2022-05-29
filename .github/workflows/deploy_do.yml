@@ -2,8 +2,6 @@ name: Deploy DO
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'durable_objects/**'
 

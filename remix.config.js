@@ -8,6 +8,6 @@ module.exports = {
   ignoredRouteFiles: ["**/.*"],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
-  // serverBuildPath: "functions/[[path]].js",
+  serverBuildPath: "public/_worker.js",
   // publicPath: "/build/",
 };

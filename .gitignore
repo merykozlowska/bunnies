@@ -4,6 +4,8 @@ node_modules
 /functions/\[\[path\]\].js
 /functions/\[\[path\]\].js.map
 /public/build
+/public/_worker.js
+/public/_worker.js.map
 .env
 
 .idea
