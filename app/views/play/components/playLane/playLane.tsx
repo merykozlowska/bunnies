@@ -156,7 +156,7 @@ export const PlayLane: React.FC<Props> = ({
           );
 
           if (hasLost) {
-            onGameOver();
+            setTimeout(() => onGameOver());
             return items;
           }
 
