@@ -30,9 +30,12 @@ export default function Play() {
   const [score, setScore] = useState(0);
 
   // useEffect(() => {
-  //   setInterval(() => {
+  //   const interval = setInterval(() => {
   //     setScore((curScore) => curScore + Math.floor(Math.random() * 100));
   //   }, 200);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
   // }, []);
 
   useUpdateGame({ score, bunnyId: bunnyId as BunnyId });

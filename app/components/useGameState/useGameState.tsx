@@ -9,13 +9,18 @@ export const useGameState = (): { gameState?: GameState } => {
   const [gameState, setGameState] = useState<GameState>();
 
   useEffect(() => {
-    session?.ws.addEventListener("message", (event) => {
+    const listener = (event: MessageEvent) => {
       const message = JSON.parse(event.data);
       if (message.type !== ServerMessageType.stateUpdated) {
         return;
       }
       setGameState(message.payload.state);
-    });
+    };
+    session?.ws.addEventListener("message", listener);
+
+    return () => {
+      session?.ws.removeEventListener("message", listener);
+    };
   }, [session]);
 
   return { gameState };
