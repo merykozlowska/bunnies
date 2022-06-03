@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { Grass, links as grassLinks } from "~/components/grass/grass";
-import { useSession } from "~/components/sessionContext/sessionContext";
+import { useUpdateGame } from "~/components/useUpdateGame/useUpdateGame";
 import type { BunnyId } from "~/model/bunnies";
-import { ClientMessageType } from "~/model/message";
 
 import {
   GameOverScreen,
@@ -28,20 +27,19 @@ type GameState = "playing" | "gameOver";
 export default function Play() {
   const { bunnyId } = useParams<{ bunnyId: BunnyId }>();
   const [gameState, setGameState] = useState<GameState>("playing");
+  const [score, setScore] = useState(0);
 
-  const session = useSession();
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     setScore((curScore) => curScore + Math.floor(Math.random() * 100));
+  //   }, 200);
+  // }, []);
 
-  useEffect(() => {
-    session?.ws.send(
-      JSON.stringify({
-        type: ClientMessageType.bunnySelected,
-        payload: { bunnyId },
-      })
-    );
-  }, [session, bunnyId]);
+  useUpdateGame({ score, bunnyId: bunnyId as BunnyId });
 
   return (
     <Grass className="play__container" speed={100}>
+      {score}
       {gameState === "gameOver" && (
         <GameOverScreen className="play__gameOver" />
       )}
