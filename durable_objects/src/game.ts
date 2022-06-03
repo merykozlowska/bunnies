@@ -98,22 +98,31 @@ export class Game implements DurableObject {
 
       case ClientMessageType.scoreUpdated: {
         const score = message.payload.score;
+        this.handleScoreUpdated(session, score);
+        break;
+      }
 
-        if (session.bunnyId == null) {
-          throw new Error("received score but no bunny id set");
-        }
-        if (session.lastScore == null) {
-          throw new Error("received score but no last score set");
-        }
-
-        const dScore = score - session.lastScore;
-        session.lastScore = score;
-        this.gameState.bunnies[session.bunnyId].scoreValue += dScore;
-
-        this.broadcastStateUpdated();
+      case ClientMessageType.gameOver: {
+        const score = message.payload.score;
+        this.handleScoreUpdated(session, score);
+        session.lastScore = 0;
         break;
       }
     }
+  }
+
+  handleScoreUpdated(session: Session, score: number) {
+    if (session.bunnyId == null) {
+      throw new Error("received score but no bunny id set");
+    }
+    if (session.lastScore == null) {
+      throw new Error("received score but no last score set");
+    }
+    const dScore = score - session.lastScore;
+    session.lastScore = score;
+    this.gameState.bunnies[session.bunnyId].scoreValue += dScore;
+
+    this.broadcastStateUpdated();
   }
 
   broadcastStateUpdated(): void {
