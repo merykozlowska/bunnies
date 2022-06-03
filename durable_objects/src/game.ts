@@ -84,6 +84,10 @@ export class Game implements DurableObject {
         if (!isValidBunnyId(selectedBunnyId)) {
           throw new Error(`invalid bunny id: ${selectedBunnyId}`);
         }
+        if (session.bunnyId) {
+          this.gameState.bunnies[session.bunnyId].playersCount--;
+        }
+
         session.bunnyId = selectedBunnyId;
         session.lastScore = 0;
         this.gameState.bunnies[selectedBunnyId].playersCount++;
