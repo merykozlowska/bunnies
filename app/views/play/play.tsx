@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { Grass, links as grassLinks } from "~/components/grass/grass";
@@ -23,8 +23,11 @@ export const links = () => [
   { rel: "stylesheet", href: styles },
 ];
 
+type GameState = "playing" | "gameOver";
+
 export default function Play() {
   const { bunnyId } = useParams<{ bunnyId: BunnyId }>();
+  const [gameState, setGameState] = useState<GameState>("playing");
 
   const session = useSession();
 
@@ -39,17 +42,21 @@ export default function Play() {
 
   return (
     <Grass className="play__container" speed={100}>
-      <GameOverScreen className="play__gameOver" />
+      {gameState === "gameOver" && (
+        <GameOverScreen className="play__gameOver" />
+      )}
 
       <div className="play__lanes">
         <PlayLane
           side="left"
           bunnyId={bunnyId as BunnyId}
+          isRunning={gameState === "playing"}
           className="play__playLane"
         />
         <PlayLane
           side="right"
           bunnyId={bunnyId as BunnyId}
+          isRunning={gameState === "playing"}
           className="play__playLane"
         />
       </div>

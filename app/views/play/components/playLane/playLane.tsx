@@ -23,6 +23,7 @@ import styles from "./playLane.styles.css";
 interface Props {
   bunnyId: BunnyId;
   side: "left" | "right";
+  isRunning: boolean;
   className?: string;
 }
 
@@ -39,7 +40,12 @@ interface Item {
   top: number;
 }
 
-export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
+export const PlayLane: React.FC<Props> = ({
+  bunnyId,
+  side,
+  isRunning,
+  className,
+}) => {
   const [lane, setLane] = useState(0);
   const touchStartedRef = useRef(false);
   const bunnyRef = useRef<HTMLDivElement>(null);
@@ -53,6 +59,8 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
+    if (!isRunning) return;
+
     let timeoutRef: NodeJS.Timeout;
     const generateItem = () => {
       timeoutRef = setTimeout(() => {
@@ -73,9 +81,11 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
     generateItem();
 
     return () => clearTimeout(timeoutRef);
-  }, []);
+  }, [isRunning]);
 
   useEffect(() => {
+    if (!isRunning) return;
+
     let updateAnimationFrame: number;
     let previousTimeInMs = 0;
     const requestAnimation = () =>
@@ -112,7 +122,7 @@ export const PlayLane: React.FC<Props> = ({ bunnyId, side, className }) => {
     updateAnimationFrame = requestAnimation();
 
     return () => window.cancelAnimationFrame(updateAnimationFrame);
-  }, []);
+  }, [isRunning]);
 
   return (
     <div
