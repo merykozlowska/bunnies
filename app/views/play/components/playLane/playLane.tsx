@@ -1,3 +1,4 @@
+import type { MutableRefObject } from "react";
 import React, { useEffect, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -12,10 +13,7 @@ import {
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
 import type { ItemType } from "~/model/items";
-import {
-  gameWorldBaseSpeedInUnitPerSeconds,
-  gameWorldBaseUnitPx,
-} from "~/model/world";
+import { gameWorldBaseUnitPx } from "~/model/world";
 import { classNames } from "~/utils/classNames";
 
 import styles from "./playLane.styles.css";
@@ -24,6 +22,7 @@ interface Props {
   bunnyId: BunnyId;
   side: "left" | "right";
   isRunning: boolean;
+  gameWorldSpeedInUnitPerSecondsRef: MutableRefObject<number>;
   onGameOver: () => void;
   className?: string;
 }
@@ -82,6 +81,7 @@ export const PlayLane: React.FC<Props> = ({
   isRunning,
   onGameOver,
   className,
+  gameWorldSpeedInUnitPerSecondsRef,
 }) => {
   const [lane, setLane] = useState(0);
   const touchStartedRef = useRef(false);
@@ -131,7 +131,7 @@ export const PlayLane: React.FC<Props> = ({
         const step =
           (timePassed / 1000) *
           gameWorldBaseUnitPx *
-          gameWorldBaseSpeedInUnitPerSeconds;
+          gameWorldSpeedInUnitPerSecondsRef.current;
 
         setItems((items) => {
           let newItems = items.map((item) => ({

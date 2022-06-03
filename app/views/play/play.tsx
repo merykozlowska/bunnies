@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 
 import { Grass, links as grassLinks } from "~/components/grass/grass";
 import { useUpdateGame } from "~/components/useUpdateGame/useUpdateGame";
 import type { BunnyId } from "~/model/bunnies";
+import { gameWorldBaseSpeedInUnitPerSeconds } from "~/model/world";
 
 import {
   GameOverScreen,
@@ -28,6 +29,17 @@ export default function Play() {
   const { bunnyId } = useParams<{ bunnyId: BunnyId }>();
   const [gameState, setGameState] = useState<GameState>("playing");
   const [score, setScore] = useState(0);
+  const gameWorldSpeedInUnitPerSecondsRef = useRef<number>(
+    gameWorldBaseSpeedInUnitPerSeconds
+  );
+
+  useEffect(() => {
+    const intervalRef = setInterval(() => {
+      gameWorldSpeedInUnitPerSecondsRef.current *= 1.05;
+    }, 1000);
+
+    return () => clearInterval(intervalRef);
+  });
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -41,7 +53,7 @@ export default function Play() {
   useUpdateGame({ score, bunnyId: bunnyId as BunnyId });
 
   return (
-    <Grass className="play__container" speed={100}>
+    <Grass className="play__container">
       {score}
       {gameState === "gameOver" && (
         <GameOverScreen className="play__gameOver" />
@@ -52,6 +64,7 @@ export default function Play() {
           side="left"
           bunnyId={bunnyId as BunnyId}
           isRunning={gameState === "playing"}
+          gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
           onGameOver={() => setGameState("gameOver")}
           className="play__playLane"
         />
@@ -59,6 +72,7 @@ export default function Play() {
           side="right"
           bunnyId={bunnyId as BunnyId}
           isRunning={gameState === "playing"}
+          gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
           onGameOver={() => setGameState("gameOver")}
           className="play__playLane"
         />

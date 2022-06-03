@@ -7,7 +7,6 @@ import styles from "./grass.styles.css";
 export const links = () => [{ rel: "stylesheet", href: styles }];
 
 interface Props {
-  speed: number;
   className?: string;
 }
 
