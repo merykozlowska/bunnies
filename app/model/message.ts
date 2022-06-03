@@ -16,6 +16,7 @@ export type ServerMessage = StateUpdatedServerMessage;
 
 export enum ClientMessageType {
   bunnySelected = "bunnySelected",
+  scoreUpdated = "scoreUpdated",
 }
 
 export interface BunnySelectedClientMessage {
@@ -23,4 +24,11 @@ export interface BunnySelectedClientMessage {
   payload: { bunnyId: BunnyId };
 }
 
-export type ClientMessage = BunnySelectedClientMessage;
+export interface ScoreUpdatedClientMessage {
+  type: ClientMessageType.scoreUpdated;
+  payload: { score: number };
+}
+
+export type ClientMessage =
+  | BunnySelectedClientMessage
+  | ScoreUpdatedClientMessage;

@@ -85,9 +85,29 @@ export class Game implements DurableObject {
           throw new Error(`invalid bunny id: ${selectedBunnyId}`);
         }
         session.bunnyId = selectedBunnyId;
+        session.lastScore = 0;
         this.gameState.teams[selectedBunnyId].playersCount++;
 
         this.broadcastStateUpdated();
+        break;
+      }
+
+      case ClientMessageType.scoreUpdated: {
+        const score = message.payload.score;
+
+        if (session.bunnyId == null) {
+          throw new Error("received score but no bunny id set");
+        }
+        if (session.lastScore == null) {
+          throw new Error("received score but no last score set");
+        }
+
+        const dScore = score - session.lastScore;
+        session.lastScore = score;
+        this.gameState.teams[session.bunnyId].scoreValue += dScore;
+
+        this.broadcastStateUpdated();
+        break;
       }
     }
   }
