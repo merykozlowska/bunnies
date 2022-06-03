@@ -65,7 +65,7 @@ export default function Home() {
   );
 
   return (
-    <Grass className="home__container" speed={100}>
+    <Grass className="home__container">
       <div className="home__bunnies">
         <HomeBunny
           bunnyId="snowball"

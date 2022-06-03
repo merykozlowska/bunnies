@@ -53,7 +53,10 @@ export default function Play() {
   useUpdateGame({ score, bunnyId: bunnyId as BunnyId });
 
   return (
-    <Grass className="play__container">
+    <Grass
+      className="play__container"
+      gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
+    >
       {score}
       {gameState === "gameOver" && (
         <GameOverScreen className="play__gameOver" />
