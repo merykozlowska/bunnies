@@ -14,7 +14,7 @@ const jsonResponse = (value: unknown, init: ResponseInit = {}) =>
 
 export class Game implements DurableObject {
   private gameState: GameState = {
-    teams: {
+    bunnies: {
       snowball: { id: "snowball", playersCount: 0, scoreValue: 0 },
       fluffy: { id: "fluffy", playersCount: 0, scoreValue: 0 },
     },
@@ -86,7 +86,7 @@ export class Game implements DurableObject {
         }
         session.bunnyId = selectedBunnyId;
         session.lastScore = 0;
-        this.gameState.teams[selectedBunnyId].playersCount++;
+        this.gameState.bunnies[selectedBunnyId].playersCount++;
 
         this.broadcastStateUpdated();
         break;
@@ -104,7 +104,7 @@ export class Game implements DurableObject {
 
         const dScore = score - session.lastScore;
         session.lastScore = score;
-        this.gameState.teams[session.bunnyId].scoreValue += dScore;
+        this.gameState.bunnies[session.bunnyId].scoreValue += dScore;
 
         this.broadcastStateUpdated();
         break;
@@ -145,11 +145,11 @@ export class Game implements DurableObject {
       (session) => !disconnectedSessions.includes(session)
     );
 
-    for (const bunnyId in this.gameState.teams) {
+    for (const bunnyId in this.gameState.bunnies) {
       const disconnectedForBunnyId = disconnectedSessions.filter(
         (session) => session.bunnyId === bunnyId
       );
-      this.gameState.teams[bunnyId as BunnyId].playersCount -=
+      this.gameState.bunnies[bunnyId as BunnyId].playersCount -=
         disconnectedForBunnyId.length;
     }
 

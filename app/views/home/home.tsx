@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import type { LoaderFunction } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
+import React from "react";
 
 import {
   BunnySprite,
   links as bunnySpriteLinks,
 } from "~/components/bunnySprite/bunnySprite";
 import { Grass, links as grassLinks } from "~/components/grass/grass";
-import type { BunnyId, BunnyState } from "~/model/bunnies";
+import { useGameState } from "~/components/useGameState/useGameState";
+import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
+import type { GameState } from "~/model/gameState";
+import type { LoaderContext } from "~/model/loaderContext";
 
 import { Button, links as buttonLinks } from "./components/button/button";
 import type { DynamicNumberData } from "./components/dynamicNumber/dynamicNumber";
@@ -27,60 +32,33 @@ export const links = () => [
   { rel: "stylesheet", href: styles },
 ];
 
+export const loader: LoaderFunction = async ({
+  context,
+  request,
+}: {
+  context: LoaderContext;
+  request: Request;
+}) => {
+  const id = context.GAME.idFromName("global");
+  const gameObject = context.GAME.get(id);
+
+  const newUrl = new URL(request.url);
+  newUrl.pathname = "/";
+  return gameObject.fetch(newUrl.toString(), request);
+};
+
 export default function Home() {
-  const [gameState, setGameState] = useState<Record<BunnyId, BunnyState>>({
-    snowball: {
-      id: "snowball",
-      scoreValue: 100,
-      playersCount: 10,
-    },
-    fluffy: {
-      id: "fluffy",
-      scoreValue: 100,
-      playersCount: 10,
-    },
-  });
+  const { gameState: initialGameState } = useLoaderData<{
+    gameState: GameState;
+  }>();
+  const { gameState = initialGameState } = useGameState();
 
-  useEffect(() => {
-    setInterval(() => {
-      setGameState((gameState) => {
-        const snowballPlayers =
-          Math.random() > 0.6
-            ? Math.max(
-                gameState.snowball.playersCount +
-                  Math.ceil(Math.random() * 6) -
-                  3,
-                0
-              )
-            : gameState.snowball.playersCount;
-        const fluffyPlayers =
-          Math.random() > 0.6
-            ? Math.max(
-                gameState.fluffy.playersCount +
-                  Math.ceil(Math.random() * 6) -
-                  3,
-                0
-              )
-            : gameState.fluffy.playersCount;
-
-        return {
-          snowball: {
-            ...gameState.snowball,
-            scoreValue: gameState.snowball.scoreValue + snowballPlayers * 2,
-            playersCount: snowballPlayers,
-          },
-          fluffy: {
-            ...gameState.fluffy,
-            scoreValue: gameState.fluffy.scoreValue + fluffyPlayers * 2,
-            playersCount: fluffyPlayers,
-          },
-        };
-      });
-    }, 2000);
-  }, []);
-
-  const dynamicScoreSnowball = useDynamicNumber(gameState.snowball.scoreValue);
-  const dynamicScoreFluffy = useDynamicNumber(gameState.fluffy.scoreValue);
+  const dynamicScoreSnowball = useDynamicNumber(
+    gameState.bunnies.snowball.scoreValue
+  );
+  const dynamicScoreFluffy = useDynamicNumber(
+    gameState.bunnies.fluffy.scoreValue
+  );
   const maxScore = Math.max(
     dynamicScoreSnowball.value,
     dynamicScoreFluffy.value
@@ -93,7 +71,7 @@ export default function Home() {
           bunnyId="snowball"
           bunnyName="snowball"
           dynamicScore={dynamicScoreSnowball}
-          playersCount={gameState.snowball.playersCount}
+          playersCount={gameState.bunnies.snowball.playersCount}
           maxScore={maxScore}
           rank={dynamicScoreSnowball.value === maxScore ? 1 : 2}
         />
@@ -102,7 +80,7 @@ export default function Home() {
           bunnyId="fluffy"
           bunnyName="fluffy"
           dynamicScore={dynamicScoreFluffy}
-          playersCount={gameState.fluffy.playersCount}
+          playersCount={gameState.bunnies.fluffy.playersCount}
           maxScore={maxScore}
           rank={dynamicScoreFluffy.value === maxScore ? 1 : 2}
         />

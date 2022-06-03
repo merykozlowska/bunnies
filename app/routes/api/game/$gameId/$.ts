@@ -1,16 +1,14 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
 import type { Params } from "react-router";
 
-interface Context {
-  GAME: DurableObjectNamespace;
-}
+import type { LoaderContext } from "~/model/loaderContext";
 
 export const loader: LoaderFunction = async ({
   context,
   params,
   request,
 }: {
-  context: Context;
+  context: LoaderContext;
   params: Params;
   request: Request;
 }) => {

@@ -1,5 +1,5 @@
-import Home, { links } from "~/views/home/home";
+import Home, { links, loader } from "~/views/home/home";
 
-export { links };
+export { links, loader };
 
 export default Home;
