@@ -61,15 +61,23 @@ export class Game implements DurableObject {
     const session: Session = { ws };
     this.sessions.push(session);
 
-    ws.addEventListener("message", async (msg: MessageEvent) => {
-      console.log("GOT MESSAGE 🎉", msg.data);
-      const message = JSON.parse(msg.data);
+    ws.addEventListener("message", async (event: MessageEvent) => {
+      console.log("GOT MESSAGE 🎉", event.data);
+      const message = JSON.parse(event.data);
 
       if (!this.canHandleMessage(message)) {
         throw new Error("unknown message type");
       }
 
       this.handleMessage(message, session);
+    });
+
+    ws.addEventListener("close", () => {
+      this.handleDisconnectedPlayers([session]);
+    });
+
+    ws.addEventListener("error", () => {
+      this.handleDisconnectedPlayers([session]);
     });
   }
 
@@ -150,16 +158,20 @@ export class Game implements DurableObject {
   }
 
   handleDisconnectedPlayers(disconnectedSessions: Session[]): void {
-    if (!disconnectedSessions.length) {
+    const disconnected = disconnectedSessions.filter((session) =>
+      this.sessions.includes(session)
+    );
+
+    if (!disconnected.length) {
       return;
     }
 
     this.sessions = this.sessions.filter(
-      (session) => !disconnectedSessions.includes(session)
+      (session) => !disconnected.includes(session)
     );
 
     for (const bunnyId in this.gameState.bunnies) {
-      const disconnectedForBunnyId = disconnectedSessions.filter(
+      const disconnectedForBunnyId = disconnected.filter(
         (session) => session.bunnyId === bunnyId
       );
       this.gameState.bunnies[bunnyId as BunnyId].playersCount -=
