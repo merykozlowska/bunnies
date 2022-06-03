@@ -161,7 +161,15 @@ export const PlayLane: React.FC<Props> = ({
           }
 
           newItems = newItems.filter(
-            (item) => item.top < laneBoundingRect.height
+            (item) =>
+              item.top < laneBoundingRect.height &&
+              !(
+                item.type === "carrot" &&
+                isColliding(
+                  bunnyBoundingRect,
+                  itemToRect(item, laneBoundingRect)
+                )
+              )
           );
 
           return newItems;
