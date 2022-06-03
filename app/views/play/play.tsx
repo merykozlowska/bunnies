@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { useParams } from "react-router";
 
 import { Grass, links as grassLinks } from "~/components/grass/grass";
+import { useSession } from "~/components/sessionContext/sessionContext";
 import type { BunnyId } from "~/model/bunnies";
+import { ClientMessageType } from "~/model/message";
 
 import {
   links as playLaneLinks,
@@ -17,6 +20,17 @@ export const links = () => [
 
 export default function Play() {
   const { bunnyId } = useParams<{ bunnyId: BunnyId }>();
+
+  const session = useSession();
+
+  useEffect(() => {
+    session?.ws.send(
+      JSON.stringify({
+        type: ClientMessageType.bunnySelected,
+        payload: { bunnyId },
+      })
+    );
+  }, [session, bunnyId]);
 
   return (
     <Grass className="play__container" speed={100}>

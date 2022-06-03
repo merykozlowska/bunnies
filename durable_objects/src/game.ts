@@ -1,5 +1,10 @@
+import type { BunnyId } from "~/model/bunnies";
+import { isValidBunnyId } from "~/model/bunnies";
 import type { GameState } from "~/model/gameState";
-import type { Session } from "~/model/session";
+import type { ClientMessage, ServerMessage } from "~/model/message";
+import { ClientMessageType, ServerMessageType } from "~/model/message";
+
+import type { Session } from "./session";
 
 const jsonResponse = (value: unknown, init: ResponseInit = {}) =>
   new Response(JSON.stringify(value), {
@@ -8,20 +13,19 @@ const jsonResponse = (value: unknown, init: ResponseInit = {}) =>
   });
 
 export class Game implements DurableObject {
-  private gameState?: GameState = undefined;
+  private gameState: GameState = {
+    teams: {
+      snowball: { id: "snowball", playersCount: 0, scoreValue: 0 },
+      fluffy: { id: "fluffy", playersCount: 0, scoreValue: 0 },
+    },
+  };
   private sessions: Session[] = [];
 
   constructor(private state: DurableObjectState) {
     // `blockConcurrencyWhile()` ensures no requests are delivered until initialization completes.
     this.state.blockConcurrencyWhile(async () => {
       const stored = await this.state.storage.get<GameState>("gameState");
-      this.gameState = stored || {
-        id: "global",
-        teams: [
-          { id: "snowball", playersCount: 0, scoreValue: 0 },
-          { id: "fluffy", playersCount: 0, scoreValue: 0 },
-        ],
-      };
+      this.gameState = stored || this.gameState;
     });
   }
 
@@ -57,10 +61,78 @@ export class Game implements DurableObject {
     const session: Session = { ws };
     this.sessions.push(session);
 
-    ws.send(JSON.stringify({ hello: "world" }));
-
     ws.addEventListener("message", async (msg: MessageEvent) => {
       console.log("GOT MESSAGE 🎉", msg.data);
+      const message = JSON.parse(msg.data);
+
+      if (!this.canHandleMessage(message)) {
+        throw new Error("unknown message type");
+      }
+
+      this.handleMessage(message, session);
     });
+  }
+
+  canHandleMessage(message: unknown): message is ClientMessage {
+    return ClientMessageType[(message as ClientMessage).type] !== undefined;
+  }
+
+  handleMessage(message: ClientMessage, session: Session): void {
+    switch (message.type) {
+      case ClientMessageType.bunnySelected: {
+        const selectedBunnyId = message.payload.bunnyId;
+        if (!isValidBunnyId(selectedBunnyId)) {
+          throw new Error(`invalid bunny id: ${selectedBunnyId}`);
+        }
+        session.bunnyId = selectedBunnyId;
+        this.gameState.teams[selectedBunnyId].playersCount++;
+
+        this.broadcastStateUpdated();
+      }
+    }
+  }
+
+  broadcastStateUpdated(): void {
+    this.broadcast({
+      type: ServerMessageType.stateUpdated,
+      payload: {
+        state: this.gameState,
+      },
+    });
+  }
+
+  broadcast(message: ServerMessage): void {
+    const stringifiedMessage = JSON.stringify(message);
+
+    const disconnected: Session[] = [];
+    this.sessions.forEach((session) => {
+      try {
+        session.ws.send(stringifiedMessage);
+      } catch (e) {
+        console.log(e);
+        disconnected.push(session);
+      }
+    });
+    this.handleDisconnectedPlayers(disconnected);
+  }
+
+  handleDisconnectedPlayers(disconnectedSessions: Session[]): void {
+    if (!disconnectedSessions.length) {
+      return;
+    }
+
+    this.sessions = this.sessions.filter(
+      (session) => !disconnectedSessions.includes(session)
+    );
+
+    for (const bunnyId in this.gameState.teams) {
+      const disconnectedForBunnyId = disconnectedSessions.filter(
+        (session) => session.bunnyId === bunnyId
+      );
+      this.gameState.teams[bunnyId as BunnyId].playersCount -=
+        disconnectedForBunnyId.length;
+    }
+
+    this.broadcastStateUpdated();
   }
 }

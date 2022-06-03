@@ -1,6 +1,5 @@
-import type { BunnyState } from "~/model/bunnies";
+import type { BunnyId, BunnyState } from "~/model/bunnies";
 
 export interface GameState {
-  id: string;
-  teams: BunnyState[];
+  teams: Record<BunnyId, BunnyState>;
 }
