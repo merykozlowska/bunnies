@@ -51,12 +51,14 @@ export default function Play() {
           side="left"
           bunnyId={bunnyId as BunnyId}
           isRunning={gameState === "playing"}
+          onGameOver={() => setGameState("gameOver")}
           className="play__playLane"
         />
         <PlayLane
           side="right"
           bunnyId={bunnyId as BunnyId}
           isRunning={gameState === "playing"}
+          onGameOver={() => setGameState("gameOver")}
           className="play__playLane"
         />
       </div>

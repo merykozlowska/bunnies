@@ -24,6 +24,7 @@ interface Props {
   bunnyId: BunnyId;
   side: "left" | "right";
   isRunning: boolean;
+  onGameOver: () => void;
   className?: string;
 }
 
@@ -40,10 +41,46 @@ interface Item {
   top: number;
 }
 
+interface Rect {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
+const itemToRect = (item: Item, laneBoundingRect: Rect): Rect => {
+  const itemXCenter =
+    (laneBoundingRect.width / 4) * (item.lane === 0 ? 1 : 3) +
+    laneBoundingRect.left;
+  const itemYTop = item.top;
+  const itemWidth = 48;
+  const itemHeight = 48;
+
+  return {
+    left: itemXCenter - itemWidth / 2,
+    top: itemYTop,
+    width: itemWidth,
+    height: itemHeight,
+  };
+};
+
+function isColliding(bunnyBoundingRect: Rect, itemRect: Rect) {
+  const colliding =
+    itemRect.left < bunnyBoundingRect.left + bunnyBoundingRect.width &&
+    itemRect.left + itemRect.width > bunnyBoundingRect.left &&
+    itemRect.top < bunnyBoundingRect.top + bunnyBoundingRect.height &&
+    itemRect.height + itemRect.top > bunnyBoundingRect.top;
+
+  console.log(colliding);
+
+  return colliding;
+}
+
 export const PlayLane: React.FC<Props> = ({
   bunnyId,
   side,
   isRunning,
+  onGameOver,
   className,
 }) => {
   const [lane, setLane] = useState(0);
@@ -106,6 +143,21 @@ export const PlayLane: React.FC<Props> = ({
           const laneBoundingRect = laneRef.current?.getBoundingClientRect();
           if (!bunnyBoundingRect || !laneBoundingRect) {
             return newItems;
+          }
+
+          const hasLost = newItems.find(
+            (item: Item) =>
+              (item.type === "carrot" && item.top >= laneBoundingRect.height) ||
+              (item.type === "bomb" &&
+                isColliding(
+                  bunnyBoundingRect,
+                  itemToRect(item, laneBoundingRect)
+                ))
+          );
+
+          if (hasLost) {
+            onGameOver();
+            return items;
           }
 
           newItems = newItems.filter(

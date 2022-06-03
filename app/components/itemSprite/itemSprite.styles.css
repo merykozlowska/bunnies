@@ -1,5 +1,7 @@
-.carrotSprite {
+.itemSprite {
     display: block;
     position: relative;
     user-select: none;
+
+    width: 48px;
 }
