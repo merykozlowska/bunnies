@@ -1,5 +1,5 @@
 import type { MutableRefObject } from "react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import {
@@ -10,6 +10,7 @@ import {
   ItemSprite,
   links as carrotSpriteLinks,
 } from "~/components/itemSprite/itemSprite";
+import { useRequestAnimation } from "~/components/useRequestAnimation/useRequestAnimation";
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
 import type { ItemType } from "~/model/items";
@@ -120,69 +121,56 @@ export const PlayLane: React.FC<Props> = ({
     return () => clearTimeout(timeoutRef);
   }, [isRunning]);
 
-  useEffect(() => {
-    if (!isRunning) return;
+  const animationCallback = useCallback(
+    (dtInMs) => {
+      const step =
+        (dtInMs / 1000) *
+        gameWorldBaseUnitPx *
+        gameWorldSpeedInUnitPerSecondsRef.current;
 
-    let updateAnimationFrame: number;
-    let previousTimeInMs = 0;
-    const requestAnimation = () =>
-      window.requestAnimationFrame((currentTimeInMs) => {
-        const timePassed = currentTimeInMs - previousTimeInMs;
-        const step =
-          (timePassed / 1000) *
-          gameWorldBaseUnitPx *
-          gameWorldSpeedInUnitPerSecondsRef.current;
+      setItems((items) => {
+        let newItems = items.map((item) => ({
+          ...item,
+          top: item.top + step,
+        }));
 
-        setItems((items) => {
-          let newItems = items.map((item) => ({
-            ...item,
-            top: item.top + step,
-          }));
-
-          const bunnyBoundingRect = bunnyRef.current?.getBoundingClientRect();
-          const laneBoundingRect = laneRef.current?.getBoundingClientRect();
-          if (!bunnyBoundingRect || !laneBoundingRect) {
-            return newItems;
-          }
-
-          const hasLost = newItems.find(
-            (item: Item) =>
-              (item.type === "carrot" && item.top >= laneBoundingRect.height) ||
-              (item.type === "bomb" &&
-                isColliding(
-                  bunnyBoundingRect,
-                  itemToRect(item, laneBoundingRect)
-                ))
-          );
-
-          if (hasLost) {
-            setTimeout(() => onGameOver());
-            return items;
-          }
-
-          newItems = newItems.filter(
-            (item) =>
-              item.top < laneBoundingRect.height &&
-              !(
-                item.type === "carrot" &&
-                isColliding(
-                  bunnyBoundingRect,
-                  itemToRect(item, laneBoundingRect)
-                )
-              )
-          );
-
+        const bunnyBoundingRect = bunnyRef.current?.getBoundingClientRect();
+        const laneBoundingRect = laneRef.current?.getBoundingClientRect();
+        if (!bunnyBoundingRect || !laneBoundingRect) {
           return newItems;
-        });
+        }
 
-        previousTimeInMs = currentTimeInMs;
-        updateAnimationFrame = requestAnimation();
+        const hasLost = newItems.find(
+          (item: Item) =>
+            (item.type === "carrot" && item.top >= laneBoundingRect.height) ||
+            (item.type === "bomb" &&
+              isColliding(
+                bunnyBoundingRect,
+                itemToRect(item, laneBoundingRect)
+              ))
+        );
+
+        if (hasLost) {
+          setTimeout(() => onGameOver());
+          return items;
+        }
+
+        newItems = newItems.filter(
+          (item) =>
+            item.top < laneBoundingRect.height &&
+            !(
+              item.type === "carrot" &&
+              isColliding(bunnyBoundingRect, itemToRect(item, laneBoundingRect))
+            )
+        );
+
+        return newItems;
       });
+    },
+    [gameWorldSpeedInUnitPerSecondsRef, onGameOver]
+  );
 
-    updateAnimationFrame = requestAnimation();
-
-    return () => window.cancelAnimationFrame(updateAnimationFrame);
-  }, [isRunning]);
+  useRequestAnimation(animationCallback, isRunning);
 
   return (
     <div

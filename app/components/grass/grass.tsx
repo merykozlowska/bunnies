@@ -1,6 +1,7 @@
 import type { MutableRefObject } from "react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
+import { useRequestAnimation } from "~/components/useRequestAnimation/useRequestAnimation";
 import {
   gameWorldBaseSpeedInUnitPerSeconds,
   gameWorldBaseUnitPx,
@@ -23,29 +24,17 @@ export const Grass: React.FC<Props> = ({
 }) => {
   const [grassY, setGrassY] = useState(0);
 
-  useEffect(() => {
-    let updateAnimationFrame: number;
-    let previousTimeInMs = 0;
-    const requestAnimation = () =>
-      window.requestAnimationFrame((currentTimeInMs) => {
-        const timePassed = currentTimeInMs - previousTimeInMs;
+  const animationCallback = useCallback((dtInMs) => {
+    const step =
+      (dtInMs / 1000) *
+      gameWorldBaseUnitPx *
+      (gameWorldSpeedInUnitPerSecondsRef?.current ??
+        gameWorldBaseSpeedInUnitPerSeconds);
 
-        const step =
-          (timePassed / 1000) *
-          gameWorldBaseUnitPx *
-          (gameWorldSpeedInUnitPerSecondsRef?.current ??
-            gameWorldBaseSpeedInUnitPerSeconds);
-
-        setGrassY((grassY) => (grassY + step) % gameWorldBaseUnitPx);
-
-        previousTimeInMs = currentTimeInMs;
-        updateAnimationFrame = requestAnimation();
-      });
-
-    updateAnimationFrame = requestAnimation();
-
-    return () => window.cancelAnimationFrame(updateAnimationFrame);
+    setGrassY((grassY) => (grassY + step) % gameWorldBaseUnitPx);
   }, []);
+
+  useRequestAnimation(animationCallback);
 
   return (
     <div
