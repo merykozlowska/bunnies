@@ -1,0 +1,12 @@
+.gameOverScreen {
+    background-color: var(--overlay-background-color);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameOverScreen__title {
+    font-size: var(--heading-xl);
+    letter-spacing: var(--heading-letter-spacing);
+}

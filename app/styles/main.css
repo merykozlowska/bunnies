@@ -33,6 +33,7 @@ html, body {
 
     --heading-l: 3rem;
     --heading-xl: 4rem;
+    --heading-letter-spacing: 0.06em;
 
     --text-color: #fff;
     --progress-bar-text: #000;
@@ -53,6 +54,8 @@ html, body {
 
     --game-world-base-unit: 64px;
     --game-world-base-unit-per-seconds: 2;
+
+    --overlay-background-color: rgba(0, 0, 0, 0.5)
 
     /* medium-screen: 768px; */
     /* large-screen: 1024; */

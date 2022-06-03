@@ -65,7 +65,7 @@
     position: relative;
 
     font-size: var(--heading-l);
-    letter-spacing: 0.06em;
+    letter-spacing: var(--heading-letter-spacing);
 
     text-align: center;
 }
