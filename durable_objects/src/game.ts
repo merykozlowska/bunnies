@@ -166,6 +166,10 @@ export class Game implements DurableObject {
         disconnectedForBunnyId.length;
     }
 
+    if (!this.sessions.length) {
+      this.state.storage.put("gameState", this.gameState);
+    }
+
     this.broadcastStateUpdated();
   }
 }
