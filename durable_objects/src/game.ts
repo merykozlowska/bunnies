@@ -107,6 +107,7 @@ export class Game implements DurableObject {
       case ClientMessageType.scoreUpdated: {
         const score = message.payload.score;
         this.handleScoreUpdated(session, score);
+        this.broadcastStateUpdated();
         break;
       }
 
@@ -119,6 +120,8 @@ export class Game implements DurableObject {
           this.gameState.bunnies[session.bunnyId].playersCount--;
           session.bunnyId = undefined;
         }
+
+        this.broadcastStateUpdated();
         break;
       }
     }
@@ -139,8 +142,6 @@ export class Game implements DurableObject {
     this.gameState.bunnies[session.bunnyId].scoreValue += dScore;
 
     session.lastScore = score;
-
-    this.broadcastStateUpdated();
   }
 
   broadcastStateUpdated(): void {
