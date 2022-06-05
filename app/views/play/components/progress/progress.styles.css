@@ -1,5 +1,6 @@
 .playProgress {
     background-color: rgb(14, 26, 4, 0.8);
+    -webkit-backdrop-filter: saturate(180%) blur(10px);
     backdrop-filter: saturate(180%) blur(10px);
 
     padding: var(--spacing-xs);
