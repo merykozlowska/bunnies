@@ -2,7 +2,7 @@ import React from "react";
 
 import { BunnySprite } from "~/components/bunnySprite/bunnySprite";
 import { useGameState } from "~/components/useGameState/useGameState";
-import type { BunnyState } from "~/model/bunnies";
+import type { BunnyId, BunnyState } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
 import { classNames } from "~/utils/classNames";
 import {
@@ -25,10 +25,11 @@ export const links = () => [
 
 interface Props {
   score: number;
+  bunnyId: BunnyId;
   className?: string;
 }
 
-export const PlayTopBar: React.FC<Props> = ({ score, className }) => {
+export const PlayTopBar: React.FC<Props> = ({ score, bunnyId, className }) => {
   const { gameState } = useGameState();
 
   if (!gameState) {
@@ -51,7 +52,12 @@ export const PlayTopBar: React.FC<Props> = ({ score, className }) => {
           otherBunnyState={gameState.bunnies.snowball}
         />
       </div>
-      <div className="playTopBar__score">{score}m</div>
+      <div
+        className="playTopBar__score colourText"
+        data-colour={bunnyColourForId(bunnyId)}
+      >
+        {score}m
+      </div>
     </div>
   );
 };

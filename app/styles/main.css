@@ -32,6 +32,9 @@ html, body {
     --text-m: 2rem;
     --text-l: 3rem;
 
+    --text-light-white: #D2E6FF;
+    --text-light-brown: #D69756;
+
     --heading-l: 3rem;
     --heading-xl: 4rem;
     --heading-letter-spacing: 0.06em;
@@ -53,7 +56,7 @@ html, body {
 
     --playLane-separator: #FFF;
 
-    --overlay-background-color: rgba(0, 0, 0, 0.5)
+    --overlay-background-color: rgba(0, 0, 0, 0.5);
 
     /* medium-screen: 768px; */
     /* large-screen: 1024; */
@@ -64,4 +67,12 @@ html, body {
         --heading-l: 4rem;
         --heading-xl: 6rem;
     }
+}
+
+.colourText {
+    color: var(--text-light-white);
+}
+
+.colourText[data-colour="brown"] {
+    color: var(--text-light-brown);
 }

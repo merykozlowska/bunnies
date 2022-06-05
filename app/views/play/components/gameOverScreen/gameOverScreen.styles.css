@@ -13,3 +13,13 @@
     font-size: var(--heading-xl);
     letter-spacing: var(--heading-letter-spacing);
 }
+
+.gameOverScreen__text {
+    font-size: var(--text-l);
+    text-align: center;
+    line-height: 3rem;
+}
+
+.gameOverScreen__text__emoji {
+    font-size: 0.7em;
+}

@@ -98,13 +98,18 @@ export default function Play() {
       className="play__container"
       gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
     >
-      <PlayTopBar className="play__topBar" score={scoreRef.current} />
+      <PlayTopBar
+        bunnyId={bunnyId}
+        score={scoreRef.current}
+        className="play__topBar"
+      />
 
       <div className="play__lanes">
         {lifecycleState === "gameOver" && (
           <GameOverScreen
-            onContinue={() => setLifecycleState("playing")}
             bunnyId={bunnyId}
+            score={scoreRef.current}
+            onContinue={() => setLifecycleState("playing")}
             className="play__gameOver"
           />
         )}
