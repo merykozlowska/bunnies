@@ -14,7 +14,12 @@ import { useRequestAnimation } from "~/components/useRequestAnimation/useRequest
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
 import type { ItemType } from "~/model/items";
-import { gameWorldBaseUnitPx } from "~/model/world";
+import {
+  gameWorldBaseUnitPx,
+  laneSpawnProbability,
+  timeBetweenItemInSameLaneMs,
+  timeBetweenSameItemInDifferentLane,
+} from "~/model/world";
 import { classNames } from "~/utils/classNames";
 
 import styles from "./playLane.styles.css";
@@ -83,7 +88,10 @@ const createNewRandomItem = (lane: 0 | 1, allowedItems: ItemType[]): Item => ({
 });
 
 const getValidItems = (itemInOtherLane?: TrackedSpawnedItem): ItemType[] => {
-  if (!itemInOtherLane || itemInOtherLane.dtInMs > 1000) {
+  if (
+    !itemInOtherLane ||
+    itemInOtherLane.dtInMs > timeBetweenSameItemInDifferentLane
+  ) {
     return ["bomb", "carrot"];
   }
 
@@ -92,6 +100,30 @@ const getValidItems = (itemInOtherLane?: TrackedSpawnedItem): ItemType[] => {
   }
 
   return ["carrot"];
+};
+
+const generateItemInLane = (
+  lane: 0 | 1,
+  trackedSpawned: [TrackedSpawnedItem?, TrackedSpawnedItem?],
+  newItems: Item[]
+) => {
+  const timeSinceLastItemInLane = trackedSpawned[lane]?.dtInMs;
+  if (
+    !timeSinceLastItemInLane ||
+    timeSinceLastItemInLane > timeBetweenItemInSameLaneMs
+  ) {
+    const newItem = createNewRandomItem(
+      lane,
+      getValidItems(trackedSpawned[1 - lane])
+    );
+
+    trackedSpawned[lane] = {
+      type: newItem.type,
+      dtInMs: 0,
+    };
+
+    newItems.push(newItem);
+  }
 };
 
 export const PlayLane: React.FC<Props> = ({
@@ -136,43 +168,17 @@ export const PlayLane: React.FC<Props> = ({
       }
 
       setItems((items) => {
-        const newItems = [];
+        const newItems: Item[] = [];
         const numberOfSquaresToSpawn =
           Math.floor(numberOfSquarePassedRef.current) -
           Math.floor(previousNumberOfSquarePassed);
 
         for (let i = 0; i < numberOfSquaresToSpawn; i++) {
-          if (Math.random() < 0.125) {
-            const timeSinceLastItem = trackedSpawnedRef.current[0]?.dtInMs;
-            if (!timeSinceLastItem || timeSinceLastItem > 1000) {
-              const newItem = createNewRandomItem(
-                0,
-                getValidItems(trackedSpawnedRef.current[1])
-              );
-
-              trackedSpawnedRef.current[0] = {
-                type: newItem.type,
-                dtInMs: 0,
-              };
-
-              newItems.push(newItem);
-            }
+          if (Math.random() < laneSpawnProbability) {
+            generateItemInLane(0, trackedSpawnedRef.current, newItems);
           }
-          if (Math.random() < 0.125) {
-            const timeSinceLastItem = trackedSpawnedRef.current[1]?.dtInMs;
-            if (!timeSinceLastItem || timeSinceLastItem > 1000) {
-              const newItem = createNewRandomItem(
-                1,
-                getValidItems(trackedSpawnedRef.current[0])
-              );
-
-              trackedSpawnedRef.current[1] = {
-                type: newItem.type,
-                dtInMs: 0,
-              };
-
-              newItems.push(newItem);
-            }
+          if (Math.random() < laneSpawnProbability) {
+            generateItemInLane(1, trackedSpawnedRef.current, newItems);
           }
         }
 
