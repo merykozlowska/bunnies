@@ -1,5 +1,5 @@
 import type { MutableRefObject } from "react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import {
@@ -89,6 +89,7 @@ export const PlayLane: React.FC<Props> = ({
   const touchStartedRef = useRef(false);
   const bunnyRef = useRef<HTMLDivElement>(null);
   const laneRef = useRef<HTMLDivElement>(null);
+  const numberOfSquarePassedRef = useRef<number>(0);
 
   const switchLane = () => setLane((prevLane) => (prevLane + 1) % 2);
 
@@ -97,23 +98,6 @@ export const PlayLane: React.FC<Props> = ({
 
   const [items, setItems] = useState<Item[]>([]);
 
-  useEffect(() => {
-    if (!isRunning) return;
-
-    let timeoutRef: NodeJS.Timeout;
-    const generateItem = () => {
-      timeoutRef = setTimeout(() => {
-        setItems((items) => [...items, createNewRandomItem()]);
-
-        generateItem();
-      }, 10000 * Math.random() + 1000);
-    };
-
-    generateItem();
-
-    return () => clearTimeout(timeoutRef);
-  }, [isRunning]);
-
   const animationCallback = useCallback(
     (dtInMs) => {
       const step =
@@ -121,19 +105,36 @@ export const PlayLane: React.FC<Props> = ({
         gameWorldBaseUnitPx *
         gameWorldSpeedInUnitPerSecondsRef.current;
 
+      const previousNumberOfSquarePassed = numberOfSquarePassedRef.current;
+      numberOfSquarePassedRef.current += step / gameWorldBaseUnitPx;
+
       setItems((items) => {
-        let newItems = items.map((item) => ({
-          ...item,
-          top: item.top + step,
-        }));
+        const newItems = [];
+        const numberOfSquaresToSpawn =
+          Math.floor(numberOfSquarePassedRef.current) -
+          Math.floor(previousNumberOfSquarePassed);
+
+        for (let i = 0; i < numberOfSquaresToSpawn; i++) {
+          if (Math.random() < 0.25) {
+            newItems.push(createNewRandomItem());
+          }
+        }
+
+        let updatedItems = [
+          ...newItems,
+          ...items.map((item) => ({
+            ...item,
+            top: item.top + step,
+          })),
+        ];
 
         const bunnyBoundingRect = bunnyRef.current?.getBoundingClientRect();
         const laneBoundingRect = laneRef.current?.getBoundingClientRect();
         if (!bunnyBoundingRect || !laneBoundingRect) {
-          return newItems;
+          return updatedItems;
         }
 
-        const hasLost = newItems.find(
+        const hasLost = updatedItems.find(
           (item: Item) =>
             (item.type === "carrot" && item.top >= laneBoundingRect.height) ||
             (item.type === "bomb" &&
@@ -148,7 +149,7 @@ export const PlayLane: React.FC<Props> = ({
           return items;
         }
 
-        newItems = newItems.filter(
+        updatedItems = updatedItems.filter(
           (item) =>
             item.top < laneBoundingRect.height &&
             !(
@@ -157,7 +158,7 @@ export const PlayLane: React.FC<Props> = ({
             )
         );
 
-        return newItems;
+        return updatedItems;
       });
     },
     [gameWorldSpeedInUnitPerSecondsRef, onGameOver]
