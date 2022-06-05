@@ -13,20 +13,13 @@ import {
 import { useRequestAnimation } from "~/components/useRequestAnimation/useRequestAnimation";
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
-import type { ItemType } from "~/model/items";
-import {
-  gameWorldBaseUnitPx,
-  laneSpawnProbability,
-  minGameWorldUnitBetweenItemInSameLane,
-  minGameWorldUnitBetweenSameItemInDifferentLane,
-  timeBetweenItemInSameLaneMs,
-  timeBetweenSameItemInDifferentLaneMs,
-} from "~/model/world";
+import { gameWorldBaseUnitPx, laneSpawnProbability } from "~/model/world";
 import { classNames } from "~/utils/classNames";
-import { isColliding } from "~/views/play/components/playLane/collision";
 
+import { isColliding } from "./collision";
 import styles from "./playLane.styles.css";
-import type { Item } from "./types";
+import type { PlayLaneItem, TrackedSpawnedItem } from "./playLaneItem";
+import { generateItemInLane } from "./playLaneItem";
 
 interface Props {
   bunnyId: BunnyId;
@@ -42,63 +35,6 @@ export const links = () => [
   ...carrotSpriteLinks(),
   { rel: "stylesheet", href: styles },
 ];
-
-interface TrackedSpawnedItem {
-  type: ItemType;
-  dtInMs: number;
-  squarePassed: number;
-}
-
-const createNewRandomItem = (lane: 0 | 1, allowedItems: ItemType[]): Item => ({
-  id: `${new Date().getTime().toString()}-${lane}`,
-  lane,
-  top: 0,
-  type: allowedItems[Math.floor(Math.random() * allowedItems.length)],
-});
-
-const getValidItems = (itemInOtherLane?: TrackedSpawnedItem): ItemType[] => {
-  if (
-    !itemInOtherLane ||
-    (itemInOtherLane.dtInMs > timeBetweenSameItemInDifferentLaneMs &&
-      itemInOtherLane.squarePassed >
-        minGameWorldUnitBetweenSameItemInDifferentLane)
-  ) {
-    return ["bomb", "carrot"];
-  }
-
-  if (itemInOtherLane.type === "carrot") {
-    return ["bomb"];
-  }
-
-  return ["carrot"];
-};
-
-const generateItemInLane = (
-  lane: 0 | 1,
-  trackedSpawned: [TrackedSpawnedItem?, TrackedSpawnedItem?],
-  newItems: Item[]
-) => {
-  const lastSpawnedItemInLane = trackedSpawned[lane];
-  if (
-    !lastSpawnedItemInLane ||
-    (lastSpawnedItemInLane.dtInMs > timeBetweenItemInSameLaneMs &&
-      lastSpawnedItemInLane.squarePassed >
-        minGameWorldUnitBetweenItemInSameLane)
-  ) {
-    const newItem = createNewRandomItem(
-      lane,
-      getValidItems(trackedSpawned[1 - lane])
-    );
-
-    trackedSpawned[lane] = {
-      type: newItem.type,
-      dtInMs: 0,
-      squarePassed: 0,
-    };
-
-    newItems.push(newItem);
-  }
-};
 
 export const PlayLane: React.FC<Props> = ({
   bunnyId,
@@ -122,7 +58,7 @@ export const PlayLane: React.FC<Props> = ({
   useHotkeys(side, switchLane);
   useHotkeys(side === "left" ? "a" : "d", switchLane);
 
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<PlayLaneItem[]>([]);
 
   const animationCallback = useCallback(
     (dtInMs) => {
@@ -147,7 +83,7 @@ export const PlayLane: React.FC<Props> = ({
       }
 
       setItems((items) => {
-        const newItems: Item[] = [];
+        const newItems: PlayLaneItem[] = [];
 
         for (let i = 0; i < squarePassedSinceLastFrame; i++) {
           if (Math.random() < laneSpawnProbability) {
@@ -173,7 +109,7 @@ export const PlayLane: React.FC<Props> = ({
         }
 
         const hasLost = updatedItems.find(
-          (item: Item) =>
+          (item: PlayLaneItem) =>
             (item.type === "carrot" && item.top >= laneBoundingRect.height) ||
             (item.type === "bomb" &&
               isColliding(bunnyBoundingRect, item, laneBoundingRect))

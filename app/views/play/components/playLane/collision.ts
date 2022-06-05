@@ -1,4 +1,4 @@
-import type { Item } from "~/views/play/components/playLane/types";
+import type { PlayLaneItem } from "~/views/play/components/playLane/playLaneItem";
 
 interface Rect {
   left: number;
@@ -9,7 +9,7 @@ interface Rect {
 
 export const isColliding = (
   bunnyBoundingRect: Rect,
-  item: Item,
+  item: PlayLaneItem,
   laneBoundingRect: Rect
 ) => {
   const itemRect = itemToRect(item, laneBoundingRect);
@@ -22,7 +22,7 @@ export const isColliding = (
   );
 };
 
-const itemToRect = (item: Item, laneBoundingRect: Rect): Rect => {
+const itemToRect = (item: PlayLaneItem, laneBoundingRect: Rect): Rect => {
   const itemXCenter =
     (laneBoundingRect.width / 4) * (item.lane === 0 ? 1 : 3) +
     laneBoundingRect.left;
