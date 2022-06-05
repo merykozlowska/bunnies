@@ -52,7 +52,7 @@ const createNewRandomItem = (
 ): PlayLaneItem => ({
   id: `${new Date().getTime().toString()}-${lane}`,
   lane,
-  top: 0,
+  top: -80,
   type: allowedItems[Math.floor(Math.random() * allowedItems.length)],
 });
 

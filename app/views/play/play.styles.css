@@ -1,4 +1,6 @@
 .play__container {
+    position: relative;
+
     width: 100%;
     height: 100%;
 
@@ -6,13 +8,13 @@
     justify-content: center;
 }
 
-.play__score {
+.play__progress {
     position: absolute;
-    z-index: 10;
-    left: var(--spacing-m);
-    top: var(--spacing-s);
+    left: 0;
+    right: 0;
+    top: 0;
 
-    font-size: var(--text-l);
+    z-index: 10;
 }
 
 .play__lanes {

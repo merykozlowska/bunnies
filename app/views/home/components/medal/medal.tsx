@@ -7,7 +7,7 @@ import styles from "./medal.styles.css";
 export const links = () => [{ rel: "stylesheet", href: styles }];
 
 interface Props {
-  rank: number;
+  rank: 1 | 2;
   className?: string;
 }
 
