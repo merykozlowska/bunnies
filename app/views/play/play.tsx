@@ -23,11 +23,12 @@ export const links = () => [
   { rel: "stylesheet", href: styles },
 ];
 
-type GameState = "playing" | "gameOver";
+type LifecycleState = "playing" | "gameOver";
 
 export default function Play() {
   const { bunnyId } = useParams<{ bunnyId: BunnyId }>();
-  const [gameState, setGameState] = useState<GameState>("playing");
+  const [lifecycleState, setLifecycleState] =
+    useState<LifecycleState>("playing");
   const [internalScore, setInternalScore] = useState(0);
   const score = Math.round(internalScore);
   const gameWorldSpeedInUnitPerSecondsRef = useRef<number>(
@@ -50,7 +51,7 @@ export default function Play() {
 
   useUpdateGame({ score, bunnyId: bunnyId as BunnyId });
 
-  const onGameOver = useCallback(() => setGameState("gameOver"), []);
+  const onGameOver = useCallback(() => setLifecycleState("gameOver"), []);
 
   return (
     <Grass
@@ -58,7 +59,7 @@ export default function Play() {
       gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
     >
       {score}
-      {gameState === "gameOver" && (
+      {lifecycleState === "gameOver" && (
         <GameOverScreen className="play__gameOver" />
       )}
 
@@ -66,7 +67,7 @@ export default function Play() {
         <PlayLane
           side="left"
           bunnyId={bunnyId as BunnyId}
-          isRunning={gameState === "playing"}
+          isRunning={lifecycleState === "playing"}
           gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
           onGameOver={onGameOver}
           className="play__playLane"
@@ -74,7 +75,7 @@ export default function Play() {
         <PlayLane
           side="right"
           bunnyId={bunnyId as BunnyId}
-          isRunning={gameState === "playing"}
+          isRunning={lifecycleState === "playing"}
           gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
           onGameOver={onGameOver}
           className="play__playLane"
