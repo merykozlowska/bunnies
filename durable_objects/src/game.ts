@@ -179,7 +179,11 @@ export class Game implements DurableObject {
     }
 
     if (!this.sessions.length) {
-      this.state.storage.put("gameState", this.gameState);
+      setTimeout(() => {
+        if (!this.sessions.length) {
+          this.state.storage.put("gameState", this.gameState);
+        }
+      }, 3000);
     }
 
     this.broadcastStateUpdated();
