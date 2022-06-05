@@ -4,6 +4,10 @@
     width: 15px;
     height: 26px;
     user-select: none;
+
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
 
 .bunnySprite--lg {

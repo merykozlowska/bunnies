@@ -13,6 +13,10 @@
 
 .itemSprite img {
     width: 48px;
+
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
 
 .itemSprite[data-show-role-text="true"][data-item-type="carrot"]::after {
