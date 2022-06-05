@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 
 import { Grass, links as grassLinks } from "~/components/grass/grass";
@@ -50,6 +50,8 @@ export default function Play() {
 
   useUpdateGame({ score, bunnyId: bunnyId as BunnyId });
 
+  const onGameOver = useCallback(() => setGameState("gameOver"), []);
+
   return (
     <Grass
       className="play__container"
@@ -66,7 +68,7 @@ export default function Play() {
           bunnyId={bunnyId as BunnyId}
           isRunning={gameState === "playing"}
           gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
-          onGameOver={() => setGameState("gameOver")}
+          onGameOver={onGameOver}
           className="play__playLane"
         />
         <PlayLane
@@ -74,7 +76,7 @@ export default function Play() {
           bunnyId={bunnyId as BunnyId}
           isRunning={gameState === "playing"}
           gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
-          onGameOver={() => setGameState("gameOver")}
+          onGameOver={onGameOver}
           className="play__playLane"
         />
       </div>
