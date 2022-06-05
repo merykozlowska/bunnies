@@ -34,7 +34,7 @@ export default function Play() {
   const [lifecycleState, setLifecycleState] =
     useState<LifecycleState>("playing");
   const [internalScore, setInternalScore] = useState(0);
-  const score = Math.round(internalScore);
+  const scoreRef = useRef(Math.round(internalScore));
   const gameWorldSpeedInUnitPerSecondsRef = useRef<number>(
     gameWorldBaseSpeedInUnitPerSeconds
   );
@@ -46,19 +46,25 @@ export default function Play() {
     }
 
     const intervalRef = setInterval(() => {
-      setInternalScore(
-        (score) =>
+      setInternalScore((score) => {
+        const newScore =
           score +
           gameWorldSpeedInUnitPerSecondsRef.current /
-            gameWorldBaseSpeedInUnitPerSeconds
-      );
+            gameWorldBaseSpeedInUnitPerSeconds;
+        scoreRef.current = Math.round(newScore);
+        return newScore;
+      });
       gameWorldSpeedInUnitPerSecondsRef.current *= 1.05;
     }, 1000);
 
     return () => clearInterval(intervalRef);
   }, [lifecycleState]);
 
-  useUpdateGame({ score, bunnyId: bunnyId as BunnyId, lifecycleState });
+  useUpdateGame({
+    scoreRef,
+    bunnyId: bunnyId as BunnyId,
+    lifecycleState,
+  });
 
   const onGameOver = useCallback(() => setLifecycleState("gameOver"), []);
 
@@ -67,7 +73,7 @@ export default function Play() {
       className="play__container"
       gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
     >
-      <Progress className="play__progress" score={score} />
+      <Progress className="play__progress" score={scoreRef.current} />
       {lifecycleState === "gameOver" && (
         <GameOverScreen className="play__gameOver" />
       )}

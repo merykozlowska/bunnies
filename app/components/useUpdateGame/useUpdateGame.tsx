@@ -1,3 +1,4 @@
+import type { MutableRefObject } from "react";
 import { useEffect, useRef } from "react";
 
 import { useSession } from "~/components/sessionContext/sessionContext";
@@ -8,7 +9,7 @@ import { ClientMessageType } from "~/model/message";
 import { throttle } from "~/utils/throttle";
 
 interface Params {
-  score: number;
+  scoreRef: MutableRefObject<number>;
   bunnyId: BunnyId;
   lifecycleState: LifecycleState;
 }
@@ -18,10 +19,12 @@ const sendMessage = (ws: WebSocket, message: ClientMessage): void => {
 };
 
 export const useUpdateGame = ({
-  score,
+  scoreRef,
   bunnyId,
   lifecycleState,
 }: Params): void => {
+  const score = scoreRef.current;
+
   const session = useSession();
 
   const onUpdateScore = useRef(
@@ -69,4 +72,17 @@ export const useUpdateGame = ({
       onUpdateScore.current(session.ws, score);
     }
   }, [session, lifecycleState, score, bunnyId]);
+
+  useEffect(() => {
+    return () => {
+      if (!session) return;
+
+      if (lastLifecycleState.current === "playing") {
+        sendMessage(session.ws, {
+          type: ClientMessageType.gameOver,
+          payload: { score: scoreRef.current },
+        });
+      }
+    };
+  }, [scoreRef, session]);
 };
