@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { Grass, links as grassLinks } from "~/components/grass/grass";
 import { useUpdateGame } from "~/components/useUpdateGame/useUpdateGame";
 import type { BunnyId } from "~/model/bunnies";
+import type { LifecycleState } from "~/model/gameState";
 import { gameWorldBaseSpeedInUnitPerSeconds } from "~/model/world";
 
 import {
@@ -22,8 +23,6 @@ export const links = () => [
   ...gameOverScreenLinks(),
   { rel: "stylesheet", href: styles },
 ];
-
-type LifecycleState = "playing" | "gameOver";
 
 export default function Play() {
   const { bunnyId } = useParams<{ bunnyId: BunnyId }>();
@@ -49,7 +48,7 @@ export default function Play() {
     return () => clearInterval(intervalRef);
   }, []);
 
-  useUpdateGame({ score, bunnyId: bunnyId as BunnyId });
+  useUpdateGame({ score, bunnyId: bunnyId as BunnyId, lifecycleState });
 
   const onGameOver = useCallback(() => setLifecycleState("gameOver"), []);
 
