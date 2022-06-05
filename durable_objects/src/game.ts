@@ -114,6 +114,10 @@ export class Game implements DurableObject {
         const score = message.payload.score;
         this.handleScoreUpdated(session, score);
         session.lastScore = 0;
+        if (session.bunnyId) {
+          this.gameState.bunnies[session.bunnyId].playersCount--;
+          session.bunnyId = undefined;
+        }
         break;
       }
     }
