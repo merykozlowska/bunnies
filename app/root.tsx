@@ -46,27 +46,27 @@ export default function App() {
   const [session, setSession] = useState<Session>();
 
   const connect = () => {
-    const protocol = window.location.protocol === "http:" ? "ws:" : "wss:";
-    const host = window.location.host;
-    const ws = new WebSocket(`${protocol}//${host}/api/game/global/websocket`);
-
-    ws.addEventListener("open", () => {
-      setSession({ ws });
-    });
-
-    const reconnect = () => {
-      const newWS = new WebSocket(
+    const connectWS = () => {
+      const protocol = window.location.protocol === "http:" ? "ws:" : "wss:";
+      const host = window.location.host;
+      const ws = new WebSocket(
         `${protocol}//${host}/api/game/global/websocket`
       );
-      setSession({ ws: newWS });
+
+      ws.addEventListener("open", () => {
+        setSession({ ws });
+      });
+
+      ws.addEventListener("close", () => {
+        connectWS();
+      });
+
+      ws.addEventListener("error", () => {
+        connectWS();
+      });
     };
 
-    ws.addEventListener("close", () => {
-      reconnect();
-    });
-    ws.addEventListener("error", () => {
-      reconnect();
-    });
+    connectWS();
   };
 
   useEffect(() => {
