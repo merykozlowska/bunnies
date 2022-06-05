@@ -1,4 +1,4 @@
-import type { BunnyId } from "~/model/bunnies";
+import type { BunnyId, BunnyState } from "~/model/bunnies";
 import { isValidBunnyId } from "~/model/bunnies";
 import type { GameState } from "~/model/gameState";
 import type { ClientMessage, ServerMessage } from "~/model/message";
@@ -25,8 +25,24 @@ export class Game implements DurableObject {
     // `blockConcurrencyWhile()` ensures no requests are delivered until initialization completes.
     this.state.blockConcurrencyWhile(async () => {
       console.log("reading game state from storage");
-      const stored = await this.state.storage.get<GameState>("gameState");
-      this.gameState = stored || this.gameState;
+      const stored = await this.state.storage.get<
+        Record<BunnyId, { score: number }>
+      >("gameState");
+
+      if (stored) {
+        this.gameState = {
+          bunnies: Object.fromEntries(
+            Object.entries(stored).map(([bunnyId, { score }]) => [
+              bunnyId,
+              {
+                id: bunnyId,
+                playersCount: 0,
+                scoreValue: score,
+              },
+            ])
+          ) as Record<BunnyId, BunnyState>,
+        };
+      }
     });
   }
 
@@ -86,7 +102,13 @@ export class Game implements DurableObject {
 
   saveState(): void {
     console.log("saving state");
-    this.state.storage.put("gameState", this.gameState);
+    const stateToSave = Object.fromEntries(
+      Object.entries(this.gameState.bunnies).map(([bunnyId, bunnyState]) => [
+        bunnyId,
+        { score: bunnyState.scoreValue },
+      ])
+    );
+    this.state.storage.put("gameState", stateToSave);
   }
 
   canHandleMessage(message: unknown): message is ClientMessage {
