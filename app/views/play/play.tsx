@@ -20,16 +20,16 @@ import {
   PlayLane,
 } from "./components/playLane/playLane";
 import {
-  links as progressLinks,
-  Progress,
-} from "./components/progress/progress";
+  links as playTopBarLinks,
+  PlayTopBar,
+} from "./components/playTopBar/playTopBar";
 import styles from "./play.styles.css";
 
 export const links = () => [
   ...grassLinks(),
   ...playLaneLinks(),
   ...gameOverScreenLinks(),
-  ...progressLinks(),
+  ...playTopBarLinks(),
   { rel: "stylesheet", href: styles },
 ];
 
@@ -81,7 +81,7 @@ export default function Play() {
       className="play__container"
       gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
     >
-      <Progress className="play__progress" score={scoreRef.current} />
+      <PlayTopBar className="play__topBar" score={scoreRef.current} />
 
       <div className="play__lanes">
         {lifecycleState === "gameOver" && (

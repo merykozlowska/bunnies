@@ -15,7 +15,7 @@ import {
   Medal,
 } from "~/views/home/components/medal/medal";
 
-import styles from "./progress.styles.css";
+import styles from "./playTopBar.styles.css";
 
 export const links = () => [
   ...medalLinks(),
@@ -28,7 +28,7 @@ interface Props {
   className?: string;
 }
 
-export const Progress: React.FC<Props> = ({ score, className }) => {
+export const PlayTopBar: React.FC<Props> = ({ score, className }) => {
   const { gameState } = useGameState();
 
   if (!gameState) {
@@ -40,8 +40,8 @@ export const Progress: React.FC<Props> = ({ score, className }) => {
     gameState.bunnies.snowball.scoreValue;
 
   return (
-    <div className={classNames("playProgress", className)}>
-      <div className="playProgress__bunnies" data-reverse={isFluffyFirst}>
+    <div className={classNames("playTopBar", className)}>
+      <div className="playTopBar__bunnies" data-reverse={isFluffyFirst}>
         <PlayProgressBunny
           bunnyState={gameState.bunnies.snowball}
           otherBunnyState={gameState.bunnies.fluffy}
@@ -51,7 +51,7 @@ export const Progress: React.FC<Props> = ({ score, className }) => {
           otherBunnyState={gameState.bunnies.snowball}
         />
       </div>
-      <div className="playProgress__score">{score}m</div>
+      <div className="playTopBar__score">{score}m</div>
     </div>
   );
 };
@@ -70,8 +70,8 @@ const PlayProgressBunny: React.FC<PlayProgressBunnyProps> = ({
   const rank = bunnyState.scoreValue >= otherBunnyState.scoreValue ? 1 : 2;
 
   return (
-    <div className="playProgress__bunny">
-      <Medal rank={rank} className="playProgress__bunny__medal" />
+    <div className="playTopBar__bunny">
+      <Medal rank={rank} className="playTopBar__bunny__medal" />
       <BunnySprite
         bunnyColour={bunnyColourForId(bunnyState.id)}
         bunnySize="sm"

@@ -1,4 +1,4 @@
-.playProgress {
+.playTopBar {
     background-color: rgb(14, 26, 4, 0.8);
     -webkit-backdrop-filter: saturate(180%) blur(10px);
     backdrop-filter: saturate(180%) blur(10px);
@@ -10,39 +10,39 @@
     align-items: center;
 }
 
-.playProgress__bunnies {
+.playTopBar__bunnies {
     display: flex;
     flex-direction: column;
 
     gap: var(--spacing-xs);
 }
 
-.playProgress__bunnies[data-reverse="true"] {
+.playTopBar__bunnies[data-reverse="true"] {
     flex-direction: column-reverse;
 }
 
-.playProgress__score {
+.playTopBar__score {
     font-size: var(--text-l);
 }
 
 @media only screen and (min-width: 768px) {
-    .playProgress__bunnies {
+    .playTopBar__bunnies {
         flex-direction: row;
         gap: var(--spacing-m);
     }
 
-    .playProgress__bunnies[data-reverse="true"] {
+    .playTopBar__bunnies[data-reverse="true"] {
         flex-direction: row-reverse;
     }
 }
 
-.playProgress__bunny__medal {
+.playTopBar__bunny__medal {
     position: absolute;
     transform: scale(0.5);
     left: 0;
 }
 
-.playProgress__bunny {
+.playTopBar__bunny {
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
