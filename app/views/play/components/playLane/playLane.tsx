@@ -17,8 +17,10 @@ import type { ItemType } from "~/model/items";
 import {
   gameWorldBaseUnitPx,
   laneSpawnProbability,
+  minGameWorldUnitBetweenItemInSameLane,
+  minGameWorldUnitBetweenSameItemInDifferentLane,
   timeBetweenItemInSameLaneMs,
-  timeBetweenSameItemInDifferentLane,
+  timeBetweenSameItemInDifferentLaneMs,
 } from "~/model/world";
 import { classNames } from "~/utils/classNames";
 
@@ -49,6 +51,7 @@ interface Item {
 interface TrackedSpawnedItem {
   type: ItemType;
   dtInMs: number;
+  squarePassed: number;
 }
 
 interface Rect {
@@ -90,7 +93,9 @@ const createNewRandomItem = (lane: 0 | 1, allowedItems: ItemType[]): Item => ({
 const getValidItems = (itemInOtherLane?: TrackedSpawnedItem): ItemType[] => {
   if (
     !itemInOtherLane ||
-    itemInOtherLane.dtInMs > timeBetweenSameItemInDifferentLane
+    (itemInOtherLane.dtInMs > timeBetweenSameItemInDifferentLaneMs &&
+      itemInOtherLane.squarePassed >
+        minGameWorldUnitBetweenSameItemInDifferentLane)
   ) {
     return ["bomb", "carrot"];
   }
@@ -107,10 +112,12 @@ const generateItemInLane = (
   trackedSpawned: [TrackedSpawnedItem?, TrackedSpawnedItem?],
   newItems: Item[]
 ) => {
-  const timeSinceLastItemInLane = trackedSpawned[lane]?.dtInMs;
+  const lastSpawnedItemInLane = trackedSpawned[lane];
   if (
-    !timeSinceLastItemInLane ||
-    timeSinceLastItemInLane > timeBetweenItemInSameLaneMs
+    !lastSpawnedItemInLane ||
+    (lastSpawnedItemInLane.dtInMs > timeBetweenItemInSameLaneMs &&
+      lastSpawnedItemInLane.squarePassed >
+        minGameWorldUnitBetweenItemInSameLane)
   ) {
     const newItem = createNewRandomItem(
       lane,
@@ -120,6 +127,7 @@ const generateItemInLane = (
     trackedSpawned[lane] = {
       type: newItem.type,
       dtInMs: 0,
+      squarePassed: 0,
     };
 
     newItems.push(newItem);
@@ -159,21 +167,23 @@ export const PlayLane: React.FC<Props> = ({
 
       const previousNumberOfSquarePassed = numberOfSquarePassedRef.current;
       numberOfSquarePassedRef.current += step / gameWorldBaseUnitPx;
+      const squarePassedSinceLastFrame =
+        Math.floor(numberOfSquarePassedRef.current) -
+        Math.floor(previousNumberOfSquarePassed);
 
       if (trackedSpawnedRef.current[0]) {
         trackedSpawnedRef.current[0].dtInMs += dtInMs;
+        trackedSpawnedRef.current[0].squarePassed += squarePassedSinceLastFrame;
       }
       if (trackedSpawnedRef.current[1]) {
         trackedSpawnedRef.current[1].dtInMs += dtInMs;
+        trackedSpawnedRef.current[1].squarePassed += squarePassedSinceLastFrame;
       }
 
       setItems((items) => {
         const newItems: Item[] = [];
-        const numberOfSquaresToSpawn =
-          Math.floor(numberOfSquarePassedRef.current) -
-          Math.floor(previousNumberOfSquarePassed);
 
-        for (let i = 0; i < numberOfSquaresToSpawn; i++) {
+        for (let i = 0; i < squarePassedSinceLastFrame; i++) {
           if (Math.random() < laneSpawnProbability) {
             generateItemInLane(0, trackedSpawnedRef.current, newItems);
           }
