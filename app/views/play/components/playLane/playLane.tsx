@@ -7,8 +7,12 @@ import {
   links as bunnySpriteLinks,
 } from "~/components/bunnySprite/bunnySprite";
 import {
+  ExplosionSprite,
+  links as explosionSpriteLinks,
+} from "~/components/explosionSprite/explosionSprite";
+import {
   ItemSprite,
-  links as carrotSpriteLinks,
+  links as itemSpriteLinks,
 } from "~/components/itemSprite/itemSprite";
 import { useRequestAnimation } from "~/components/useRequestAnimation/useRequestAnimation";
 import type { BunnyId } from "~/model/bunnies";
@@ -37,7 +41,8 @@ interface Props {
 
 export const links = () => [
   ...bunnySpriteLinks(),
-  ...carrotSpriteLinks(),
+  ...itemSpriteLinks(),
+  ...explosionSpriteLinks(),
   { rel: "stylesheet", href: styles },
 ];
 
@@ -136,7 +141,7 @@ export const PlayLane: React.FC<Props> = ({
           )?.id;
         }
 
-        let updatedItems = [
+        const updatedItems = [
           ...newItems,
           ...items.map((item) => ({
             ...item,
@@ -150,19 +155,24 @@ export const PlayLane: React.FC<Props> = ({
           return updatedItems;
         }
 
-        const hasLost = updatedItems.find(
+        const missedCarrotOrCollidingBomb = updatedItems.find(
           (item: PlayLaneItem) =>
-            (item.type === "carrot" && item.top >= laneBoundingRect.height) ||
+            (item.type === "carrot" &&
+              item.top >= laneBoundingRect.height - 45) ||
             (item.type === "bomb" &&
               isColliding(bunnyBoundingRect, item, laneBoundingRect))
         );
-
-        if (hasLost) {
+        if (missedCarrotOrCollidingBomb) {
           setTimeout(() => onGameOver());
-          return items;
+          return [
+            ...updatedItems.filter(
+              (item) => item !== missedCarrotOrCollidingBomb
+            ),
+            { ...missedCarrotOrCollidingBomb, isDestroyed: true },
+          ];
         }
 
-        updatedItems = updatedItems.filter(
+        return updatedItems.filter(
           (item) =>
             item.top < laneBoundingRect.height &&
             !(
@@ -170,8 +180,6 @@ export const PlayLane: React.FC<Props> = ({
               isColliding(bunnyBoundingRect, item, laneBoundingRect)
             )
         );
-
-        return updatedItems;
       });
     },
     [gameWorldSpeedInUnitPerSecondsRef, onGameOver]
@@ -193,16 +201,31 @@ export const PlayLane: React.FC<Props> = ({
       ref={laneRef}
     >
       <div className="playLane__tutorial" data-side={side} />
-      {items.map((item) => (
-        <ItemSprite
-          key={item.id}
-          itemType={item.type}
-          showRoleText={item.id === firstSpawnedOfTypeIdRef.current[item.type]}
-          className="playLane__item"
-          data-lane={item.lane}
-          style={{ top: `${item.top}px` }}
-        />
-      ))}
+      {items.map((item) => {
+        if (item.isDestroyed) {
+          return (
+            <ExplosionSprite
+              key={item.id}
+              className="playLane__item"
+              data-lane={item.lane}
+              style={{ top: `${item.top}px` }}
+            />
+          );
+        }
+
+        return (
+          <ItemSprite
+            key={item.id}
+            itemType={item.type}
+            showRoleText={
+              item.id === firstSpawnedOfTypeIdRef.current[item.type]
+            }
+            className="playLane__item"
+            data-lane={item.lane}
+            style={{ top: `${item.top}px` }}
+          />
+        );
+      })}
       <BunnySprite
         bunnyColour={bunnyColourForId(bunnyId)}
         bunnySize="lg"

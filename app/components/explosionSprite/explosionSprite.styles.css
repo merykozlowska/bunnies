@@ -1,0 +1,24 @@
+.explosionSprite {
+    width: 96px;
+    height: 96px;
+
+    background-image: url("/resources/explosion.png");
+
+    animation-name: explosion__explodeAnimation;
+    animation-duration: 750ms;
+    animation-timing-function: steps(11);
+    animation-fill-mode: forwards;
+
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+@keyframes explosion__explodeAnimation {
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: -1056px;
+    }
+}

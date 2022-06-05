@@ -11,6 +11,7 @@ export interface PlayLaneItem {
   type: ItemType;
   lane: 0 | 1;
   top: number;
+  isDestroyed: boolean;
 }
 
 export interface TrackedSpawnedItem {
@@ -54,6 +55,7 @@ const createNewRandomItem = (
   lane,
   top: -80,
   type: allowedItems[Math.floor(Math.random() * allowedItems.length)],
+  isDestroyed: false,
 });
 
 const getValidItems = (itemInOtherLane?: TrackedSpawnedItem): ItemType[] => {
