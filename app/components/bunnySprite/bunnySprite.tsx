@@ -2,7 +2,7 @@ import type { MutableRefObject } from "react";
 import React, { useEffect, useState } from "react";
 
 import type { BunnyColour } from "~/model/bunnies";
-import { gameWorldBaseSpeedInUnitPerSeconds } from "~/model/world";
+import { backgroundBaseSpeedInUnitPerSeconds } from "~/model/world";
 import { classNames } from "~/utils/classNames";
 
 import styles from "./bunnySprite.styles.css";
@@ -38,7 +38,7 @@ export const BunnySprite = React.forwardRef<HTMLImageElement, Props>(
       const flicker = () => {
         const speed =
           gameWorldSpeedInUnitPerSecondsRef?.current ??
-          gameWorldBaseSpeedInUnitPerSeconds;
+          backgroundBaseSpeedInUnitPerSeconds;
 
         timeoutRef = setTimeout(
           () => {

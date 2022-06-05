@@ -6,6 +6,8 @@ import {
   BunnySprite,
   links as bunnySpriteLinks,
 } from "~/components/bunnySprite/bunnySprite";
+import type { DynamicNumberData } from "~/components/dynamicNumber/dynamicNumber";
+import { useDynamicNumber } from "~/components/dynamicNumber/dynamicNumber";
 import { Grass, links as grassLinks } from "~/components/grass/grass";
 import { useGameState } from "~/components/useGameState/useGameState";
 import type { BunnyId } from "~/model/bunnies";
@@ -14,8 +16,6 @@ import type { GameState } from "~/model/gameState";
 import type { LoaderContext } from "~/model/loaderContext";
 
 import { ButtonLink, links as buttonLinks } from "./components/button/button";
-import type { DynamicNumberData } from "./components/dynamicNumber/dynamicNumber";
-import { useDynamicNumber } from "./components/dynamicNumber/dynamicNumber";
 import { links as medalLinks, Medal } from "./components/medal/medal";
 import {
   links as progressBarLinks,

@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 
 import { useRequestAnimation } from "~/components/useRequestAnimation/useRequestAnimation";
 import {
-  gameWorldBaseSpeedInUnitPerSeconds,
+  backgroundBaseSpeedInUnitPerSeconds,
   gameWorldBaseUnitPx,
 } from "~/model/world";
 import { classNames } from "~/utils/classNames";
@@ -29,7 +29,7 @@ export const Grass: React.FC<Props> = ({
       (dtInMs / 1000) *
       gameWorldBaseUnitPx *
       (gameWorldSpeedInUnitPerSecondsRef?.current ??
-        gameWorldBaseSpeedInUnitPerSeconds);
+        backgroundBaseSpeedInUnitPerSeconds);
 
     setGrassY((grassY) => (grassY + step) % gameWorldBaseUnitPx);
   }, []);

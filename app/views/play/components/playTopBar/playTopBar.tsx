@@ -1,15 +1,15 @@
 import React from "react";
 
 import { BunnySprite } from "~/components/bunnySprite/bunnySprite";
-import { useGameState } from "~/components/useGameState/useGameState";
-import type { BunnyId, BunnyState } from "~/model/bunnies";
-import { bunnyColourForId } from "~/model/bunnies";
-import { classNames } from "~/utils/classNames";
 import {
   DynamicNumber,
   links as dynamicNumbersLinks,
   useDynamicNumber,
-} from "~/views/home/components/dynamicNumber/dynamicNumber";
+} from "~/components/dynamicNumber/dynamicNumber";
+import { useGameState } from "~/components/useGameState/useGameState";
+import type { BunnyId, BunnyState } from "~/model/bunnies";
+import { bunnyColourForId } from "~/model/bunnies";
+import { classNames } from "~/utils/classNames";
 import {
   links as medalLinks,
   Medal,

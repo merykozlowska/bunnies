@@ -7,8 +7,8 @@ import { useUpdateGame } from "~/components/useUpdateGame/useUpdateGame";
 import type { BunnyId } from "~/model/bunnies";
 import type { LifecycleState } from "~/model/gameState";
 import {
-  gameWorldBaseSpeedInUnitPerSeconds,
-  gameWorldMaxSpeedInUnitPerSeconds,
+  gameBaseSpeedInUnitPerSeconds,
+  gameMaxSpeedInUnitPerSeconds,
   timeBeforeConsideringGameWasPausedInMs,
 } from "~/model/world";
 
@@ -46,7 +46,7 @@ export default function Play() {
   const scoreRef = useRef(scoreState);
 
   const gameWorldSpeedInUnitPerSecondsRef = useRef<number>(
-    gameWorldBaseSpeedInUnitPerSeconds
+    gameBaseSpeedInUnitPerSeconds
   );
 
   useEffect(() => {
@@ -54,8 +54,7 @@ export default function Play() {
       setScoreState(0);
       internalScoreRef.current = 0;
       scoreRef.current = 0;
-      gameWorldSpeedInUnitPerSecondsRef.current =
-        gameWorldBaseSpeedInUnitPerSeconds;
+      gameWorldSpeedInUnitPerSecondsRef.current = gameBaseSpeedInUnitPerSeconds;
     }
     if (lifecycleState !== "playing") {
       gameWorldSpeedInUnitPerSecondsRef.current = 0;
@@ -69,8 +68,7 @@ export default function Play() {
 
     const dtInS = dtInMs / 1000;
     const scoreIncreasePerSecond =
-      gameWorldSpeedInUnitPerSecondsRef.current /
-      gameWorldBaseSpeedInUnitPerSeconds;
+      gameWorldSpeedInUnitPerSecondsRef.current / gameBaseSpeedInUnitPerSeconds;
     const currentScore = internalScoreRef.current;
     internalScoreRef.current =
       internalScoreRef.current + scoreIncreasePerSecond * dtInS;
@@ -83,7 +81,7 @@ export default function Play() {
 
     gameWorldSpeedInUnitPerSecondsRef.current = Math.min(
       (gameWorldSpeedInUnitPerSecondsRef.current *= 1 + 0.025 * dtInS),
-      gameWorldMaxSpeedInUnitPerSeconds
+      gameMaxSpeedInUnitPerSeconds
     );
   }, []);
 

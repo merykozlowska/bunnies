@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { ScrollingNumber } from "../scrollingNumber/scrollingNumber";
+import { ScrollingNumber } from "./components/scrollingNumber/scrollingNumber";
 import styles from "./dynamicNumber.styles.css";
 
 export const links = () => [{ rel: "stylesheet", href: styles }];
