@@ -53,6 +53,20 @@ export default function App() {
     ws.addEventListener("open", () => {
       setSession({ ws });
     });
+
+    const reconnect = () => {
+      const newWS = new WebSocket(
+        `${protocol}//${host}/api/game/global/websocket`
+      );
+      setSession({ ws: newWS });
+    };
+
+    ws.addEventListener("close", () => {
+      reconnect();
+    });
+    ws.addEventListener("error", () => {
+      reconnect();
+    });
   };
 
   useEffect(() => {
