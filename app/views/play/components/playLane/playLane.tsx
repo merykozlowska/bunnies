@@ -64,17 +64,11 @@ const itemToRect = (item: Item, laneBoundingRect: Rect): Rect => {
   };
 };
 
-function isColliding(bunnyBoundingRect: Rect, itemRect: Rect) {
-  const colliding =
-    itemRect.left < bunnyBoundingRect.left + bunnyBoundingRect.width &&
-    itemRect.left + itemRect.width > bunnyBoundingRect.left &&
-    itemRect.top < bunnyBoundingRect.top + bunnyBoundingRect.height &&
-    itemRect.height + itemRect.top > bunnyBoundingRect.top;
-
-  console.log(colliding);
-
-  return colliding;
-}
+const isColliding = (bunnyBoundingRect: Rect, itemRect: Rect) =>
+  itemRect.left < bunnyBoundingRect.left + bunnyBoundingRect.width &&
+  itemRect.left + itemRect.width > bunnyBoundingRect.left &&
+  itemRect.top < bunnyBoundingRect.top + bunnyBoundingRect.height &&
+  itemRect.height + itemRect.top > bunnyBoundingRect.top;
 
 export const PlayLane: React.FC<Props> = ({
   bunnyId,
