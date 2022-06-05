@@ -38,3 +38,59 @@
 .playLane__item[data-lane="1"] {
     left: 75%;
 }
+
+.playLane__tutorial {
+    opacity: 0;
+    animation: appearTutorial 1s linear;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 25%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-size: var(--text-l);
+}
+
+.playLane__tutorial::before {
+    content: "⬅️";
+}
+
+.playLane__tutorial[data-side="right"]::before {
+    content: "➡️";
+}
+
+.playLane__tutorial::after {
+    content: "key";
+}
+
+@media (pointer: coarse) {
+    .playLane__tutorial::before {
+        content: "👆";
+    }
+    .playLane__tutorial[data-side="right"]::before {
+        content: "👆";
+    }
+    .playLane__tutorial::after {
+        content: "tap";
+    }
+}
+
+@keyframes appearTutorial {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0;
+    }
+}

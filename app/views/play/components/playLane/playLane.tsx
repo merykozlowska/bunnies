@@ -171,6 +171,7 @@ export const PlayLane: React.FC<Props> = ({
       onKeyDown={(e) => e.key === "Enter" && switchLane()}
       ref={laneRef}
     >
+      <div className="playLane__tutorial" data-side={side} />
       {items.map((item) => (
         <ItemSprite
           key={item.id}
