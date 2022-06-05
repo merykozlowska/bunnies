@@ -84,6 +84,11 @@ export class Game implements DurableObject {
     });
   }
 
+  saveState(): void {
+    console.log("saving state");
+    this.state.storage.put("gameState", this.gameState);
+  }
+
   canHandleMessage(message: unknown): message is ClientMessage {
     return ClientMessageType[(message as ClientMessage).type] !== undefined;
   }
@@ -122,6 +127,10 @@ export class Game implements DurableObject {
         if (session.bunnyId) {
           this.gameState.bunnies[session.bunnyId].playersCount--;
           session.bunnyId = undefined;
+        }
+
+        if (this.sessions.length === 1) {
+          this.saveState();
         }
 
         this.broadcastStateUpdated();
@@ -193,8 +202,7 @@ export class Game implements DurableObject {
     }
 
     if (!this.sessions.length) {
-      console.log("saving game state in storage");
-      this.state.storage.put("gameState", this.gameState);
+      this.saveState();
     }
 
     this.broadcastStateUpdated();
