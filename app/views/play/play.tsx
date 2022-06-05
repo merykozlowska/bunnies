@@ -79,11 +79,11 @@ export default function Play() {
       gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
     >
       <Progress className="play__progress" score={scoreRef.current} />
-      {lifecycleState === "gameOver" && (
-        <GameOverScreen className="play__gameOver" />
-      )}
 
       <div className="play__lanes">
+        {lifecycleState === "gameOver" && (
+          <GameOverScreen className="play__gameOver" />
+        )}
         <PlayLane
           side="left"
           bunnyId={bunnyId as BunnyId}
