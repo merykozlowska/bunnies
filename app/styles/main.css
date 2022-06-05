@@ -53,9 +53,6 @@ html, body {
 
     --playLane-separator: #FFF;
 
-    --game-world-base-unit: 64px;
-    --game-world-base-unit-per-seconds: 2;
-
     --overlay-background-color: rgba(0, 0, 0, 0.5)
 
     /* medium-screen: 768px; */

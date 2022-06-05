@@ -8,12 +8,10 @@
 .playLane_separator {
     position: absolute;
     left: calc(50% - 2px);
-    top: calc(var(--game-world-base-unit) * -1);
+    top: 0;
     bottom: 0;
 
-    border-left: 1px dashed var(--playLane-separator);
-
-    animation: separatorScroll infinite calc(1s / var(--game-world-base-unit-per-seconds)) linear;;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .playLane__bunny {
@@ -39,14 +37,4 @@
 
 .playLane__item[data-lane="1"] {
     left: 75%;
-}
-
-@keyframes separatorScroll {
-    0% {
-        transform: translateY(0);
-    }
-
-    100% {
-        transform: translateY(var(--game-world-base-unit));
-    }
 }
