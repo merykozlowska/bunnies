@@ -149,9 +149,7 @@ export class Game implements DurableObject {
           session.bunnyId = undefined;
         }
 
-        if (this.sessions.length === 1) {
-          this.saveState();
-        }
+        this.saveState();
 
         this.broadcastStateUpdated();
         break;
