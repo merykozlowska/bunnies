@@ -70,6 +70,13 @@ const isColliding = (bunnyBoundingRect: Rect, itemRect: Rect) =>
   itemRect.top < bunnyBoundingRect.top + bunnyBoundingRect.height &&
   itemRect.height + itemRect.top > bunnyBoundingRect.top;
 
+const createNewRandomItem = (): Item => ({
+  id: new Date().getTime().toString(),
+  type: Math.random() >= 0.5 ? "carrot" : "bomb",
+  lane: Math.random() >= 0.5 ? 1 : 0,
+  top: 0,
+});
+
 export const PlayLane: React.FC<Props> = ({
   bunnyId,
   side,
@@ -96,15 +103,7 @@ export const PlayLane: React.FC<Props> = ({
     let timeoutRef: NodeJS.Timeout;
     const generateItem = () => {
       timeoutRef = setTimeout(() => {
-        setItems((items) => [
-          ...items,
-          {
-            id: new Date().getTime().toString(),
-            type: Math.random() >= 0.5 ? "carrot" : "bomb",
-            lane: Math.random() >= 0.5 ? 1 : 0,
-            top: 0,
-          },
-        ]);
+        setItems((items) => [...items, createNewRandomItem()]);
 
         generateItem();
       }, 10000 * Math.random() + 1000);
