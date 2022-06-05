@@ -8,6 +8,7 @@ import type { BunnyId } from "~/model/bunnies";
 import type { LifecycleState } from "~/model/gameState";
 import {
   gameWorldBaseSpeedInUnitPerSeconds,
+  gameWorldMaxSpeedInUnitPerSeconds,
   timeBeforeConsideringGameWasPausedInMs,
 } from "~/model/world";
 
@@ -80,7 +81,10 @@ export default function Play() {
       scoreRef.current = roundedScore;
     }
 
-    gameWorldSpeedInUnitPerSecondsRef.current *= 1 + 0.05 * dtInS;
+    gameWorldSpeedInUnitPerSecondsRef.current = Math.min(
+      (gameWorldSpeedInUnitPerSecondsRef.current *= 1 + 0.025 * dtInS),
+      gameWorldMaxSpeedInUnitPerSeconds
+    );
   }, []);
 
   useRequestAnimation(updateScore);
