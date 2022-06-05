@@ -33,6 +33,8 @@ export const useUpdateGame = ({
     }, 1000)
   );
 
+  const lastLifecycleState = useRef(lifecycleState);
+
   useEffect(() => {
     if (!session) return;
     sendMessage(session.ws, {
@@ -43,16 +45,28 @@ export const useUpdateGame = ({
 
   useEffect(() => {
     if (!session) return;
-    if (lifecycleState === "gameOver") {
+
+    const previousLifecycleState = lastLifecycleState.current;
+
+    if (previousLifecycleState !== lifecycleState) {
+      lastLifecycleState.current = lifecycleState;
+    }
+
+    if (previousLifecycleState === "playing" && lifecycleState === "gameOver") {
       sendMessage(session.ws, {
         type: ClientMessageType.gameOver,
         payload: { score },
       });
+    } else if (
+      previousLifecycleState === "gameOver" &&
+      lifecycleState === "playing"
+    ) {
+      sendMessage(session.ws, {
+        type: ClientMessageType.bunnySelected,
+        payload: { bunnyId },
+      });
+    } else if (lifecycleState === "playing") {
+      onUpdateScore.current(session.ws, score);
     }
-  }, [session, lifecycleState, score]);
-
-  useEffect(() => {
-    if (!session) return;
-    onUpdateScore.current(session.ws, score);
-  }, [session, score]);
+  }, [session, lifecycleState, score, bunnyId]);
 };
