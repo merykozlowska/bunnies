@@ -50,7 +50,7 @@ export const PlayLane: React.FC<Props> = ({
 }) => {
   const [lane, setLane] = useState(0);
   const touchStartedRef = useRef(false);
-  const bunnyRef = useRef<HTMLDivElement>(null);
+  const bunnyRef = useRef<HTMLImageElement>(null);
   const laneRef = useRef<HTMLDivElement>(null);
   const numberOfSquarePassedRef = useRef<number>(0);
   const trackedSpawnedRef = useRef<[TrackedSpawnedItem?, TrackedSpawnedItem?]>(
@@ -177,6 +177,7 @@ export const PlayLane: React.FC<Props> = ({
         className="playLane__bunny"
         data-lane={lane}
         ref={bunnyRef}
+        gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
       />
       <div className="playLane_separator" />
     </div>

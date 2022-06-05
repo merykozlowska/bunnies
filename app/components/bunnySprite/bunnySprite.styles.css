@@ -10,35 +10,3 @@
     width: 42px;
     height: 64px;
 }
-
-.bunnySprite img {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    width: 100%;
-}
-
-.bunnySprite__image1 {
-    animation: bunnyRun infinite linear forwards 1s;
-}
-
-.bunnySprite__image2 {
-    animation: bunnyRun infinite linear forwards 1s 0.5s;
-}
-
-@keyframes bunnyRun {
-    0% {
-        opacity: 0;
-    }
-    49.999% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 1;
-    }
-}
