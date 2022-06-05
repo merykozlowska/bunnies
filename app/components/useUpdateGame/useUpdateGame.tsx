@@ -25,14 +25,20 @@ export const useUpdateGame = ({
 }: Params): void => {
   const score = scoreRef.current;
 
+  const lastSentScore = useRef(0);
+
   const session = useSession();
 
   const onUpdateScore = useRef(
-    throttle((ws: WebSocket, score: number) => {
-      sendMessage(ws, {
-        type: ClientMessageType.scoreUpdated,
-        payload: { score },
-      });
+    throttle((ws: WebSocket, currentScore: number) => {
+      const scoreDiff = currentScore - lastSentScore.current;
+      if (scoreDiff > 0) {
+        sendMessage(ws, {
+          type: ClientMessageType.scoreUpdated,
+          payload: { score: scoreDiff },
+        });
+        lastSentScore.current = currentScore;
+      }
     }, 1000)
   );
 
@@ -44,6 +50,7 @@ export const useUpdateGame = ({
       type: ClientMessageType.bunnySelected,
       payload: { bunnyId },
     });
+    lastSentScore.current = 0;
   }, [session, bunnyId]);
 
   useEffect(() => {
@@ -56,14 +63,17 @@ export const useUpdateGame = ({
     }
 
     if (previousLifecycleState === "playing" && lifecycleState === "gameOver") {
+      const scoreDiff = score - lastSentScore.current;
       sendMessage(session.ws, {
         type: ClientMessageType.gameOver,
-        payload: { score },
+        payload: { score: scoreDiff },
       });
+      lastSentScore.current = score;
     } else if (
       previousLifecycleState === "gameOver" &&
       lifecycleState === "playing"
     ) {
+      lastSentScore.current = 0;
       sendMessage(session.ws, {
         type: ClientMessageType.bunnySelected,
         payload: { bunnyId },
@@ -78,10 +88,12 @@ export const useUpdateGame = ({
       if (!session) return;
 
       if (lastLifecycleState.current === "playing") {
+        const scoreDiff = scoreRef.current - lastSentScore.current;
         sendMessage(session.ws, {
           type: ClientMessageType.gameOver,
-          payload: { score: scoreRef.current },
+          payload: { score: scoreDiff },
         });
+        lastSentScore.current = scoreRef.current;
       }
     };
   }, [scoreRef, session]);
