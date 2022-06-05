@@ -37,8 +37,11 @@ export default function Play() {
   const { bunnyId } = useParams<{ bunnyId: BunnyId }>();
   const [lifecycleState, setLifecycleState] =
     useState<LifecycleState>("playing");
-  const [internalScore, setInternalScore] = useState(0);
-  const scoreRef = useRef(Math.round(internalScore));
+
+  const internalScoreRef = useRef(0);
+  const [scoreState, setScoreState] = useState(0);
+  const scoreRef = useRef(scoreState);
+
   const gameWorldSpeedInUnitPerSecondsRef = useRef<number>(
     gameWorldBaseSpeedInUnitPerSeconds
   );
@@ -53,15 +56,20 @@ export default function Play() {
     if (dtInMs > timeBeforeConsideringGameWasPausedInMs) {
       return;
     }
+
     const dtInS = dtInMs / 1000;
-    setInternalScore((score) => {
-      const scoreIncreasePerSecond =
-        gameWorldSpeedInUnitPerSecondsRef.current /
-        gameWorldBaseSpeedInUnitPerSeconds;
-      const newScore = score + scoreIncreasePerSecond * dtInS;
-      scoreRef.current = Math.round(newScore);
-      return newScore;
-    });
+    const scoreIncreasePerSecond =
+      gameWorldSpeedInUnitPerSecondsRef.current /
+      gameWorldBaseSpeedInUnitPerSeconds;
+    const currentScore = internalScoreRef.current;
+    internalScoreRef.current =
+      internalScoreRef.current + scoreIncreasePerSecond * dtInS;
+
+    if (Math.floor(currentScore) !== Math.floor(internalScoreRef.current)) {
+      const roundedScore = Math.round(internalScoreRef.current);
+      setScoreState(roundedScore);
+      scoreRef.current = roundedScore;
+    }
 
     gameWorldSpeedInUnitPerSecondsRef.current *= 1 + 0.05 * dtInS;
   }, []);
