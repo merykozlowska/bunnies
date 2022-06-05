@@ -66,6 +66,10 @@ export const PlayLane: React.FC<Props> = ({
 
   const animationCallback = useCallback(
     (dtInMs) => {
+      if (dtInMs > 500) {
+        return;
+      }
+
       const step =
         (dtInMs / 1000) *
         gameWorldBaseUnitPx *

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 
 import { Grass, links as grassLinks } from "~/components/grass/grass";
+import { useRequestAnimation } from "~/components/useRequestAnimation/useRequestAnimation";
 import { useUpdateGame } from "~/components/useUpdateGame/useUpdateGame";
 import type { BunnyId } from "~/model/bunnies";
 import type { LifecycleState } from "~/model/gameState";
@@ -42,23 +43,27 @@ export default function Play() {
   useEffect(() => {
     if (lifecycleState !== "playing") {
       gameWorldSpeedInUnitPerSecondsRef.current = 0;
+    }
+  }, [lifecycleState]);
+
+  const updateScore = useCallback((dtInMs) => {
+    if (dtInMs > 500) {
       return;
     }
+    const dtInS = dtInMs / 1000;
+    setInternalScore((score) => {
+      const scoreIncreasePerSecond =
+        gameWorldSpeedInUnitPerSecondsRef.current /
+        gameWorldBaseSpeedInUnitPerSeconds;
+      const newScore = score + scoreIncreasePerSecond * dtInS;
+      scoreRef.current = Math.round(newScore);
+      return newScore;
+    });
 
-    const intervalRef = setInterval(() => {
-      setInternalScore((score) => {
-        const newScore =
-          score +
-          gameWorldSpeedInUnitPerSecondsRef.current /
-            gameWorldBaseSpeedInUnitPerSeconds;
-        scoreRef.current = Math.round(newScore);
-        return newScore;
-      });
-      gameWorldSpeedInUnitPerSecondsRef.current *= 1.05;
-    }, 1000);
+    gameWorldSpeedInUnitPerSecondsRef.current *= 1 + 0.05 * dtInS;
+  }, []);
 
-    return () => clearInterval(intervalRef);
-  }, [lifecycleState]);
+  useRequestAnimation(updateScore);
 
   useUpdateGame({
     scoreRef,
