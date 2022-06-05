@@ -6,6 +6,15 @@
     justify-content: center;
 }
 
+.play__score {
+    position: absolute;
+    z-index: 10;
+    left: var(--spacing-m);
+    top: var(--spacing-s);
+
+    font-size: var(--text-l);
+}
+
 .play__lanes {
     width: 100%;
     height: 100%;

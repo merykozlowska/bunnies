@@ -30,6 +30,7 @@ html, body {
     --spacing-xl: var(--size-16);
 
     --text-m: 2rem;
+    --text-l: 3rem;
 
     --heading-l: 3rem;
     --heading-xl: 4rem;

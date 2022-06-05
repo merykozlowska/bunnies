@@ -62,7 +62,7 @@ export default function Play() {
       className="play__container"
       gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
     >
-      {score}
+      <div className="play__score">{score}</div>
       {lifecycleState === "gameOver" && (
         <GameOverScreen className="play__gameOver" />
       )}
