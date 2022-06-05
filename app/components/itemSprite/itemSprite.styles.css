@@ -17,8 +17,10 @@
 
 .itemSprite[data-show-role-text="true"][data-item-type="carrot"]::after {
     content: "eat all";
+    color: var(--text-light-carrot);
 }
 
 .itemSprite[data-show-role-text="true"][data-item-type="bomb"]::after {
     content: "avoid all";
+    color: var(--text-light-bomb);
 }
