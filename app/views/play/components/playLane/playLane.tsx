@@ -53,10 +53,14 @@ export const PlayLane: React.FC<Props> = ({
     []
   );
 
-  const switchLane = () => setLane((prevLane) => (prevLane + 1) % 2);
+  const switchLane = () => {
+    if (!isRunning) return;
 
-  useHotkeys(side, switchLane);
-  useHotkeys(side === "left" ? "a" : "d", switchLane);
+    setLane((prevLane) => (prevLane + 1) % 2);
+  };
+
+  useHotkeys(side, switchLane, {}, [isRunning]);
+  useHotkeys(side === "left" ? "a" : "d", switchLane, {}, [isRunning]);
 
   const [items, setItems] = useState<PlayLaneItem[]>([]);
 
