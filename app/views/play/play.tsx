@@ -35,7 +35,10 @@ export default function Play() {
   );
 
   useEffect(() => {
-    if (lifecycleState !== "playing") return;
+    if (lifecycleState !== "playing") {
+      gameWorldSpeedInUnitPerSecondsRef.current = 0;
+      return;
+    }
 
     const intervalRef = setInterval(() => {
       setInternalScore(
