@@ -41,6 +41,11 @@ interface Item {
   top: number;
 }
 
+interface TrackedSpawnedItem {
+  type: ItemType;
+  dtInMs: number;
+}
+
 interface Rect {
   left: number;
   top: number;
@@ -70,12 +75,24 @@ const isColliding = (bunnyBoundingRect: Rect, itemRect: Rect) =>
   itemRect.top < bunnyBoundingRect.top + bunnyBoundingRect.height &&
   itemRect.height + itemRect.top > bunnyBoundingRect.top;
 
-const createNewRandomItem = (): Item => ({
-  id: new Date().getTime().toString(),
-  type: Math.random() >= 0.5 ? "carrot" : "bomb",
-  lane: Math.random() >= 0.5 ? 1 : 0,
+const createNewRandomItem = (lane: 0 | 1, allowedItems: ItemType[]): Item => ({
+  id: `${new Date().getTime().toString()}-${lane}`,
+  lane,
   top: 0,
+  type: allowedItems[Math.floor(Math.random() * allowedItems.length)],
 });
+
+const getValidItems = (itemInOtherLane?: TrackedSpawnedItem): ItemType[] => {
+  if (!itemInOtherLane || itemInOtherLane.dtInMs > 1000) {
+    return ["bomb", "carrot"];
+  }
+
+  if (itemInOtherLane.type === "carrot") {
+    return ["bomb"];
+  }
+
+  return ["carrot"];
+};
 
 export const PlayLane: React.FC<Props> = ({
   bunnyId,
@@ -90,6 +107,9 @@ export const PlayLane: React.FC<Props> = ({
   const bunnyRef = useRef<HTMLDivElement>(null);
   const laneRef = useRef<HTMLDivElement>(null);
   const numberOfSquarePassedRef = useRef<number>(0);
+  const trackedSpawnedRef = useRef<[TrackedSpawnedItem?, TrackedSpawnedItem?]>(
+    []
+  );
 
   const switchLane = () => setLane((prevLane) => (prevLane + 1) % 2);
 
@@ -108,6 +128,13 @@ export const PlayLane: React.FC<Props> = ({
       const previousNumberOfSquarePassed = numberOfSquarePassedRef.current;
       numberOfSquarePassedRef.current += step / gameWorldBaseUnitPx;
 
+      if (trackedSpawnedRef.current[0]) {
+        trackedSpawnedRef.current[0].dtInMs += dtInMs;
+      }
+      if (trackedSpawnedRef.current[1]) {
+        trackedSpawnedRef.current[1].dtInMs += dtInMs;
+      }
+
       setItems((items) => {
         const newItems = [];
         const numberOfSquaresToSpawn =
@@ -115,8 +142,37 @@ export const PlayLane: React.FC<Props> = ({
           Math.floor(previousNumberOfSquarePassed);
 
         for (let i = 0; i < numberOfSquaresToSpawn; i++) {
-          if (Math.random() < 0.25) {
-            newItems.push(createNewRandomItem());
+          if (Math.random() < 0.125) {
+            const timeSinceLastItem = trackedSpawnedRef.current[0]?.dtInMs;
+            if (!timeSinceLastItem || timeSinceLastItem > 1000) {
+              const newItem = createNewRandomItem(
+                0,
+                getValidItems(trackedSpawnedRef.current[1])
+              );
+
+              trackedSpawnedRef.current[0] = {
+                type: newItem.type,
+                dtInMs: 0,
+              };
+
+              newItems.push(newItem);
+            }
+          }
+          if (Math.random() < 0.125) {
+            const timeSinceLastItem = trackedSpawnedRef.current[1]?.dtInMs;
+            if (!timeSinceLastItem || timeSinceLastItem > 1000) {
+              const newItem = createNewRandomItem(
+                1,
+                getValidItems(trackedSpawnedRef.current[0])
+              );
+
+              trackedSpawnedRef.current[1] = {
+                type: newItem.type,
+                dtInMs: 0,
+              };
+
+              newItems.push(newItem);
+            }
           }
         }
 
