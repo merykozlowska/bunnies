@@ -24,6 +24,7 @@ export class Game implements DurableObject {
   constructor(private state: DurableObjectState) {
     // `blockConcurrencyWhile()` ensures no requests are delivered until initialization completes.
     this.state.blockConcurrencyWhile(async () => {
+      console.log("reading game state from storage");
       const stored = await this.state.storage.get<GameState>("gameState");
       this.gameState = stored || this.gameState;
     });
@@ -73,10 +74,12 @@ export class Game implements DurableObject {
     });
 
     ws.addEventListener("close", () => {
+      console.log("WS CLOSE");
       this.handleDisconnectedPlayers([session]);
     });
 
     ws.addEventListener("error", () => {
+      console.log("WS ERROR");
       this.handleDisconnectedPlayers([session]);
     });
   }
@@ -190,6 +193,7 @@ export class Game implements DurableObject {
     }
 
     if (!this.sessions.length) {
+      console.log("saving game state in storage");
       this.state.storage.put("gameState", this.gameState);
     }
 
