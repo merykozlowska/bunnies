@@ -28,27 +28,25 @@ type GameState = "playing" | "gameOver";
 export default function Play() {
   const { bunnyId } = useParams<{ bunnyId: BunnyId }>();
   const [gameState, setGameState] = useState<GameState>("playing");
-  const [score, setScore] = useState(0);
+  const [internalScore, setInternalScore] = useState(0);
+  const score = Math.round(internalScore);
   const gameWorldSpeedInUnitPerSecondsRef = useRef<number>(
     gameWorldBaseSpeedInUnitPerSeconds
   );
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
+      setInternalScore(
+        (score) =>
+          score +
+          gameWorldSpeedInUnitPerSecondsRef.current /
+            gameWorldBaseSpeedInUnitPerSeconds
+      );
       gameWorldSpeedInUnitPerSecondsRef.current *= 1.05;
     }, 1000);
 
     return () => clearInterval(intervalRef);
-  });
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setScore((curScore) => curScore + Math.floor(Math.random() * 100));
-  //   }, 200);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, []);
+  }, []);
 
   useUpdateGame({ score, bunnyId: bunnyId as BunnyId });
 
