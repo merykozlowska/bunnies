@@ -35,6 +35,8 @@ export default function Play() {
   );
 
   useEffect(() => {
+    if (lifecycleState !== "playing") return;
+
     const intervalRef = setInterval(() => {
       setInternalScore(
         (score) =>
@@ -46,7 +48,7 @@ export default function Play() {
     }, 1000);
 
     return () => clearInterval(intervalRef);
-  }, []);
+  }, [lifecycleState]);
 
   useUpdateGame({ score, bunnyId: bunnyId as BunnyId, lifecycleState });
 
