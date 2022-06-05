@@ -13,7 +13,11 @@ import {
 import { useRequestAnimation } from "~/components/useRequestAnimation/useRequestAnimation";
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
-import { gameWorldBaseUnitPx, laneSpawnProbability } from "~/model/world";
+import {
+  gameWorldBaseUnitPx,
+  laneSpawnProbability,
+  timeBeforeConsideringGameWasPausedInMs,
+} from "~/model/world";
 import { classNames } from "~/utils/classNames";
 
 import { isColliding } from "./collision";
@@ -66,7 +70,7 @@ export const PlayLane: React.FC<Props> = ({
 
   const animationCallback = useCallback(
     (dtInMs) => {
-      if (dtInMs > 500) {
+      if (dtInMs > timeBeforeConsideringGameWasPausedInMs) {
         return;
       }
 

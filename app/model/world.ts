@@ -6,3 +6,5 @@ export const timeBetweenItemInSameLaneMs = 200;
 export const minGameWorldUnitBetweenItemInSameLane = 3;
 export const timeBetweenSameItemInDifferentLaneMs = 200;
 export const minGameWorldUnitBetweenSameItemInDifferentLane = 3;
+
+export const timeBeforeConsideringGameWasPausedInMs = 500;

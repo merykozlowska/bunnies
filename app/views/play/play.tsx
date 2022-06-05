@@ -6,7 +6,10 @@ import { useRequestAnimation } from "~/components/useRequestAnimation/useRequest
 import { useUpdateGame } from "~/components/useUpdateGame/useUpdateGame";
 import type { BunnyId } from "~/model/bunnies";
 import type { LifecycleState } from "~/model/gameState";
-import { gameWorldBaseSpeedInUnitPerSeconds } from "~/model/world";
+import {
+  gameWorldBaseSpeedInUnitPerSeconds,
+  timeBeforeConsideringGameWasPausedInMs,
+} from "~/model/world";
 
 import {
   GameOverScreen,
@@ -47,7 +50,7 @@ export default function Play() {
   }, [lifecycleState]);
 
   const updateScore = useCallback((dtInMs) => {
-    if (dtInMs > 500) {
+    if (dtInMs > timeBeforeConsideringGameWasPausedInMs) {
       return;
     }
     const dtInS = dtInMs / 1000;
