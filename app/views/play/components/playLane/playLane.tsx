@@ -23,8 +23,10 @@ import {
   timeBetweenSameItemInDifferentLaneMs,
 } from "~/model/world";
 import { classNames } from "~/utils/classNames";
+import { isColliding } from "~/views/play/components/playLane/collision";
 
 import styles from "./playLane.styles.css";
+import type { Item } from "./types";
 
 interface Props {
   bunnyId: BunnyId;
@@ -41,47 +43,11 @@ export const links = () => [
   { rel: "stylesheet", href: styles },
 ];
 
-interface Item {
-  id: string;
-  type: ItemType;
-  lane: 0 | 1;
-  top: number;
-}
-
 interface TrackedSpawnedItem {
   type: ItemType;
   dtInMs: number;
   squarePassed: number;
 }
-
-interface Rect {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-}
-
-const itemToRect = (item: Item, laneBoundingRect: Rect): Rect => {
-  const itemXCenter =
-    (laneBoundingRect.width / 4) * (item.lane === 0 ? 1 : 3) +
-    laneBoundingRect.left;
-  const itemYTop = item.top;
-  const itemWidth = 48;
-  const itemHeight = 48;
-
-  return {
-    left: itemXCenter - itemWidth / 2,
-    top: itemYTop,
-    width: itemWidth,
-    height: itemHeight,
-  };
-};
-
-const isColliding = (bunnyBoundingRect: Rect, itemRect: Rect) =>
-  itemRect.left < bunnyBoundingRect.left + bunnyBoundingRect.width &&
-  itemRect.left + itemRect.width > bunnyBoundingRect.left &&
-  itemRect.top < bunnyBoundingRect.top + bunnyBoundingRect.height &&
-  itemRect.height + itemRect.top > bunnyBoundingRect.top;
 
 const createNewRandomItem = (lane: 0 | 1, allowedItems: ItemType[]): Item => ({
   id: `${new Date().getTime().toString()}-${lane}`,
@@ -210,10 +176,7 @@ export const PlayLane: React.FC<Props> = ({
           (item: Item) =>
             (item.type === "carrot" && item.top >= laneBoundingRect.height) ||
             (item.type === "bomb" &&
-              isColliding(
-                bunnyBoundingRect,
-                itemToRect(item, laneBoundingRect)
-              ))
+              isColliding(bunnyBoundingRect, item, laneBoundingRect))
         );
 
         if (hasLost) {
@@ -226,7 +189,7 @@ export const PlayLane: React.FC<Props> = ({
             item.top < laneBoundingRect.height &&
             !(
               item.type === "carrot" &&
-              isColliding(bunnyBoundingRect, itemToRect(item, laneBoundingRect))
+              isColliding(bunnyBoundingRect, item, laneBoundingRect)
             )
         );
 
