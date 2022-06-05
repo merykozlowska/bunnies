@@ -13,6 +13,7 @@ import {
 import { useRequestAnimation } from "~/components/useRequestAnimation/useRequestAnimation";
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
+import type { ItemType } from "~/model/items";
 import {
   gameWorldBaseUnitPx,
   laneSpawnProbability,
@@ -29,8 +30,8 @@ interface Props {
   bunnyId: BunnyId;
   side: "left" | "right";
   isRunning: boolean;
-  gameWorldSpeedInUnitPerSecondsRef: MutableRefObject<number>;
   onGameOver: () => void;
+  gameWorldSpeedInUnitPerSecondsRef: MutableRefObject<number>;
   className?: string;
 }
 
@@ -49,13 +50,22 @@ export const PlayLane: React.FC<Props> = ({
   gameWorldSpeedInUnitPerSecondsRef,
 }) => {
   const [lane, setLane] = useState(0);
+
   const touchStartedRef = useRef(false);
+
   const bunnyRef = useRef<HTMLImageElement>(null);
   const laneRef = useRef<HTMLDivElement>(null);
+
   const numberOfSquarePassedRef = useRef<number>(0);
+
   const trackedSpawnedRef = useRef<[TrackedSpawnedItem?, TrackedSpawnedItem?]>(
     []
   );
+
+  const firstSpawnedOfTypeIdRef = useRef<Record<ItemType, string | undefined>>({
+    carrot: undefined,
+    bomb: undefined,
+  });
 
   const switchLane = () => {
     if (!isRunning) return;
@@ -113,6 +123,17 @@ export const PlayLane: React.FC<Props> = ({
           if (Math.random() < laneSpawnProbability) {
             generateItemInLane(1, trackedSpawnedRef.current, newItems);
           }
+        }
+
+        if (!firstSpawnedOfTypeIdRef.current.carrot && newItems.length) {
+          firstSpawnedOfTypeIdRef.current.carrot = newItems.find(
+            (item) => item.type === "carrot"
+          )?.id;
+        }
+        if (!firstSpawnedOfTypeIdRef.current.bomb && newItems.length) {
+          firstSpawnedOfTypeIdRef.current.bomb = newItems.find(
+            (item) => item.type === "bomb"
+          )?.id;
         }
 
         let updatedItems = [
@@ -176,9 +197,10 @@ export const PlayLane: React.FC<Props> = ({
         <ItemSprite
           key={item.id}
           itemType={item.type}
+          showRoleText={item.id === firstSpawnedOfTypeIdRef.current[item.type]}
           className="playLane__item"
-          style={{ top: `${item.top}px` }}
           data-lane={item.lane}
+          style={{ top: `${item.top}px` }}
         />
       ))}
       <BunnySprite

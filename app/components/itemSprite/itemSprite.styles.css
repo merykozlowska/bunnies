@@ -1,7 +1,24 @@
 .itemSprite {
-    display: block;
     position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xxs);
+
     user-select: none;
 
+    white-space: nowrap;
+}
+
+.itemSprite img {
     width: 48px;
+}
+
+.itemSprite[data-show-role-text="true"][data-item-type="carrot"]::after {
+    content: "eat all";
+}
+
+.itemSprite[data-show-role-text="true"][data-item-type="bomb"]::after {
+    content: "avoid all";
 }
