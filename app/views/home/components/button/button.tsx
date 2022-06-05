@@ -15,7 +15,26 @@ interface Props {
   className?: string;
 }
 
-export const Button: React.FC<RemixLinkProps & Props> = ({
+export const Button: React.FC<JSX.IntrinsicElements["button"] & Props> = ({
+  buttonColor = "white",
+  children,
+  className,
+  ...props
+}) => (
+  <button
+    {...props}
+    className={classNames("customButton", className)}
+    data-colour={buttonColor}
+  >
+    <span className="customButton__borderLeft" />
+    <span className="customButton__borderRight" />
+    <span className="customButton__borderTop" />
+    <span className="customButton__borderBottom" />
+    {children}
+  </button>
+);
+
+export const ButtonLink: React.FC<RemixLinkProps & Props> = ({
   buttonColor = "white",
   children,
   className,

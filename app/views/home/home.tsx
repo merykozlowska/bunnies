@@ -13,7 +13,7 @@ import { bunnyColourForId } from "~/model/bunnies";
 import type { GameState } from "~/model/gameState";
 import type { LoaderContext } from "~/model/loaderContext";
 
-import { Button, links as buttonLinks } from "./components/button/button";
+import { ButtonLink, links as buttonLinks } from "./components/button/button";
 import type { DynamicNumberData } from "./components/dynamicNumber/dynamicNumber";
 import { useDynamicNumber } from "./components/dynamicNumber/dynamicNumber";
 import { links as medalLinks, Medal } from "./components/medal/medal";
@@ -114,13 +114,13 @@ const HomeBunny: React.FC<{
           maxScore={maxScore}
           className="home__bunny__progress__score"
         />
-        <Button
+        <ButtonLink
           buttonColor={bunnyColour}
           to={`/play/${bunnyId}`}
           className="home__bunny__progress__button"
         >
           help {bunnyName}
-        </Button>
+        </ButtonLink>
       </div>
     </div>
   );

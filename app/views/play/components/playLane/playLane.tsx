@@ -1,5 +1,5 @@
 import type { MutableRefObject } from "react";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import {
@@ -67,6 +67,15 @@ export const PlayLane: React.FC<Props> = ({
   useHotkeys(side === "left" ? "a" : "d", switchLane, {}, [isRunning]);
 
   const [items, setItems] = useState<PlayLaneItem[]>([]);
+
+  const previousIsRunning = useRef(isRunning);
+  useEffect(() => {
+    if (isRunning && !previousIsRunning.current) {
+      setItems([]);
+    }
+
+    previousIsRunning.current = isRunning;
+  }, [isRunning]);
 
   const animationCallback = useCallback(
     (dtInMs) => {

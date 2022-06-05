@@ -2,8 +2,11 @@
     background-color: var(--overlay-background-color);
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    gap: var(--spacing-m);
 }
 
 .gameOverScreen__title {
