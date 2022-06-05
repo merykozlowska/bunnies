@@ -1,7 +1,7 @@
 import type { BunnyId } from "~/model/bunnies";
 import { isValidBunnyId } from "~/model/bunnies";
 import type { GameState } from "~/model/gameState";
-import type { ClientMessage, ServerMessage } from "~/model/message";
+import type { ClientMessage } from "~/model/message";
 import { ClientMessageType, ServerMessageType } from "~/model/message";
 
 import type { Session } from "./session";
@@ -11,6 +11,32 @@ const jsonResponse = (value: unknown, init: ResponseInit = {}) =>
     headers: { "Content-Type": "application/json", ...init.headers },
     ...init,
   });
+
+const throttleAndSendLast = <T1, T2>(
+  cbk: (...args: [T1, T2]) => void,
+  duration: number
+): ((...args: [T1, T2]) => void) => {
+  let lastCalledTimestamp: number | undefined;
+  let timeoutRef: NodeJS.Timeout;
+
+  const throttledFunction = (...args: [T1, T2]) => {
+    const now = Date.now();
+    if (!lastCalledTimestamp || now - lastCalledTimestamp > duration) {
+      cbk(...args);
+      clearTimeout(timeoutRef);
+      lastCalledTimestamp = Date.now();
+      return;
+    }
+
+    clearTimeout(timeoutRef);
+    timeoutRef = setTimeout(
+      () => throttledFunction(...args),
+      now - lastCalledTimestamp
+    );
+  };
+
+  return throttledFunction;
+};
 
 export class Game implements DurableObject {
   private gameState: GameState = {
@@ -58,7 +84,20 @@ export class Game implements DurableObject {
     // @ts-ignore
     ws.accept();
 
-    const session: Session = { ws };
+    const session: Session = {
+      ws,
+      throttledSendMessage: throttleAndSendLast(
+        (message: string, disconnected: Session[]) => {
+          try {
+            ws.send(message);
+          } catch (e) {
+            console.log(e);
+            disconnected.push(session);
+          }
+        },
+        1000
+      ),
+    };
     this.sessions.push(session);
 
     ws.addEventListener("message", async (event: MessageEvent) => {
@@ -145,25 +184,16 @@ export class Game implements DurableObject {
   }
 
   broadcastStateUpdated(): void {
-    this.broadcast({
+    const stringifiedMessage = JSON.stringify({
       type: ServerMessageType.stateUpdated,
       payload: {
         state: this.gameState,
       },
     });
-  }
-
-  broadcast(message: ServerMessage): void {
-    const stringifiedMessage = JSON.stringify(message);
 
     const disconnected: Session[] = [];
     this.sessions.forEach((session) => {
-      try {
-        session.ws.send(stringifiedMessage);
-      } catch (e) {
-        console.log(e);
-        disconnected.push(session);
-      }
+      session.throttledSendMessage(stringifiedMessage, disconnected);
     });
     this.handleDisconnectedPlayers(disconnected);
   }
