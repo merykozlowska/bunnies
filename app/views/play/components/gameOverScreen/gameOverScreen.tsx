@@ -5,6 +5,7 @@ import { bunnyColourForId } from "~/model/bunnies";
 import { classNames } from "~/utils/classNames";
 import {
   Button,
+  ButtonLink,
   links as buttonLinks,
 } from "~/views/home/components/button/button";
 
@@ -51,6 +52,9 @@ export const GameOverScreen: React.FC<Props> = ({
       <Button onClick={onContinue} buttonColor={bunnyColour}>
         keep helping {bunnyId}!
       </Button>
+      <ButtonLink to="/" buttonColor="secondary">
+        main menu
+      </ButtonLink>
     </div>
   );
 };

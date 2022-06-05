@@ -9,6 +9,8 @@
     background-color: var(--button-white-background);
     color: var(--button-white-text);
     border: none;
+
+    text-decoration: none;
 }
 
 .customButton__borderLeft {
@@ -53,4 +55,11 @@
     color: var(--button-brown-text);
 
     --button-white-border: var(--button-brown-border);
+}
+
+.customButton[data-colour="secondary"] {
+    background-color: var(--button-secondary-background);
+    color: var(--button-secondary-text);
+
+    --button-white-border: var(--button-secondary-border);
 }

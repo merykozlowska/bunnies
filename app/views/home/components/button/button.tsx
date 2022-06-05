@@ -8,7 +8,7 @@ import styles from "./button.styles.css";
 
 export const links = () => [{ rel: "stylesheet", href: styles }];
 
-export type ButtonColour = "white" | "brown";
+export type ButtonColour = "white" | "brown" | "secondary";
 
 interface Props {
   buttonColor?: ButtonColour;

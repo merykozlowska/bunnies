@@ -54,6 +54,10 @@ html, body {
     --button-brown-border: #8C3F21;
     --button-brown-text: #000;
 
+    --button-secondary-background: #c9c9c9;
+    --button-secondary-border: #8d8d8d;
+    --button-secondary-text: #000;
+
     --playLane-separator: #FFF;
 
     --overlay-background-color: rgba(0, 0, 0, 0.5);
