@@ -1,5 +1,5 @@
 export const gameWorldBaseUnitPx = 64;
-export const backgroundBaseSpeedInUnitPerSeconds = 2.5;
+export const backgroundBaseSpeedInUnitPerSeconds = 1;
 
 export const gameBaseSpeedInUnitPerSeconds = 4;
 export const gameMaxSpeedInUnitPerSeconds = 20;
