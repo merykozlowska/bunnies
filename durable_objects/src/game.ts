@@ -4,6 +4,7 @@ import type { GameState } from "~/model/gameState";
 import type { ClientMessage, ServerMessage } from "~/model/message";
 import { ClientMessageType, ServerMessageType } from "~/model/message";
 
+import type { StoredGameState } from "./gameState";
 import type { Session } from "./session";
 
 const jsonResponse = (value: unknown, init: ResponseInit = {}) =>
@@ -13,10 +14,10 @@ const jsonResponse = (value: unknown, init: ResponseInit = {}) =>
   });
 
 export class Game implements DurableObject {
-  private gameState: GameState = {
+  private gameState: StoredGameState = {
     bunnies: {
-      snowball: { id: "snowball", playersCount: 0, scoreValue: 0 },
-      fluffy: { id: "fluffy", playersCount: 0, scoreValue: 0 },
+      snowball: { score: 0 },
+      fluffy: { score: 0 },
     },
   };
   private sessions: Session[] = [];
@@ -25,22 +26,14 @@ export class Game implements DurableObject {
     // `blockConcurrencyWhile()` ensures no requests are delivered until initialization completes.
     this.state.blockConcurrencyWhile(async () => {
       console.log("reading game state from storage");
+
       const stored = await this.state.storage.get<
         Record<BunnyId, { score: number }>
       >("gameState");
 
       if (stored) {
         this.gameState = {
-          bunnies: Object.fromEntries(
-            Object.entries(stored).map(([bunnyId, { score }]) => [
-              bunnyId,
-              {
-                id: bunnyId,
-                playersCount: 0,
-                scoreValue: score,
-              },
-            ])
-          ) as Record<BunnyId, BunnyState>,
+          bunnies: stored,
         };
       }
     });
@@ -50,7 +43,7 @@ export class Game implements DurableObject {
     const url = new URL(request.url);
     switch (url.pathname) {
       case "/": {
-        return jsonResponse({ gameState: this.gameState });
+        return jsonResponse({ gameState: this.getGameState() });
       }
 
       case "/websocket": {
@@ -102,13 +95,10 @@ export class Game implements DurableObject {
 
   saveState(): void {
     console.log("saving state");
-    const stateToSave = Object.fromEntries(
-      Object.entries(this.gameState.bunnies).map(([bunnyId, bunnyState]) => [
-        bunnyId,
-        { score: bunnyState.scoreValue },
-      ])
+    this.state.storage.put<Record<BunnyId, { score: number }>>(
+      "gameState",
+      this.gameState.bunnies
     );
-    this.state.storage.put("gameState", stateToSave);
   }
 
   canHandleMessage(message: unknown): message is ClientMessage {
@@ -119,15 +109,12 @@ export class Game implements DurableObject {
     switch (message.type) {
       case ClientMessageType.bunnySelected: {
         const selectedBunnyId = message.payload.bunnyId;
+
         if (!isValidBunnyId(selectedBunnyId)) {
           throw new Error(`invalid bunny id: ${selectedBunnyId}`);
         }
-        if (session.bunnyId) {
-          this.gameState.bunnies[session.bunnyId].playersCount--;
-        }
 
         session.bunnyId = selectedBunnyId;
-        this.gameState.bunnies[selectedBunnyId].playersCount++;
 
         this.broadcastStateUpdated();
         break;
@@ -145,7 +132,6 @@ export class Game implements DurableObject {
         this.handleScoreUpdated(session, score);
 
         if (session.bunnyId) {
-          this.gameState.bunnies[session.bunnyId].playersCount--;
           session.bunnyId = undefined;
         }
 
@@ -165,14 +151,31 @@ export class Game implements DurableObject {
       throw new Error("received score but no bunny id set");
     }
 
-    this.gameState.bunnies[session.bunnyId].scoreValue += score;
+    this.gameState.bunnies[session.bunnyId].score += score;
+  }
+
+  getGameState(): GameState {
+    return {
+      bunnies: Object.fromEntries(
+        Object.entries(this.gameState.bunnies).map(([bunnyId, bunnyState]) => [
+          bunnyId,
+          {
+            id: bunnyId,
+            scoreValue: bunnyState.score,
+            playersCount: this.sessions.filter(
+              (session) => session.bunnyId === bunnyId
+            ).length,
+          },
+        ])
+      ) as Record<BunnyId, BunnyState>,
+    };
   }
 
   broadcastStateUpdated(): void {
     this.broadcast({
       type: ServerMessageType.stateUpdated,
       payload: {
-        state: this.gameState,
+        state: this.getGameState(),
       },
     });
   }
@@ -204,14 +207,6 @@ export class Game implements DurableObject {
     this.sessions = this.sessions.filter(
       (session) => !disconnected.includes(session)
     );
-
-    for (const bunnyId in this.gameState.bunnies) {
-      const disconnectedForBunnyId = disconnected.filter(
-        (session) => session.bunnyId === bunnyId
-      );
-      this.gameState.bunnies[bunnyId as BunnyId].playersCount -=
-        disconnectedForBunnyId.length;
-    }
 
     if (!this.sessions.length) {
       this.saveState();
