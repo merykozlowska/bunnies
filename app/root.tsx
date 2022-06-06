@@ -7,10 +7,10 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 import { SessionContext } from "~/components/sessionContext/sessionContext";
-import type { Session } from "~/model/session";
+import { useWebSocket } from "~/components/useWebSocket/useWebSocket";
 import fonts from "~/styles/fonts.css";
 import main from "~/styles/main.css";
 import reset from "~/styles/reset.css";
@@ -43,35 +43,8 @@ export const meta: MetaFunction = () => ({
 });
 
 export default function App() {
-  const [session, setSession] = useState<Session>();
-
-  const connect = () => {
-    const connectWS = () => {
-      const protocol = window.location.protocol === "http:" ? "ws:" : "wss:";
-      const host = window.location.host;
-      const ws = new WebSocket(
-        `${protocol}//${host}/api/game/global/websocket`
-      );
-
-      ws.addEventListener("open", () => {
-        setSession({ ws });
-      });
-
-      ws.addEventListener("close", () => {
-        connectWS();
-      });
-
-      ws.addEventListener("error", () => {
-        connectWS();
-      });
-    };
-
-    connectWS();
-  };
-
-  useEffect(() => {
-    connect();
-  }, []);
+  const ws = useWebSocket();
+  const session = useMemo(() => (ws ? { ws } : undefined), [ws]);
 
   return (
     <html lang="en">
