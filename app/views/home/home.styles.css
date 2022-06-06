@@ -63,6 +63,10 @@
     gap: var(--spacing-xs);
 }
 
+.home__bunny[data-is-background="true"] {
+    animation: homeBackgroundBunnyFade 250ms 1000ms forwards ease-in;
+}
+
 .home__bunny__hero {
     position: relative;
 }
@@ -141,37 +145,45 @@
 }
 
 @keyframes homeAppear {
-    0% {
+    from {
         opacity: 0;
         transform: translateY(-1rem);
     }
-    100% {
+    to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
 @keyframes homeAppearVs {
-    0% {
+    from {
         opacity: 0;
         transform: scale(4) rotate(0deg);
     }
-    100% {
+    to {
         opacity: 1;
         transform: scale(1) rotate(-20deg);
     }
 }
 
-
 @keyframes homeAppearMedal {
-    0% {
+    from {
         opacity: 0;
         transform: scale(2) translateY(-1.5rem);
         transform-origin: top center;
     }
-    100% {
+    to {
         opacity: 1;
         transform: scale(1) translateY(0);
         transform-origin: top center;
+    }
+}
+
+@keyframes homeBackgroundBunnyFade {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.5;
     }
 }

@@ -1,5 +1,5 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useLocation } from "@remix-run/react";
 import React from "react";
 
 import {
@@ -112,9 +112,15 @@ const HomeBunny: React.FC<{
   maxScore: number;
 }> = ({ bunnyId, bunnyName, dynamicScore, playersCount, maxScore, rank }) => {
   const bunnyColour = bunnyColourForId(bunnyId);
+  const highlightedBunnyId = useHighlightedBunny();
 
   return (
-    <div className="home__bunny">
+    <div
+      className="home__bunny"
+      data-is-background={
+        highlightedBunnyId !== undefined && highlightedBunnyId != bunnyId
+      }
+    >
       <div className="home__bunny__hero">
         <BunnySprite bunnyColour={bunnyColour} bunnySize="lg" />
         <Medal rank={rank} className="home__bunny__hero__medal" />
@@ -144,4 +150,14 @@ const HomeBunny: React.FC<{
       </div>
     </div>
   );
+};
+
+const useHighlightedBunny = (): BunnyId | undefined => {
+  const { search } = useLocation();
+  const bParam = new URLSearchParams(search).get("b");
+  return bParam === "snowball"
+    ? "snowball"
+    : bParam === "fluffy"
+    ? "fluffy"
+    : undefined;
 };

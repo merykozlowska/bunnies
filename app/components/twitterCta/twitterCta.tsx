@@ -32,6 +32,11 @@ const ctaTexts = [
   "use your Twitter creds",
 ];
 
+const generateLink = (bunnyId: BunnyId) =>
+  `https://twitter.com/intent/tweet?text=Come%20help%20${bunnyId}%20win%20on%20snowball%20vs%20fluffy!%20%23team${capitalize(
+    bunnyId
+  )} 🐰%0A%0Ahttps%3A//snowball-vs-fluffy.pages.dev/?b=${bunnyId}`;
+
 export const TwitterCta: React.FC<Props> = ({ bunnyId, className }) => {
   const [ctaText] = useState(
     ctaTexts[Math.floor(Math.random() * ctaTexts.length)]
@@ -39,9 +44,7 @@ export const TwitterCta: React.FC<Props> = ({ bunnyId, className }) => {
 
   return (
     <a
-      href={`https://twitter.com/intent/tweet?text=Come%20help%20${bunnyId}%20win%20on%20https%3A//snowball-vs-fluffy.pages.dev/%20!%0A%0A%23team${capitalize(
-        bunnyId
-      )} 🐰`}
+      href={generateLink(bunnyId)}
       target="_blank"
       className={classNames("twitterCta", className)}
       rel="noreferrer"
@@ -59,9 +62,7 @@ export const TwitterCtaButton: React.FC<Props> = ({ bunnyId, className }) => {
 
   return (
     <ButtonAnchor
-      href={`https://twitter.com/intent/tweet?text=Come%20help%20${bunnyId}%20win%20on%20https%3A//snowball-vs-fluffy.pages.dev/%20!%0A%0A%23team${capitalize(
-        bunnyId
-      )} 🐰`}
+      href={generateLink(bunnyId)}
       buttonColor="twitter"
       target="_blank"
       className={classNames("twitterCta", className)}
