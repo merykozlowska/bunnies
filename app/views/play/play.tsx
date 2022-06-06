@@ -42,8 +42,7 @@ export default function Play() {
     useState<LifecycleState>("playing");
 
   const internalScoreRef = useRef(0);
-  const [scoreState, setScoreState] = useState(0);
-  const scoreRef = useRef(scoreState);
+  const [score, setScore] = useState(0);
 
   const gameWorldSpeedInUnitPerSecondsRef = useRef<number>(
     gameBaseSpeedInUnitPerSeconds
@@ -51,9 +50,8 @@ export default function Play() {
 
   useEffect(() => {
     if (lifecycleState === "playing") {
-      setScoreState(0);
+      setScore(0);
       internalScoreRef.current = 0;
-      scoreRef.current = 0;
       gameWorldSpeedInUnitPerSecondsRef.current = gameBaseSpeedInUnitPerSeconds;
     }
     if (lifecycleState !== "playing") {
@@ -75,8 +73,7 @@ export default function Play() {
 
     if (Math.floor(currentScore) !== Math.floor(internalScoreRef.current)) {
       const roundedScore = Math.round(internalScoreRef.current);
-      setScoreState(roundedScore);
-      scoreRef.current = roundedScore;
+      setScore(roundedScore);
     }
 
     gameWorldSpeedInUnitPerSecondsRef.current = Math.min(
@@ -87,11 +84,7 @@ export default function Play() {
 
   useRequestAnimation(updateScore);
 
-  useUpdateGame({
-    scoreRef,
-    bunnyId,
-    lifecycleState,
-  });
+  useUpdateGame({ bunnyId, lifecycleState, score });
 
   const onGameOver = useCallback(() => setLifecycleState("gameOver"), []);
 
@@ -100,17 +93,13 @@ export default function Play() {
       className="play__container"
       gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
     >
-      <PlayTopBar
-        bunnyId={bunnyId}
-        score={scoreRef.current}
-        className="play__topBar"
-      />
+      <PlayTopBar bunnyId={bunnyId} score={score} className="play__topBar" />
 
       <div className="play__lanes">
         {lifecycleState === "gameOver" && (
           <GameOverScreen
             bunnyId={bunnyId}
-            score={scoreRef.current}
+            score={score}
             onContinue={() => setLifecycleState("playing")}
             className="play__gameOver"
           />
