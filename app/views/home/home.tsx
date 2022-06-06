@@ -66,6 +66,15 @@ export default function Home() {
 
   return (
     <Grass className="home__container">
+      <a
+        href="https://github.com/merykozlowska/bunnies"
+        target="_blank"
+        rel="noreferrer"
+        className="home__github"
+      >
+        <img src="/resources/github-logo.svg" alt="GitHub repository" />
+        <span className="home__github__text">View on GitHub</span>
+      </a>
       <div className="home__bunnies">
         <HomeBunny
           bunnyId="snowball"
