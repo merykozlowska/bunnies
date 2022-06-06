@@ -43,10 +43,17 @@ export const useDynamicNumber = (value: number): DynamicNumberData => {
     }
 
     setLastChange(0);
-    setTimeout(() => setLastChange(value - currentUpdatedValue));
-    setTimeout(() => {
+    const lastChangeTimeoutRef = setTimeout(() =>
+      setLastChange(value - currentUpdatedValue)
+    );
+    const valueTimeoutRef = setTimeout(() => {
       setCurrentUpdatedValue(value);
     }, animationDurationMs);
+
+    return () => {
+      clearTimeout(lastChangeTimeoutRef);
+      clearTimeout(valueTimeoutRef);
+    };
   }, [currentUpdatedValue, value]);
 
   return { lastChange, value: currentUpdatedValue };
