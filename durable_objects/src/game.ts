@@ -30,19 +30,7 @@ export class Game implements DurableObject {
         "game_state"
       );
 
-      if (stored) {
-        this.gameState = stored;
-      } else {
-        const oldStored = await this.state.storage.get<
-          Record<BunnyId, { score: number }>
-        >("gameState");
-
-        if (oldStored) {
-          this.gameState = {
-            bunnies: oldStored,
-          };
-        }
-      }
+      this.gameState = stored || this.gameState;
     });
   }
 
