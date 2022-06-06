@@ -23,8 +23,6 @@ export const useUpdateGame = ({
   bunnyId,
   lifecycleState,
 }: Params): void => {
-  const score = scoreRef.current;
-
   const lastSentScore = useRef(0);
 
   const session = useSession();
@@ -46,42 +44,34 @@ export const useUpdateGame = ({
 
   useEffect(() => {
     if (!session.ws) return;
-    sendMessage(session.ws, {
-      type: ClientMessageType.bunnySelected,
-      payload: { bunnyId },
-    });
-    lastSentScore.current = 0;
-  }, [session, bunnyId]);
 
-  useEffect(() => {
-    if (!session.ws) return;
-
-    const previousLifecycleState = lastLifecycleState.current;
-
-    if (previousLifecycleState !== lifecycleState) {
-      lastLifecycleState.current = lifecycleState;
-    }
-
-    if (previousLifecycleState === "playing" && lifecycleState === "gameOver") {
-      const scoreDiff = score - lastSentScore.current;
-      sendMessage(session.ws, {
-        type: ClientMessageType.gameOver,
-        payload: { score: scoreDiff },
-      });
-      lastSentScore.current = score;
-    } else if (
-      previousLifecycleState === "gameOver" &&
-      lifecycleState === "playing"
-    ) {
-      lastSentScore.current = 0;
+    if (lifecycleState === "playing") {
       sendMessage(session.ws, {
         type: ClientMessageType.bunnySelected,
         payload: { bunnyId },
       });
-    } else if (lifecycleState === "playing") {
-      onUpdateScore.current(session.ws, score);
     }
-  }, [session, lifecycleState, score, bunnyId]);
+  }, [session, lifecycleState, bunnyId]);
+
+  useEffect(() => {
+    const previousLifecycleState = lastLifecycleState.current;
+    lastLifecycleState.current = lifecycleState;
+
+    if (previousLifecycleState === "playing" && lifecycleState === "gameOver") {
+      const scoreDiff = scoreRef.current - lastSentScore.current;
+      lastSentScore.current = 0;
+      if (session.ws) {
+        sendMessage(session.ws, {
+          type: ClientMessageType.gameOver,
+          payload: { score: scoreDiff },
+        });
+      }
+    } else if (lifecycleState === "playing") {
+      if (session.ws) {
+        onUpdateScore.current(session.ws, scoreRef.current);
+      }
+    }
+  }, [session, lifecycleState, scoreRef.current, bunnyId]);
 
   useEffect(() => {
     return () => {
