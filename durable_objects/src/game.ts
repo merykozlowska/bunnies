@@ -26,15 +26,22 @@ export class Game implements DurableObject {
     // `blockConcurrencyWhile()` ensures no requests are delivered until initialization completes.
     this.state.blockConcurrencyWhile(async () => {
       console.log("reading game state from storage");
-
-      const stored = await this.state.storage.get<
-        Record<BunnyId, { score: number }>
-      >("gameState");
+      const stored = await this.state.storage.get<StoredGameState>(
+        "game_state"
+      );
 
       if (stored) {
-        this.gameState = {
-          bunnies: stored,
-        };
+        this.gameState = stored;
+      } else {
+        const oldStored = await this.state.storage.get<
+          Record<BunnyId, { score: number }>
+        >("gameState");
+
+        if (oldStored) {
+          this.gameState = {
+            bunnies: oldStored,
+          };
+        }
       }
     });
   }
@@ -95,10 +102,7 @@ export class Game implements DurableObject {
 
   saveState(): void {
     console.log("saving state");
-    this.state.storage.put<Record<BunnyId, { score: number }>>(
-      "gameState",
-      this.gameState.bunnies
-    );
+    this.state.storage.put<StoredGameState>("game_state", this.gameState);
   }
 
   canHandleMessage(message: unknown): message is ClientMessage {
