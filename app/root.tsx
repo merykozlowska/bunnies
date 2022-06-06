@@ -37,9 +37,23 @@ export function links() {
   ];
 }
 
+const title = "snowball vs fluffy";
+const description =
+  "Help either snowball or fluffy in the battle to determine the bunniest of them all.";
+const image = "https://snowball-vs-fluffy.pages.dev/social/ogImage.png";
+
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Snowball vs Fluffy",
+  title,
+  description,
+  "og:title": title,
+  "og:description": description,
+  "og:image": image,
+  "og:url": "https://snowball-vs-fluffy.pages.dev/",
+  "twitter:title": title,
+  "twitter:description": description,
+  "twitter:image": image,
+  "twitter:card": "summary_large_image",
   viewport: "width=device-width,initial-scale=1",
 });
 
