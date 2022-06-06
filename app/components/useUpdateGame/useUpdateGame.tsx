@@ -70,12 +70,15 @@ export const useUpdateGame = ({
           payload: { score: scoreDiff },
         });
       }
-    } else if (lifecycleState === "playing") {
+    } else if (
+      lifecycleState === "playing" &&
+      previousLifecycleState === "playing"
+    ) {
       if (session.ws) {
         onUpdateScore.current(session.ws, score);
       }
     }
-  }, [session, lifecycleState, score, bunnyId]);
+  }, [session, lifecycleState, score]);
 
   useEffect(() => {
     return () => {
