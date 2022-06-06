@@ -8,7 +8,7 @@ import styles from "./button.styles.css";
 
 export const links = () => [{ rel: "stylesheet", href: styles }];
 
-export type ButtonColour = "white" | "brown" | "secondary";
+export type ButtonColour = "white" | "brown" | "secondary" | "twitter";
 
 interface Props {
   buttonColor?: ButtonColour;
@@ -51,4 +51,23 @@ export const ButtonLink: React.FC<RemixLinkProps & Props> = ({
     <span className="customButton__borderBottom" />
     {children}
   </Link>
+);
+
+export const ButtonAnchor: React.FC<JSX.IntrinsicElements["a"] & Props> = ({
+  buttonColor = "white",
+  children,
+  className,
+  ...props
+}) => (
+  <a
+    {...props}
+    className={classNames("customButton", className)}
+    data-colour={buttonColor}
+  >
+    <span className="customButton__borderLeft" />
+    <span className="customButton__borderRight" />
+    <span className="customButton__borderTop" />
+    <span className="customButton__borderBottom" />
+    {children}
+  </a>
 );

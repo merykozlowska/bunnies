@@ -62,6 +62,10 @@ html, body {
     --button-secondary-border: #8d8d8d;
     --button-secondary-text: #000;
 
+    --button-twitter-background: #FFF;
+    --button-twitter-border: #1e96e6;
+    --button-twitter-text: #1e96e6;
+
     --playLane-separator: #FFF;
 
     --overlay-background-color: rgba(0, 0, 0, 0.5);

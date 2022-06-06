@@ -28,6 +28,5 @@
 
 .gameOverScreen__twitter {
     position: absolute;
-    left: var(--spacing-s);
-    bottom: var(--spacing-s);
+    bottom: var(--spacing-m);
 }

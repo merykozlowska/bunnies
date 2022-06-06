@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import {
   links as twitterCtaLinks,
-  TwitterCta,
+  TwitterCtaButton,
 } from "~/components/twitterCta/twitterCta";
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
@@ -60,7 +60,7 @@ export const GameOverScreen: React.FC<Props> = ({
       <ButtonLink to="/" buttonColor="secondary">
         main menu
       </ButtonLink>
-      <TwitterCta bunnyId={bunnyId} className="gameOverScreen__twitter" />
+      <TwitterCtaButton bunnyId={bunnyId} className="gameOverScreen__twitter" />
     </div>
   );
 };

@@ -63,3 +63,10 @@
 
     --button-white-border: var(--button-secondary-border);
 }
+
+.customButton[data-colour="twitter"] {
+    background-color: var(--button-twitter-background);
+    color: var(--button-twitter-text);
+
+    --button-white-border: var(--button-twitter-border);
+}
