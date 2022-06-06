@@ -6,6 +6,8 @@
     justify-content: center;
     align-items: center;
 
+    padding: 0 var(--spacing-s);
+
     gap: var(--spacing-m);
 }
 
@@ -22,4 +24,10 @@
 
 .gameOverScreen__text__emoji {
     font-size: 0.7em;
+}
+
+.gameOverScreen__twitter {
+    position: absolute;
+    left: var(--spacing-s);
+    bottom: var(--spacing-s);
 }

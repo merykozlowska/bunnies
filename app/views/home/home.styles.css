@@ -93,8 +93,28 @@
     animation: homeAppear 150ms 650ms forwards ease-in;
 }
 
-.home__bunny__progress__button {
-    align-self: flex-end;
+.home__bunny__actions {
+    display: flex;
+    flex-direction: column;
+
+    gap: var(--spacing-s);
+
+    justify-content: space-between;
+    align-items: end;
+}
+
+.home__bunny__actions__twitter {
+    align-self: start;
+}
+
+@media only screen and (min-width: 768px) {
+    .home__bunny__actions {
+        flex-direction: row-reverse;
+    }
+
+    .home__bunny__actions__twitter {
+        align-self: end;
+    }
 }
 
 .home__bunny__name, .home__bunnies__vs {

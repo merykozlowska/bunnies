@@ -9,6 +9,10 @@ import {
 import type { DynamicNumberData } from "~/components/dynamicNumber/dynamicNumber";
 import { useDynamicNumber } from "~/components/dynamicNumber/dynamicNumber";
 import { Grass, links as grassLinks } from "~/components/grass/grass";
+import {
+  links as twitterCtaLinks,
+  TwitterCta,
+} from "~/components/twitterCta/twitterCta";
 import { useGameState } from "~/components/useGameState/useGameState";
 import type { BunnyId } from "~/model/bunnies";
 import { bunnyColourForId } from "~/model/bunnies";
@@ -26,6 +30,7 @@ import styles from "./home.styles.css";
 export const links = () => [
   ...bunnySpriteLinks(),
   ...progressBarLinks(),
+  ...twitterCtaLinks(),
   ...buttonLinks(),
   ...medalLinks(),
   ...grassLinks(),
@@ -123,13 +128,19 @@ const HomeBunny: React.FC<{
           maxScore={maxScore}
           className="home__bunny__progress__score"
         />
-        <ButtonLink
-          buttonColor={bunnyColour}
-          to={`/play/${bunnyId}`}
-          className="home__bunny__progress__button"
-        >
-          help {bunnyName}
-        </ButtonLink>
+        <div className="home__bunny__actions">
+          <ButtonLink
+            buttonColor={bunnyColour}
+            to={`/play/${bunnyId}`}
+            className="home__bunny__actions__button"
+          >
+            help {bunnyName}
+          </ButtonLink>
+          <TwitterCta
+            bunnyId={bunnyId}
+            className="home__bunny__actions__twitter"
+          />
+        </div>
       </div>
     </div>
   );
