@@ -11,6 +11,7 @@ import { useMemo } from "react";
 
 import { SessionContext } from "~/components/sessionContext/sessionContext";
 import { useWebSocket } from "~/components/useWebSocket/useWebSocket";
+import type { Session } from "~/model/session";
 import fonts from "~/styles/fonts.css";
 import main from "~/styles/main.css";
 import reset from "~/styles/reset.css";
@@ -44,7 +45,7 @@ export const meta: MetaFunction = () => ({
 
 export default function App() {
   const ws = useWebSocket();
-  const session = useMemo(() => (ws ? { ws } : undefined), [ws]);
+  const session: Session = useMemo(() => ({ ws }), [ws]);
 
   return (
     <html lang="en">

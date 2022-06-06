@@ -45,7 +45,7 @@ export const useUpdateGame = ({
   const lastLifecycleState = useRef(lifecycleState);
 
   useEffect(() => {
-    if (!session) return;
+    if (!session.ws) return;
     sendMessage(session.ws, {
       type: ClientMessageType.bunnySelected,
       payload: { bunnyId },
@@ -54,7 +54,7 @@ export const useUpdateGame = ({
   }, [session, bunnyId]);
 
   useEffect(() => {
-    if (!session) return;
+    if (!session.ws) return;
 
     const previousLifecycleState = lastLifecycleState.current;
 
@@ -85,7 +85,7 @@ export const useUpdateGame = ({
 
   useEffect(() => {
     return () => {
-      if (!session) return;
+      if (!session.ws) return;
 
       if (lastLifecycleState.current === "playing") {
         const scoreDiff = scoreRef.current - lastSentScore.current;

@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { SessionContext } from "~/components/sessionContext/sessionContext";
+import { useSession } from "~/components/sessionContext/sessionContext";
 import type { GameState } from "~/model/gameState";
 import { ServerMessageType } from "~/model/message";
 
 export const useGameState = (): { gameState?: GameState } => {
-  const session = useContext(SessionContext);
+  const session = useSession();
   const [gameState, setGameState] = useState<GameState>();
 
   useEffect(() => {
@@ -16,10 +16,10 @@ export const useGameState = (): { gameState?: GameState } => {
       }
       setGameState(message.payload.state);
     };
-    session?.ws.addEventListener("message", listener);
+    session.ws?.addEventListener("message", listener);
 
     return () => {
-      session?.ws.removeEventListener("message", listener);
+      session.ws?.removeEventListener("message", listener);
     };
   }, [session]);
 
