@@ -118,7 +118,7 @@ const HomeBunny: React.FC<{
     <div
       className="home__bunny"
       data-is-background={
-        highlightedBunnyId !== undefined && highlightedBunnyId != bunnyId
+        highlightedBunnyId !== undefined && highlightedBunnyId !== bunnyId
       }
     >
       <div className="home__bunny__hero">
