@@ -58,10 +58,16 @@
 
 .playLane__tutorial::before {
     content: "⬅️";
+
+    line-height: 1.5;
+    height: calc(var(--text-l) * 1.2);
 }
 
 .playLane__tutorial[data-side="right"]::before {
     content: "➡️";
+
+    line-height: 1.5;
+    height: calc(var(--text-l) * 1.2);
 }
 
 .playLane__tutorial::after {
