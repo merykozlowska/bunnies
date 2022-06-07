@@ -17,7 +17,7 @@
 .playLane__bunny {
     position: absolute;
     left: 25%;
-    bottom: 100px;
+    bottom: 4vh;
 
     transform: translateX(-50%);
     transition: left 150ms ease-in-out;
