@@ -8,7 +8,13 @@
 
     padding: 0 var(--spacing-s);
 
-    gap: var(--spacing-m);
+    gap: 1.5rem;
+}
+
+@media only screen and (min-width: 768px) {
+    .gameOverScreen {
+        gap: var(--spacing-m);
+    }
 }
 
 .gameOverScreen__title {
