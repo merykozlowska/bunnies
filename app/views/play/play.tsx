@@ -9,6 +9,7 @@ import type { LifecycleState } from "~/model/gameState";
 import {
   gameBaseSpeedInUnitPerSeconds,
   gameMaxSpeedInUnitPerSeconds,
+  gameSpeedIncreasePerSecondAdd,
   timeBeforeConsideringGameWasPausedInMs,
 } from "~/model/world";
 
@@ -59,28 +60,32 @@ export default function Play() {
     }
   }, [lifecycleState]);
 
-  const updateScore = useCallback((dtInMs) => {
-    if (dtInMs > timeBeforeConsideringGameWasPausedInMs) {
-      return;
-    }
+  const updateScore = useCallback(
+    (dtInMs: number) => {
+      if (dtInMs > timeBeforeConsideringGameWasPausedInMs) return;
+      if (lifecycleState !== "playing") return;
 
-    const dtInS = dtInMs / 1000;
-    const scoreIncreasePerSecond =
-      gameWorldSpeedInUnitPerSecondsRef.current / gameBaseSpeedInUnitPerSeconds;
-    const currentScore = internalScoreRef.current;
-    internalScoreRef.current =
-      internalScoreRef.current + scoreIncreasePerSecond * dtInS;
+      const dtInS = dtInMs / 1000;
+      const scoreIncreasePerSecond =
+        gameWorldSpeedInUnitPerSecondsRef.current /
+        gameBaseSpeedInUnitPerSeconds;
+      const currentScore = internalScoreRef.current;
+      internalScoreRef.current =
+        internalScoreRef.current + scoreIncreasePerSecond * dtInS;
 
-    if (Math.floor(currentScore) !== Math.floor(internalScoreRef.current)) {
-      const roundedScore = Math.round(internalScoreRef.current);
-      setScore(roundedScore);
-    }
+      if (Math.floor(currentScore) !== Math.floor(internalScoreRef.current)) {
+        const roundedScore = Math.round(internalScoreRef.current);
+        setScore(roundedScore);
+      }
 
-    gameWorldSpeedInUnitPerSecondsRef.current = Math.min(
-      (gameWorldSpeedInUnitPerSecondsRef.current *= 1 + 0.025 * dtInS),
-      gameMaxSpeedInUnitPerSeconds
-    );
-  }, []);
+      gameWorldSpeedInUnitPerSecondsRef.current = Math.min(
+        (gameWorldSpeedInUnitPerSecondsRef.current +=
+          gameSpeedIncreasePerSecondAdd * dtInS),
+        gameMaxSpeedInUnitPerSeconds
+      );
+    },
+    [lifecycleState]
+  );
 
   useRequestAnimation(updateScore);
 

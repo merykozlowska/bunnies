@@ -2,7 +2,8 @@ export const gameWorldBaseUnitPx = 64;
 export const backgroundBaseSpeedInUnitPerSeconds = 1;
 
 export const gameBaseSpeedInUnitPerSeconds = 4;
-export const gameMaxSpeedInUnitPerSeconds = 20;
+export const gameMaxSpeedInUnitPerSeconds = 16;
+export const gameSpeedIncreasePerSecondAdd = 0.1;
 
 export const laneSpawnProbability = 0.15;
 export const timeBetweenItemInSameLaneMs = 200;
