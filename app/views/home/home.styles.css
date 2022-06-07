@@ -51,9 +51,15 @@
     flex-grow: 1;
     justify-content: space-around;
     align-items: stretch;
-    gap: 1.5rem;
+    gap: 1rem;
 
     max-width: 40rem;
+}
+
+@media only screen and (min-width: 768px) {
+    .home__bunnies {
+        gap: 2rem;
+    }
 }
 
 .home__bunny {
@@ -131,12 +137,18 @@
 }
 
 .home__bunnies__vs {
-    font-size: var(--heading-xl);
+    font-size: 3rem;
 
     align-self: center;
 
     opacity: 0;
     animation: homeAppearVs 150ms 250ms forwards ease-in;
+}
+
+@media only screen and (min-width: 768px) {
+    .home__bunnies__vs {
+        font-size: 4rem;
+    }
 }
 
 .home__bunnies {

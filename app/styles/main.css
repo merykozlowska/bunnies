@@ -29,15 +29,15 @@ html, body {
     --spacing-l: var(--size-12);
     --spacing-xl: var(--size-16);
 
-    --text-m: 2rem;
-    --text-l: 3rem;
+    --text-m: 1.5rem;
+    --text-l: 2rem;
 
     --text-light-white: #D2E6FF;
     --text-light-brown: #D69756;
     --text-light-carrot: #fdcda5;
     --text-light-bomb: #c3ccff;
 
-    --heading-l: 3rem;
+    --heading-l: 2.5rem;
     --heading-xl: 4rem;
     --heading-letter-spacing: 0.06em;
 
@@ -76,6 +76,9 @@ html, body {
 
 @media only screen and (min-width: 768px) {
     :root {
+        --text-m: 2rem;
+        --text-l: 3rem;
+
         --heading-l: 4rem;
         --heading-xl: 6rem;
     }

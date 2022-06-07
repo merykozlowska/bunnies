@@ -3,14 +3,20 @@
 
     position: relative;
 
-    font-size: 2rem;
-    padding: var(--spacing-xs) var(--spacing-s);
+    font-size: var(--text-m);
+    padding: var(--spacing-xxs) var(--spacing-xs);
 
     background-color: var(--button-white-background);
     color: var(--button-white-text);
     border: none;
 
     text-decoration: none;
+}
+
+@media only screen and (min-width: 768px) {
+    .customButton {
+        padding: var(--spacing-xs) var(--spacing-s);
+    }
 }
 
 .customButton__borderLeft {

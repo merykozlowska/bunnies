@@ -4,4 +4,6 @@
     align-items: center;
 
     color: var(--text-color-twitter);
+
+    font-size: var(--text-m);
 }

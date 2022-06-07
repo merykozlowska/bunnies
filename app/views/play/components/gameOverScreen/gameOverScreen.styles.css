@@ -19,7 +19,7 @@
 .gameOverScreen__text {
     font-size: var(--text-l);
     text-align: center;
-    line-height: 3rem;
+    line-height: var(--text-l);
 }
 
 .gameOverScreen__text__emoji {
