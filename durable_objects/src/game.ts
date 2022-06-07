@@ -71,20 +71,33 @@ export class Game implements DurableObject {
       const message = JSON.parse(event.data);
 
       if (!this.canHandleMessage(message)) {
-        throw new Error("unknown message type");
+        console.log("unknown message type");
+        return;
       }
 
-      this.handleMessage(message, session);
+      try {
+        this.handleMessage(message, session);
+      } catch (e) {
+        console.log("error handling message", message, e);
+      }
     });
 
     ws.addEventListener("close", () => {
       console.log("WS CLOSE");
-      this.handleDisconnectedPlayers([session]);
+      try {
+        this.handleDisconnectedPlayers([session]);
+      } catch (e) {
+        console.log(e);
+      }
     });
 
     ws.addEventListener("error", () => {
       console.log("WS ERROR");
-      this.handleDisconnectedPlayers([session]);
+      try {
+        this.handleDisconnectedPlayers([session]);
+      } catch (e) {
+        console.log(e);
+      }
     });
   }
 
