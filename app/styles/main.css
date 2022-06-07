@@ -78,6 +78,16 @@ img {
     /* large-screen: 1024; */
 }
 
+@media only screen and (min-width: 390px) {
+    :root {
+        --text-m: 2rem;
+        --text-l: 3rem;
+
+        --heading-l: 3rem;
+        --heading-xl: 4rem;
+    }
+}
+
 @media only screen and (min-width: 768px) {
     :root {
         --text-m: 2rem;
