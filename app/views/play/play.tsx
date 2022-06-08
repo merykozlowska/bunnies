@@ -26,6 +26,7 @@ import {
   PlayTopBar,
 } from "./components/playTopBar/playTopBar";
 import styles from "./play.styles.css";
+import { gameSpeedToScoreSpeed } from "./utils/speed";
 
 export const links = () => [
   ...grassLinks(),
@@ -48,12 +49,18 @@ export default function Play() {
   const gameWorldSpeedInUnitPerSecondsRef = useRef<number>(
     gameBaseSpeedInUnitPerSeconds
   );
+  const [speedToDisplay, setSpeedToDisplay] = useState(
+    gameSpeedToScoreSpeed(gameWorldSpeedInUnitPerSecondsRef.current)
+  );
 
   useEffect(() => {
     if (lifecycleState === "playing") {
-      setScore(0);
       internalScoreRef.current = 0;
       gameWorldSpeedInUnitPerSecondsRef.current = gameBaseSpeedInUnitPerSeconds;
+      setScore(0);
+      setSpeedToDisplay(
+        gameSpeedToScoreSpeed(gameWorldSpeedInUnitPerSecondsRef.current)
+      );
     }
     if (lifecycleState !== "playing") {
       gameWorldSpeedInUnitPerSecondsRef.current = 0;
@@ -66,9 +73,9 @@ export default function Play() {
       if (lifecycleState !== "playing") return;
 
       const dtInS = dtInMs / 1000;
-      const scoreIncreasePerSecond =
-        gameWorldSpeedInUnitPerSecondsRef.current /
-        gameBaseSpeedInUnitPerSeconds;
+      const scoreIncreasePerSecond = gameSpeedToScoreSpeed(
+        gameWorldSpeedInUnitPerSecondsRef.current
+      );
       const currentScore = internalScoreRef.current;
       internalScoreRef.current =
         internalScoreRef.current + scoreIncreasePerSecond * dtInS;
@@ -78,11 +85,21 @@ export default function Play() {
         setScore(roundedScore);
       }
 
+      const previousSpeed = gameWorldSpeedInUnitPerSecondsRef.current;
       gameWorldSpeedInUnitPerSecondsRef.current = Math.min(
         (gameWorldSpeedInUnitPerSecondsRef.current +=
           gameSpeedIncreasePerSecondAdd * dtInS),
         gameMaxSpeedInUnitPerSeconds
       );
+
+      if (
+        gameSpeedToScoreSpeed(previousSpeed) !==
+        gameSpeedToScoreSpeed(gameWorldSpeedInUnitPerSecondsRef.current)
+      ) {
+        setSpeedToDisplay(
+          gameSpeedToScoreSpeed(gameWorldSpeedInUnitPerSecondsRef.current)
+        );
+      }
     },
     [lifecycleState]
   );
@@ -98,7 +115,12 @@ export default function Play() {
       className="play__container"
       gameWorldSpeedInUnitPerSecondsRef={gameWorldSpeedInUnitPerSecondsRef}
     >
-      <PlayTopBar bunnyId={bunnyId} score={score} className="play__topBar" />
+      <PlayTopBar
+        bunnyId={bunnyId}
+        score={score}
+        speedToDisplay={speedToDisplay}
+        className="play__topBar"
+      />
 
       <div className="play__lanes">
         {lifecycleState === "gameOver" && (

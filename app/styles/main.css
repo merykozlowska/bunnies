@@ -33,6 +33,7 @@ img {
     --spacing-l: var(--size-12);
     --spacing-xl: var(--size-16);
 
+    --text-s: 1.25rem;
     --text-m: 1.5rem;
     --text-l: 2rem;
 
@@ -80,6 +81,7 @@ img {
 
 @media only screen and (min-width: 390px) {
     :root {
+        --text-s: 1.5rem;
         --text-m: 2rem;
         --text-l: 3rem;
 
@@ -90,6 +92,7 @@ img {
 
 @media only screen and (min-width: 768px) {
     :root {
+        --text-s: 1.5rem;
         --text-m: 2rem;
         --text-l: 3rem;
 
